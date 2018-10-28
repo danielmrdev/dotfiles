@@ -283,7 +283,7 @@ defaults write com.apple.ical "first minute of work hours" 540
 ###############################################################################
 
 # Custom DateFormat
-defaults write com.apple.menuextra.clock DateFormat "EEE MMM d  H:mm"
+defaults write com.apple.menuextra.clock DateFormat "d MMM  H:mm"
 
 ###############################################################################
 # Photos                                                                      #
