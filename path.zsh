@@ -17,3 +17,6 @@ export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 
 # Load custom commands
 export PATH="$DOTFILES/bin:$PATH"
+
+# JAVA
+export JAVA_HOME=$(/usr/libexec/java_home)
