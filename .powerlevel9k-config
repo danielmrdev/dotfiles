@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-alias airport="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport"
+# alias airport="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport"
 
 # Please only use this battery segment if you have material icons in your nerd font (or font)
 # Otherwise, use the font awesome one in "User Segments"
@@ -52,55 +52,55 @@ prompt_zsh_battery_level() {
   echo -n "%{$color%}$symbol" ;
 }
 
-zsh_internet_signal(){
-  #source on quality levels - http://www.wireless-nets.com/resources/tutorials/define_SNR_values.html
-  #source on signal levels  - http://www.speedguide.net/faq/how-to-read-rssisignal-and-snrnoise-ratings-440
-  local signal=$(airport -I | grep agrCtlRSSI | awk '{print $2}' | sed 's/-//g')
-  local noise=$(airport -I | grep agrCtlNoise | awk '{print $2}' | sed 's/-//g')
-  if [[ ! -z "${signal// }" ]] ;
-    then local SNR=$(bc <<<"scale=2; $signal / $noise");
-  fi
+# zsh_internet_signal(){
+#   #source on quality levels - http://www.wireless-nets.com/resources/tutorials/define_SNR_values.html
+#   #source on signal levels  - http://www.speedguide.net/faq/how-to-read-rssisignal-and-snrnoise-ratings-440
+#   local signal=$(airport -I | grep agrCtlRSSI | awk '{print $2}' | sed 's/-//g')
+#   local noise=$(airport -I | grep agrCtlNoise | awk '{print $2}' | sed 's/-//g')
+#   if [[ ! -z "${signal// }" ]] ;
+#     then local SNR=$(bc <<<"scale=2; $signal / $noise");
+#   fi
 
-  local net=$(curl -D- -o /dev/null -s http://www.google.com | grep HTTP/1.1 | awk '{print $2}')
-  local color='%F{yellow}'
-  local symbol="\uf197"
+#   local net=$(curl -D- -o /dev/null -s http://www.google.com | grep HTTP/1.1 | awk '{print $2}')
+#   local color='%F{yellow}'
+#   local symbol="\uf197"
 
-  # Excellent Signal (5 bars)
-  if [[ ! -z "${signal// }" ]] && [[ $SNR -gt .40 ]] ;
-    then color='%F{blue}' ; symbol="\uf1eb" ;
-  fi
+#   # Excellent Signal (5 bars)
+#   if [[ ! -z "${signal// }" ]] && [[ $SNR -gt .40 ]] ;
+#     then color='%F{blue}' ; symbol="\uf1eb" ;
+#   fi
 
-  # Good Signal (3-4 bars)
-  if [[ ! -z "${signal// }" ]] && [[ ! $SNR -gt .40 ]] && [[ $SNR -gt .25 ]] ;
-    then color='%F{green}' ; symbol="\uf1eb" ;
-  fi
+#   # Good Signal (3-4 bars)
+#   if [[ ! -z "${signal// }" ]] && [[ ! $SNR -gt .40 ]] && [[ $SNR -gt .25 ]] ;
+#     then color='%F{green}' ; symbol="\uf1eb" ;
+#   fi
 
-  # Low Signal (2 bars)
-  if [[ ! -z "${signal// }" ]] && [[ ! $SNR -gt .25 ]] && [[ $SNR -gt .15 ]] ;
-    then color='%F{yellow}' ; symbol="\uf1eb" ;
-  fi
+#   # Low Signal (2 bars)
+#   if [[ ! -z "${signal// }" ]] && [[ ! $SNR -gt .25 ]] && [[ $SNR -gt .15 ]] ;
+#     then color='%F{yellow}' ; symbol="\uf1eb" ;
+#   fi
 
-  # Very Low Signal (1 bar)
-  if [[ ! -z "${signal// }" ]] && [[ ! $SNR -gt .15 ]] && [[ $SNR -gt .10 ]] ;
-    then color='%F{red}' ; symbol="\uf1eb" ;
-  fi
+#   # Very Low Signal (1 bar)
+#   if [[ ! -z "${signal// }" ]] && [[ ! $SNR -gt .15 ]] && [[ $SNR -gt .10 ]] ;
+#     then color='%F{red}' ; symbol="\uf1eb" ;
+#   fi
 
-  # No Signal - No Internet
-  if [[ ! -z "${signal// }" ]] && [[ ! $SNR -gt .10 ]] ;
-    then color='%F{red}' ; symbol="\uf011";
-  fi
+#   # No Signal - No Internet
+#   if [[ ! -z "${signal// }" ]] && [[ ! $SNR -gt .10 ]] ;
+#     then color='%F{red}' ; symbol="\uf011";
+#   fi
 
-  if [[ -z "${signal// }" ]] && [[ "$net" -ne 200 ]] ;
-    then color='%F{red}' ; symbol="\uf011" ;
-  fi
+#   if [[ -z "${signal// }" ]] && [[ "$net" -ne 200 ]] ;
+#     then color='%F{red}' ; symbol="\uf011" ;
+#   fi
 
-  # Ethernet Connection (no wifi, hardline)
-  if [[ -z "${signal// }" ]] && [[ "$net" -eq 200 ]] ;
-    then color='%F{blue}' ; symbol="\uf197" ;
-  fi
+#   # Ethernet Connection (no wifi, hardline)
+#   if [[ -z "${signal// }" ]] && [[ "$net" -eq 200 ]] ;
+#     then color='%F{blue}' ; symbol="\uf197" ;
+#   fi
 
-  echo -n "%{$color%}$symbol " # \f1eb is wifi bars
-}
+#   echo -n "%{$color%}$symbol " # \f1eb is wifi bars
+# }
 
 # prompt_zsh_nowplaying () {
 #   state=`osascript -e 'tell application "Spotify" to player state as string'`;
@@ -155,9 +155,11 @@ POWERLEVEL9K_TIME_FORMAT="\UF43A %D{%H:%M:%S}"
 POWERLEVEL9K_CUSTOM_NOW_PLAYING_BACKGROUND='black'
 POWERLEVEL9K_CUSTOM_NOW_PLAYING_FOREGROUND='green'
 
-POWERLEVEL9K_CUSTOM_INTERNET_SIGNAL="zsh_internet_signal"
+# POWERLEVEL9K_CUSTOM_INTERNET_SIGNAL="zsh_internet_signal"
 POWERLEVEL9K_CUSTOM_BATTERY_STATUS="prompt_zsh_battery_level"
 POWERLEVEL9K_CUSTOM_INTERNET_SIGNAL_BACKGROUND='black'
 POWERLEVEL9K_CUSTOM_BATTERY_STATUS_BACKGROUND='black'
 
 # POWERLEVEL9K_CUSTOM_NOW_PLAYING="prompt_zsh_nowplaying"
+
+UPDATE_PROMPT=false
