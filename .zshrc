@@ -55,7 +55,7 @@ ZSH_CUSTOM=$DOTFILES
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git wd composer osx)
+plugins=(git wd composer macos)
 
 # Activate Oh-My-Zsh
 source $ZSH/oh-my-zsh.sh
@@ -80,5 +80,8 @@ export LANG=en_US.UTF-8
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 
-# GitHub Cli
-export GITHUB_TOKEN=96b440984e5ec6f5b781e3f70ffa5b0ec9027176
+export NODE_AUTH_TOKEN=cAgPagfk7BnZJWVyLXpbaHUGFrFBgC2gDIwE
+
+# NPM publish
+export NPM_TOKEN=b8face04-74a7-418e-86e5-033a0ee9eae2
+export NPM_EMAIL=daniel@d2pro.es
