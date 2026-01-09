@@ -18,5 +18,29 @@ export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 # Load custom commands
 export PATH="$DOTFILES/bin:$PATH"
 
+# Brew preference
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+
 # JAVA
-export JAVA_HOME=$(/usr/libexec/java_home)
+export JAVA_HOME=/opt/homebrew/opt/openjdk
+# Local bin
+export PATH="$PATH:/Users/danielmunoz/.local/bin"
+
+# Codeium Windsurf
+export PATH="/Users/danielmunoz/.codeium/windsurf/bin:$PATH"
+
+# Java
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+# Home bin
+export PATH="$HOME/bin:$PATH"
+
+# NPM global
+export PATH=~/.npm-global/bin:$PATH
+
+# Bun
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Spicetify
+export PATH=$PATH:/Users/danielmunoz/.spicetify
+
