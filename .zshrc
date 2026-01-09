@@ -55,7 +55,7 @@ ZSH_CUSTOM=$DOTFILES
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git wd composer macos)
+plugins=(gitignore)
 
 # Activate Oh-My-Zsh
 source $ZSH/oh-my-zsh.sh
@@ -67,21 +67,12 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-
+# GitHub Cli
 export NODE_AUTH_TOKEN=cAgPagfk7BnZJWVyLXpbaHUGFrFBgC2gDIwE
 
 # NPM publish
 export NPM_TOKEN=b8face04-74a7-418e-86e5-033a0ee9eae2
 export NPM_EMAIL=daniel@d2pro.es
+
+test -e /Users/danielmunoz/.iterm2_shell_integration.zsh && source /Users/danielmunoz/.iterm2_shell_integration.zsh || tru
+e
