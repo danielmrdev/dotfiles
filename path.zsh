@@ -18,9 +18,6 @@ export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 # Load custom commands
 export PATH="$DOTFILES/bin:$PATH"
 
-# Brew preference
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
-
 # JAVA
 export JAVA_HOME=/opt/homebrew/opt/openjdk
 # Local bin
@@ -44,3 +41,5 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Spicetify
 export PATH=$PATH:/Users/danielmunoz/.spicetify
 
+# Brew preference
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
