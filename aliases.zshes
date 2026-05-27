@@ -77,39 +77,32 @@ wip() {
 alias code="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code"
 
 # Help (colored with bat)
-# help() {
-#     "$@" --help 2>&1 | bat --plain --language=help
-# }
-# alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
-# alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+help() {
+    "$@" --help 2>&1 | bat --plain --language=help
+}
+alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
+alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
 
 # GLM
-# glm() {
-#   export ANTHROPIC_AUTH_TOKEN="56e2c642e29842f783e5acdd67be96b1.JviO8WFjKbuuL3A2"
-#   export ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic"
-#   export API_TIMEOUT_MS="3000000"
-#   export ANTHROPIC_DEFAULT_HAIKU_MODEL="glm-4.5-air"
-#   export ANTHROPIC_DEFAULT_SONNET_MODEL="glm-4.6"
-#   export ANTHROPIC_DEFAULT_OPUS_MODEL="glm-4.6"
-#   claude "$@"
-# }
-# ccc() {
-#   unset ANTHROPIC_AUTH_TOKEN
-#   unset ANTHROPIC_BASE_URL
-#   unset API_TIMEOUT_MS
-#   unset ANTHROPIC_DEFAULT_HAIKU_MODEL
-#   unset ANTHROPIC_DEFAULT_SONNET_MODEL
-#   unset ANTHROPIC_DEFAULT_OPUS_MODEL
-#   claude "$@"
-# }
+glm() {
+  export ANTHROPIC_AUTH_TOKEN="56e2c642e29842f783e5acdd67be96b1.JviO8WFjKbuuL3A2"
+  export ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic"
+  export API_TIMEOUT_MS="3000000"
+  export ANTHROPIC_DEFAULT_HAIKU_MODEL="glm-4.5-air"
+  export ANTHROPIC_DEFAULT_SONNET_MODEL="glm-4.6"
+  export ANTHROPIC_DEFAULT_OPUS_MODEL="glm-4.6"
+  claude "$@"
+}
+ccc() {
+  unset ANTHROPIC_AUTH_TOKEN
+  unset ANTHROPIC_BASE_URL
+  unset API_TIMEOUT_MS
+  unset ANTHROPIC_DEFAULT_HAIKU_MODEL
+  unset ANTHROPIC_DEFAULT_SONNET_MODEL
+  unset ANTHROPIC_DEFAULT_OPUS_MODEL
+  claude "$@"
+}
 
 # Alias for openclaw tui
-# alias clau='openclaw tui'
-alias cds='claude --dangerously-skip-permissions'
-alias ncm='~/.nanoclaw/scripts/nc-manager.sh'
-
-# VPS + tmux
-vps() {
-  local session_name=${1:-default}
-  TERM=xterm-256color ssh vps -t "tmux new-session -A -s $session_name"
-}
+alias clau='openclaw tui'
+alias nanoclaw='cd ~/.nanoclaw && claude'
