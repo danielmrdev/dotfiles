@@ -135,3 +135,9 @@ vps() {
   local session_name=${1:-default}
   ssh -t vps "tmux -u new-session -A -s $session_name"
 }
+
+# VPS-Mail + tmux
+vps-mail() {
+  local session_name=${1:-default}
+  ssh -t vps-mail "tmux -u new-session -A -s $session_name"
+}
