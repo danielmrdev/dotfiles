@@ -14,6 +14,9 @@ fi
 # Path to your dotfiles installation.
 export DOTFILES=$HOME/.dotfiles
 
+# Node/pnpm installed via mise
+export PATH="$HOME/.local/share/mise/installs/node/26.2.0/bin:$HOME/.local/bin:$PATH"
+
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -69,12 +72,22 @@ ZSH_CUSTOM=$DOTFILES
 plugins=(gitignore)
 
 # Activate Oh-My-Zsh
-source $ZSH/oh-my-zsh.sh
-# PowerLevel10k theme
-source /opt/homebrew/opt/powerlevel10k/share/powerlevel10k/powerlevel10k.zsh-theme
-# ZSH autosuggestions & syntax highlighting
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $(brew --prefix)/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+source "$ZSH/oh-my-zsh.sh"
+
+# Powerlevel10k theme: use the standard oh-my-zsh custom theme path.
+if [[ -f "$HOME/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme" ]]; then
+  source "$HOME/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme"
+elif [[ -f "$HOME/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme.zwc" ]]; then
+  source "$HOME/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme.zwc"
+fi
+
+# ZSH autosuggestions & syntax highlighting, if installed locally.
+if [[ -f "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+  source "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+if [[ -f "$HOME/.oh-my-zsh/custom/plugins/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh" ]]; then
+  source "$HOME/.oh-my-zsh/custom/plugins/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+fi
 
 # You may need to manually set your language environment
 export LC_ALL=en_US.UTF-8
@@ -100,10 +113,10 @@ export NODE_AUTH_TOKEN=cAgPagfk7BnZJWVyLXpbaHUGFrFBgC2gDIwE
 export NPM_TOKEN=b8face04-74a7-418e-86e5-033a0ee9eae2
 export NPM_EMAIL=daniel@d2pro.es
 
-test -e /Users/danielmunoz/.iterm2_shell_integration.zsh && source /Users/danielmunoz/.iterm2_shell_integration.zsh || true
+test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh" || true
 
 # BUN
-[ -s "/Users/danielmunoz/.bun/_bun" ] && source "/Users/danielmunoz/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 export BUN_INSTALL="$HOME/.bun"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.

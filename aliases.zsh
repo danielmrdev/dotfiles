@@ -1,17 +1,35 @@
 # Shortcuts
 alias c="clear"
 alias cat="bat"
-alias copyssh="pbcopy < $HOME/.ssh/id_rsa.pub"
 alias reload="source $HOME/.zshrc"
-alias reloaddns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
-alias ls="lsd"
+if command -v pbcopy >/dev/null 2>&1; then
+  alias copyssh="pbcopy < $HOME/.ssh/id_rsa.pub"
+else
+  alias copyssh="xclip -selection clipboard < $HOME/.ssh/id_rsa.pub"
+fi
+if command -v dscacheutil >/dev/null 2>&1 && command -v mDNSResponder >/dev/null 2>&1; then
+  alias reloaddns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
+fi
+if command -v lsd >/dev/null 2>&1; then
+  alias ls="lsd"
+  alias l="lsd -l"
+  alias ll="lsd -la"
+  alias la="lsd -a"
+elif command -v eza >/dev/null 2>&1; then
+  alias ls="eza"
+  alias l="eza -l"
+  alias ll="eza -la"
+  alias la="eza -a"
+fi
 alias myip="ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'"
 alias ip="curl ifconfig.co"
 # alias updateip="php $HOME/.dotfiles/dns-auto-updater/do-dns-auto-updater.php"
 
 # Directories
 alias dotfiles="cd $DOTFILES"
-alias library="cd $HOME/Library"
+if [[ -d "$HOME/Library" ]]; then
+  alias library="cd $HOME/Library"
+fi
 
 # Laravel
 alias art="php artisan"
@@ -74,7 +92,9 @@ wip() {
 }
 
 # Visual Studio Code
-alias code="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code"
+if [[ -x "/usr/bin/code" ]]; then
+  alias code="/usr/bin/code"
+fi
 
 # Help (colored with bat)
 # help() {
@@ -106,10 +126,12 @@ alias code="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/co
 # Alias for openclaw tui
 # alias clau='openclaw tui'
 alias cds='claude --dangerously-skip-permissions'
-alias ncm='~/.nanoclaw/scripts/nc-manager.sh'
+if [[ -x "$HOME/.nanoclaw/scripts/nc-manager.sh" ]]; then
+  alias ncm='~/.nanoclaw/scripts/nc-manager.sh'
+fi
 
 # VPS + tmux
 vps() {
   local session_name=${1:-default}
-  TERM=xterm-256color ssh vps -t "tmux new-session -A -s $session_name"
+  ssh -t vps "tmux -u new-session -A -s $session_name"
 }
