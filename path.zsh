@@ -18,17 +18,6 @@ export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 # Load custom commands
 export PATH="$DOTFILES/bin:$PATH"
 
-# JAVA
-export JAVA_HOME=/opt/homebrew/opt/openjdk
-# Local bin
-export PATH="$PATH:/Users/danielmunoz/.local/bin"
-
-# Codeium Windsurf
-export PATH="/Users/danielmunoz/.codeium/windsurf/bin:$PATH"
-
-# Java
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-
 # Home bin
 export PATH="$HOME/bin:$PATH"
 
@@ -38,8 +27,12 @@ export PATH=~/.npm-global/bin:$PATH
 # Bun
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-# Spicetify
-export PATH=$PATH:/Users/danielmunoz/.spicetify
+# Local bin
+export PATH="$PATH:$HOME/.local/bin"
 
-# Brew preference
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+# Platform-specific paths
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  export JAVA_HOME=/opt/homebrew/opt/openjdk
+  export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/openjdk/bin:$PATH"
+  export PATH="$PATH:/Users/danielmunoz/.codeium/windsurf/bin:/Users/danielmunoz/.spicetify"
+fi
