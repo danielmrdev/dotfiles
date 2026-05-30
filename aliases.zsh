@@ -4,8 +4,10 @@ alias cat="bat"
 alias reload="source $HOME/.zshrc"
 if command -v pbcopy >/dev/null 2>&1; then
   alias copyssh="pbcopy < $HOME/.ssh/id_rsa.pub"
+elif [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+  alias copyssh="wl-copy < $HOME/.ssh/id_ed25519.pub"
 else
-  alias copyssh="xclip -selection clipboard < $HOME/.ssh/id_rsa.pub"
+  alias copyssh="xclip -selection clipboard < $HOME/.ssh/id_ed25519.pub"
 fi
 if command -v dscacheutil >/dev/null 2>&1 && command -v mDNSResponder >/dev/null 2>&1; then
   alias reloaddns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
@@ -134,10 +136,4 @@ fi
 vps() {
   local session_name=${1:-default}
   ssh -t vps "tmux -u new-session -A -s $session_name"
-}
-
-# VPS-Mail + tmux
-vps-mail() {
-  local session_name=${1:-default}
-  ssh -t vps-mail "tmux -u new-session -A -s $session_name"
 }
