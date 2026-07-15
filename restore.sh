@@ -17,13 +17,31 @@ link() {
 
   mkdir -p "$(dirname "$linkpath")"
 
-  # Remove existing file/symlink at destination
-  if [ -e "$linkpath" ] || [ -L "$linkpath" ]; then
+  # Remove existing file/symlink/dir at destination
+  if [ -L "$linkpath" ] || [ -f "$linkpath" ]; then
     rm -f "$linkpath"
+  elif [ -d "$linkpath" ]; then
+    # Only remove if it's not a critical system dir
+    rmdir "$linkpath" 2>/dev/null || true
   fi
 
   ln -s "$fulltarget" "$linkpath"
   echo "  LINK $target → $linkpath"
+}
+
+# Helper: link all files in a dir (with .bak filter)
+link_all() {
+  local srcdir="$DOTFILES/$1"
+  local destdir="$2"
+  local pattern="${3:-*}"
+  for f in "$srcdir"/$pattern; do
+    [ -f "$f" ] || [ -d "$f" ] || continue
+    b="$(basename "$f")"
+    [[ "$b" == *.bak.* ]] && continue
+    [[ "$b" == *.bak_* ]] && continue
+    [[ "$b" == *.bak[0-9]* ]] && continue
+    link "$1/$b" "$destdir/$b"
+  done
 }
 
 echo "=== Creating symlinks ==="
@@ -31,39 +49,24 @@ echo "=== Creating symlinks ==="
 # Shell
 link ".zshrc"                    "$HOME/.zshrc"
 link ".p10k.zsh"                 "$HOME/.p10k.zsh"
-link "aliases.zsh"               "$HOME/.dotfiles/aliases.zsh"
-link "path.zsh"                  "$HOME/.dotfiles/path.zsh"
 
 # Hyprland
-for f in "$DOTFILES/.config/hypr/"*.conf; do
-  b="$(basename "$f")"
-  link ".config/hypr/$b"         "$HOME/.config/hypr/$b"
-done
+link_all ".config/hypr"    "$HOME/.config/hypr"
 
 # Waybar
-for f in "$DOTFILES/.config/waybar/"*; do
-  b="$(basename "$f")"
-  link ".config/waybar/$b"       "$HOME/.config/waybar/$b"
-done
+link_all ".config/waybar"  "$HOME/.config/waybar"
 
 # Walker
 link ".config/walker/config.toml" "$HOME/.config/walker/config.toml"
 
 # SwayOSD
-for f in "$DOTFILES/.config/swayosd/"*; do
-  b="$(basename "$f")"
-  link ".config/swayosd/$b"      "$HOME/.config/swayosd/$b"
-done
+link_all ".config/swayosd" "$HOME/.config/swayosd"
 
 # Btop
 link ".config/btop/btop.conf"    "$HOME/.config/btop/btop.conf"
 
 # Fastfetch
-for f in "$DOTFILES/.config/fastfetch/"*; do
-  b="$(basename "$f")"
-  [ "$b" = "*.bak.*" ] && continue
-  link ".config/fastfetch/$b"    "$HOME/.config/fastfetch/$b"
-done
+link_all ".config/fastfetch" "$HOME/.config/fastfetch"
 
 # Terminals
 link ".config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml" 2>/dev/null || true
@@ -71,10 +74,8 @@ link ".config/ghostty/config"           "$HOME/.config/ghostty/config" 2>/dev/nu
 link ".config/foot/foot.ini"            "$HOME/.config/foot/foot.ini" 2>/dev/null || true
 
 # Systemd user services
-for f in "$DOTFILES/.config/systemd/user/"*.service "$DOTFILES/.config/systemd/user/"*.timer; do
-  b="$(basename "$f")"
-  link ".config/systemd/user/$b" "$HOME/.config/systemd/user/$b"
-done
+link_all ".config/systemd/user" "$HOME/.config/systemd/user" "*.service"
+link_all ".config/systemd/user" "$HOME/.config/systemd/user" "*.timer"
 for d in "$DOTFILES/.config/systemd/user/"*.service.d; do
   [ -d "$d" ] || continue
   b="$(basename "$d")"
@@ -82,10 +83,7 @@ for d in "$DOTFILES/.config/systemd/user/"*.service.d; do
 done
 
 # Autostart
-for f in "$DOTFILES/.config/autostart/"*.desktop; do
-  b="$(basename "$f")"
-  link ".config/autostart/$b"    "$HOME/.config/autostart/$b"
-done
+link_all ".config/autostart" "$HOME/.config/autostart" "*.desktop"
 
 # Environment
 for f in "$DOTFILES/.config/environment.d/"*; do
@@ -98,40 +96,24 @@ done
 link ".config/chromium-flags.conf" "$HOME/.config/chromium-flags.conf" 2>/dev/null || true
 
 # Omarchy hooks
-for f in "$DOTFILES/.config/omarchy/hooks/"*; do
-  b="$(basename "$f")"
-  [ "$b" = "*" ] && continue
-  link ".config/omarchy/hooks/$b" "$HOME/.config/omarchy/hooks/$b"
-done
+link_all ".config/omarchy/hooks" "$HOME/.config/omarchy/hooks"
 
-# Omarchy custom theme
-for f in "$DOTFILES/.config/omarchy/themes/harbor/"*; do
-  b="$(basename "$f")"
-  [ -f "$f" ] && link ".config/omarchy/themes/harbor/$b" "$HOME/.config/omarchy/themes/harbor/$b" || true
+# Omarchy custom theme (files + backgrounds dir)
+link_all ".config/omarchy/themes/harbor" "$HOME/.config/omarchy/themes/harbor"
+for d in "$DOTFILES/.config/omarchy/themes/harbor/backgrounds/"*; do
+  [ -f "$d" ] || continue
+  b="$(basename "$d")"
+  link ".config/omarchy/themes/harbor/backgrounds/$b" "$HOME/.config/omarchy/themes/harbor/backgrounds/$b"
 done
-# Also link background dir
-if [ -d "$DOTFILES/.config/omarchy/themes/harbor/backgrounds" ]; then
-  link ".config/omarchy/themes/harbor/backgrounds" "$HOME/.config/omarchy/themes/harbor/backgrounds" 2>/dev/null || true
-fi
 
 # Omarchy extensions
-for f in "$DOTFILES/.config/omarchy/extensions/"*; do
-  b="$(basename "$f")"
-  [ "$b" = "*" ] && continue
-  link ".config/omarchy/extensions/$b" "$HOME/.config/omarchy/extensions/$b"
-done
+link_all ".config/omarchy/extensions" "$HOME/.config/omarchy/extensions"
 
 # Omarchy branding
-for f in "$DOTFILES/.config/omarchy/branding/"*; do
-  b="$(basename "$f")"
-  link ".config/omarchy/branding/$b" "$HOME/.config/omarchy/branding/$b"
-done
+link_all ".config/omarchy/branding" "$HOME/.config/omarchy/branding"
 
 # Custom scripts
-for f in "$DOTFILES/.local/bin/"*; do
-  b="$(basename "$f")"
-  link ".local/bin/$b" "$HOME/.local/bin/$b"
-done
+link_all ".local/bin" "$HOME/.local/bin"
 
 echo ""
 echo "=== Reloading systemd ==="
