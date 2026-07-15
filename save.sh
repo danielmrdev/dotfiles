@@ -4,98 +4,120 @@ set -e
 
 DOTFILES="$HOME/.dotfiles"
 
+# Safe copy: skip if source and dest are the same file (e.g. via symlink)
+safe_cp() {
+  local src="$1" dst="$2"
+  if [ "$(stat -c '%d:%i' "$src" 2>/dev/null)" = "$(stat -c '%d:%i' "$dst" 2>/dev/null)" ]; then
+    return 0  # same file, skip
+  fi
+  cp -a "$src" "$dst"
+}
+
+safe_cp_dir() {
+  local src_dir="$1" dst_dir="$2" pattern="${3:-*}"
+  mkdir -p "$dst_dir"
+  for f in "$src_dir"/$pattern; do
+    [ -f "$f" ] || [ -d "$f" ] || continue
+    b="$(basename "$f")"
+    [[ "$b" == *.bak.* ]] || [[ "$b" == *.bak[0-9]* ]] || [[ "$b" == *.bak_* ]] || safe_cp "$f" "$dst_dir/"
+  done
+}
+
 echo "=== Copying configs to $DOTFILES ==="
 
 # Hyprland
 echo "[hypr]"
-cp -a "$HOME/.config/hypr/"*.conf "$DOTFILES/.config/hypr/"
-cp -a "$HOME/.config/hypr/hy3.conf" "$DOTFILES/.config/hypr/" 2>/dev/null || true
-cp -a "$HOME/.config/hypr/hy3-layout-watch.sh" "$DOTFILES/.config/hypr/" 2>/dev/null || true
+mkdir -p "$DOTFILES/.config/hypr"
+safe_cp_dir "$HOME/.config/hypr" "$DOTFILES/.config/hypr" "*.conf"
+safe_cp "$HOME/.config/hypr/hy3.conf" "$DOTFILES/.config/hypr/hy3.conf"
+safe_cp "$HOME/.config/hypr/hy3-layout-watch.sh" "$DOTFILES/.config/hypr/hy3-layout-watch.sh"
 
-# Waybar (exclude .bak files)
+# Waybar
 echo "[waybar]"
-for f in "$HOME/.config/waybar/"*; do
-  b="$(basename "$f")"
-  [[ "$b" == *.bak.* ]] || [[ "$b" == *.bak[0-9]* ]] || [[ "$b" == *.bak_* ]] || cp -a "$f" "$DOTFILES/.config/waybar/"
-done
+safe_cp_dir "$HOME/.config/waybar" "$DOTFILES/.config/waybar"
 
 # Walker
 echo "[walker]"
-cp -a "$HOME/.config/walker/config.toml" "$DOTFILES/.config/walker/"
+mkdir -p "$DOTFILES/.config/walker"
+safe_cp "$HOME/.config/walker/config.toml" "$DOTFILES/.config/walker/config.toml"
 
 # SwayOSD
 echo "[swayosd]"
-cp -a "$HOME/.config/swayosd/"* "$DOTFILES/.config/swayosd/"
+safe_cp_dir "$HOME/.config/swayosd" "$DOTFILES/.config/swayosd"
 
 # Btop
 echo "[btop]"
-cp -a "$HOME/.config/btop/btop.conf" "$DOTFILES/.config/btop/"
+mkdir -p "$DOTFILES/.config/btop"
+safe_cp "$HOME/.config/btop/btop.conf" "$DOTFILES/.config/btop/btop.conf"
 
 # Fastfetch
 echo "[fastfetch]"
-cp -a "$HOME/.config/fastfetch/"* "$DOTFILES/.config/fastfetch/"
+safe_cp_dir "$HOME/.config/fastfetch" "$DOTFILES/.config/fastfetch"
 
 # Terminals
 echo "[terminals]"
-cp -a "$HOME/.config/alacritty/alacritty.toml" "$DOTFILES/.config/alacritty/" 2>/dev/null || true
-cp -a "$HOME/.config/ghostty/config" "$DOTFILES/.config/ghostty/" 2>/dev/null || true
-cp -a "$HOME/.config/foot/foot.ini" "$DOTFILES/.config/foot/" 2>/dev/null || true
+safe_cp "$HOME/.config/alacritty/alacritty.toml" "$DOTFILES/.config/alacritty/alacritty.toml"
+safe_cp "$HOME/.config/ghostty/config" "$DOTFILES/.config/ghostty/config"
+safe_cp "$HOME/.config/foot/foot.ini" "$DOTFILES/.config/foot/foot.ini"
 
-# Systemd user services (custom only, exclude symlink targets/wants dirs)
+# Systemd user services
 echo "[systemd]"
+mkdir -p "$DOTFILES/.config/systemd/user"
 for f in "$HOME/.config/systemd/user/"*.service "$HOME/.config/systemd/user/"*.timer; do
   [ -f "$f" ] || continue
   # Skip symlinks to /dev/null (Nextcloud noise)
   [ -L "$f" ] && [ "$(readlink "$f")" = "/dev/null" ] && continue
-  cp -a "$f" "$DOTFILES/.config/systemd/user/"
+  safe_cp "$f" "$DOTFILES/.config/systemd/user/"
 done
-# Service drop-in overrides
 for d in "$HOME/.config/systemd/user/"*.service.d; do
-  [ -d "$d" ] && cp -a "$d" "$DOTFILES/.config/systemd/user/" || true
+  [ -d "$d" ] || continue
+  safe_cp "$d" "$DOTFILES/.config/systemd/user/"
 done
 
 # Autostart
 echo "[autostart]"
-cp -a "$HOME/.config/autostart/"*.desktop "$DOTFILES/.config/autostart/"
+mkdir -p "$DOTFILES/.config/autostart"
+safe_cp_dir "$HOME/.config/autostart" "$DOTFILES/.config/autostart" "*.desktop"
 
 # Environment
 echo "[environment]"
-cp -a "$HOME/.config/environment.d/"* "$DOTFILES/.config/environment.d/"
+safe_cp_dir "$HOME/.config/environment.d" "$DOTFILES/.config/environment.d"
 
 # Chromium flags
-echo "[chromium-flags]"
-cp -a "$HOME/.config/chromium-flags.conf" "$DOTFILES/.config/" 2>/dev/null || true
+safe_cp "$HOME/.config/chromium-flags.conf" "$DOTFILES/.config/chromium-flags.conf"
 
 # Omarchy hooks
 echo "[omarchy hooks]"
-cp -a "$HOME/.config/omarchy/hooks/"* "$DOTFILES/.config/omarchy/hooks/" 2>/dev/null || true
+safe_cp_dir "$HOME/.config/omarchy/hooks" "$DOTFILES/.config/omarchy/hooks"
 
 # Omarchy custom theme
 echo "[omarchy theme harbor]"
-cp -a "$HOME/.config/omarchy/themes/harbor/"* "$DOTFILES/.config/omarchy/themes/harbor/" 2>/dev/null || true
+safe_cp_dir "$HOME/.config/omarchy/themes/harbor" "$DOTFILES/.config/omarchy/themes/harbor"
+for d in "$HOME/.config/omarchy/themes/harbor/backgrounds/"*; do
+  [ -f "$d" ] && safe_cp "$d" "$DOTFILES/.config/omarchy/themes/harbor/backgrounds/" || true
+done
 
 # Omarchy extensions
 echo "[omarchy extensions]"
-cp -a "$HOME/.config/omarchy/extensions/"* "$DOTFILES/.config/omarchy/extensions/" 2>/dev/null || true
+safe_cp_dir "$HOME/.config/omarchy/extensions" "$DOTFILES/.config/omarchy/extensions"
 
 # Omarchy branding
 echo "[omarchy branding]"
-cp -a "$HOME/.config/omarchy/branding/"* "$DOTFILES/.config/omarchy/branding/" 2>/dev/null || true
+safe_cp_dir "$HOME/.config/omarchy/branding" "$DOTFILES/.config/omarchy/branding"
 
 # Custom scripts
 echo "[scripts]"
-for f in "$HOME/.local/bin/teams-jiggler" "$HOME/.local/bin/teams-jiggler-status" \
-         "$HOME/.local/bin/teams-jiggler-toggle" "$HOME/.local/bin/teams-jiggler-off" \
-         "$HOME/.local/bin/nextcloud-external-guard" "$HOME/.local/bin/neon-pilot-app" \
-         "$HOME/.local/bin/omniroute"; do
-  [ -f "$f" ] && cp -a "$f" "$DOTFILES/.local/bin/" || true
+mkdir -p "$DOTFILES/.local/bin"
+for f in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-off \
+         nextcloud-external-guard neon-pilot-app omniroute; do
+  [ -f "$HOME/.local/bin/$f" ] && safe_cp "$HOME/.local/bin/$f" "$DOTFILES/.local/bin/$f" || true
 done
 
 echo ""
 echo "=== Git add + commit ==="
 cd "$DOTFILES"
 
-# Update .gitignore to exclude macOS artifacts and backups
+# Update .gitignore
 cat > .gitignore << 'GITIGNORE'
 Brewfile.lock.json
 themes/
