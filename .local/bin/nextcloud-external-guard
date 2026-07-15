@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MOUNT=/mnt/nextcloud
+SYNC_DIR="$MOUNT/Nextcloud"
+LOG="$HOME/.local/state/nextcloud-external-guard.log"
+
+mkdir -p "$(dirname "$LOG")"
+
+if ! mountpoint -q "$MOUNT"; then
+  printf '%s Nextcloud not started: %s is not mounted\n' "$(date -Is)" "$MOUNT" >> "$LOG"
+  notify-send "Nextcloud not started" "External drive is not mounted at $MOUNT" 2>/dev/null || true
+  exit 0
+fi
+
+if [ ! -d "$SYNC_DIR" ]; then
+  printf '%s Nextcloud not started: %s missing\n' "$(date -Is)" "$SYNC_DIR" >> "$LOG"
+  notify-send "Nextcloud not started" "Sync folder missing: $SYNC_DIR" 2>/dev/null || true
+  exit 0
+fi
+
+exec /usr/bin/nextcloud --background

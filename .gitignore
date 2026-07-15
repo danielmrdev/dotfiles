@@ -2,3 +2,5 @@ Brewfile.lock.json
 themes/
 .zshrc_old
 .zshenv.local
+*.bak.*
+.bak/

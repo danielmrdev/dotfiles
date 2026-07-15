@@ -1,0 +1,9 @@
+[Unit]
+Description=Disable Teams jiggler after weekday schedule
+
+[Timer]
+OnCalendar=Mon..Fri 15:18
+Persistent=false
+
+[Install]
+WantedBy=timers.target

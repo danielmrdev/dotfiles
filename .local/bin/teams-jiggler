@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/teams-jiggler"
+MODE_FILE="$CONFIG_DIR/mode"
+START="07:54"
+END="15:18"
+MIN_INTERVAL_SECONDS=35
+MAX_INTERVAL_SECONDS=65
+MAX_PIXELS=3
+
+mkdir -p "$CONFIG_DIR"
+[[ -f "$MODE_FILE" ]] || printf 'schedule\n' > "$MODE_FILE"
+
+within_schedule() {
+  local day time
+  day=$(date +%u)      # 1=Mon .. 7=Sun
+  time=$(date +%H:%M)
+  [[ "$day" -ge 1 && "$day" -le 5 && "$time" > "$START" && "$time" < "$END" ]]
+}
+
+rand_between() {
+  local min=$1 max=$2
+  echo $((RANDOM % (max - min + 1) + min))
+}
+
+jiggle() {
+  local dx dy pause
+  dx=$(rand_between "-$MAX_PIXELS" "$MAX_PIXELS")
+  dy=$(rand_between "-$MAX_PIXELS" "$MAX_PIXELS")
+  pause="0.$(rand_between 12 45)"
+
+  if [[ "$dx" -eq 0 && "$dy" -eq 0 ]]; then
+    dx=1
+  fi
+
+  ydotool mousemove "$dx" "$dy" >/dev/null 2>&1 || return 1
+  sleep "$pause"
+  ydotool mousemove "$((-dx))" "$((-dy))" >/dev/null 2>&1 || return 1
+}
+
+inhibit_idle_once() {
+  systemd-inhibit --what=idle:sleep --mode=block --why="Teams jiggler active" sleep $((MAX_INTERVAL_SECONDS + 10)) &
+}
+
+while true; do
+  mode=$(cat "$MODE_FILE" 2>/dev/null || printf 'off')
+  case "$mode" in
+    infinite)
+      inhibit_idle_once
+      jiggle || true
+      ;;
+    schedule)
+      if within_schedule; then
+        inhibit_idle_once
+        jiggle || true
+      fi
+      ;;
+    off|*)
+      ;;
+  esac
+  sleep "$(rand_between "$MIN_INTERVAL_SECONDS" "$MAX_INTERVAL_SECONDS")"
+done
