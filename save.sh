@@ -12,9 +12,12 @@ cp -a "$HOME/.config/hypr/"*.conf "$DOTFILES/.config/hypr/"
 cp -a "$HOME/.config/hypr/hy3.conf" "$DOTFILES/.config/hypr/" 2>/dev/null || true
 cp -a "$HOME/.config/hypr/hy3-layout-watch.sh" "$DOTFILES/.config/hypr/" 2>/dev/null || true
 
-# Waybar
+# Waybar (exclude .bak files)
 echo "[waybar]"
-cp -a "$HOME/.config/waybar/"* "$DOTFILES/.config/waybar/"
+for f in "$HOME/.config/waybar/"*; do
+  b="$(basename "$f")"
+  [[ "$b" == *.bak.* ]] || [[ "$b" == *.bak[0-9]* ]] || [[ "$b" == *.bak_* ]] || cp -a "$f" "$DOTFILES/.config/waybar/"
+done
 
 # Walker
 echo "[walker]"
@@ -38,10 +41,13 @@ cp -a "$HOME/.config/alacritty/alacritty.toml" "$DOTFILES/.config/alacritty/" 2>
 cp -a "$HOME/.config/ghostty/config" "$DOTFILES/.config/ghostty/" 2>/dev/null || true
 cp -a "$HOME/.config/foot/foot.ini" "$DOTFILES/.config/foot/" 2>/dev/null || true
 
-# Systemd user services (custom only)
+# Systemd user services (custom only, exclude symlink targets/wants dirs)
 echo "[systemd]"
 for f in "$HOME/.config/systemd/user/"*.service "$HOME/.config/systemd/user/"*.timer; do
-  [ -f "$f" ] && cp -a "$f" "$DOTFILES/.config/systemd/user/" || true
+  [ -f "$f" ] || continue
+  # Skip symlinks to /dev/null (Nextcloud noise)
+  [ -L "$f" ] && [ "$(readlink "$f")" = "/dev/null" ] && continue
+  cp -a "$f" "$DOTFILES/.config/systemd/user/"
 done
 # Service drop-in overrides
 for d in "$HOME/.config/systemd/user/"*.service.d; do
