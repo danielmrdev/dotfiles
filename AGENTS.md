@@ -16,8 +16,8 @@ edits the file inside the repo, so changes are always trackable.
 |------|----------|
 | `.zshrc` | `~/.zshrc` → `~/.dotfiles/.zshrc` |
 | `.p10k.zsh` | `~/.p10k.zsh` → `~/.dotfiles/.p10k.zsh` |
-| `aliases.zsh` | sourced by .zshrc from `~/.dotfiles/` |
-| `path.zsh` | sourced by .zshrc from `~/.dotfiles/` |
+| `aliases.zsh` | NOT symlinked. Sourced directly by .zshrc from `~/.dotfiles/aliases.zsh` |
+| `path.zsh` | NOT symlinked. Sourced directly by .zshrc from `~/.dotfiles/path.zsh` |
 
 ### Omarchy / Desktop Config
 | Area | Path in `~/.dotfiles/` |
