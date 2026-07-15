@@ -1,0 +1,1 @@
+/home/daniel/.dotfiles/.config/omarchy/hooks/battery-low.d
