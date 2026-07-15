@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/teams-jiggler"
+MODE_FILE="$CONFIG_DIR/mode"
+START="07:54"
+END="15:18"
+mkdir -p "$CONFIG_DIR"
+mode=$(cat "$MODE_FILE" 2>/dev/null || printf 'schedule')
+
+day=$(date +%u)
+time=$(date +%H:%M)
+active=false
+if [[ "$mode" == "infinite" ]]; then
+  active=true
+elif [[ "$mode" == "schedule" && "$day" -ge 1 && "$day" -le 5 && "$time" > "$START" && "$time" < "$END" ]]; then
+  active=true
+fi
+
+case "$mode:$active" in
+  infinite:true)
+    printf '{"text":"∞","class":"active infinite","tooltip":"Teams jiggler: infinite\\nClick: off\\nRight-click: off\\nMiddle-click: infinite"}\n'
+    ;;
+  schedule:true)
+    printf '{"text":"󰥔","class":"active schedule","tooltip":"Teams jiggler: schedule active\\nMon-Fri 07:54-15:18\\nClick: infinite\\nRight-click: off"}\n'
+    ;;
+  schedule:false)
+    printf '{"text":"󰥔","class":"schedule","tooltip":"Teams jiggler: scheduled\\nMon-Fri 07:54-15:18\\nCurrently idle\\nClick: infinite\\nRight-click: off"}\n'
+    ;;
+  off:*)
+    printf '{"text":"󰅖","class":"off","tooltip":"Teams jiggler: off\\nClick: schedule\\nMiddle-click: infinite"}\n'
+    ;;
+  *)
+    printf '{"text":"!","class":"off","tooltip":"Teams jiggler: invalid mode (%s)"}\n' "$mode"
+    ;;
+esac

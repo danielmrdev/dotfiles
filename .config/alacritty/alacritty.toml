@@ -1,0 +1,26 @@
+general.import = [ "~/.config/omarchy/current/theme/alacritty.toml" ]
+
+[terminal]
+osc52 = "CopyPaste"
+
+[selection]
+save_to_clipboard = true
+
+[font]
+normal = { family = "iA Writer Mono S" }
+bold = { family = "iA Writer Mono S" }
+italic = { family = "iA Writer Mono S" }
+size = 10
+builtin_box_drawing = true
+
+[window]
+padding.x = 14
+padding.y = 14
+decorations = "None"
+
+[keyboard]
+bindings = [
+{ key = "Insert", mods = "Shift", action = "Paste" },
+{ key = "Insert", mods = "Control", action = "Copy" },
+{ key = "Return", mods = "Shift", chars = "\u001B\r" }
+]

@@ -71,6 +71,39 @@ ZSH_CUSTOM=$DOTFILES
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(gitignore)
 
+# ── Env vars needed also in non-interactive shells (pi/omp !!command, etc.) ──
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# GitHub Cli
+export NODE_AUTH_TOKEN=cAgPagfk7BnZJWVyLXpbaHUGFrFBgC2gDIwE
+
+# NPM publish
+export NPM_TOKEN=b8face04-74a7-418e-86e5-033a0ee9eae2
+export NPM_EMAIL=daniel@d2pro.es
+
+# Bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/home/daniel/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+# Skip oh-my-zsh if not interactive, or if called via `zsh -c` (pi/omp !!command).
+# Uses ZSH_EXECUTION_STRING (set only by -c flag) instead of -t 0 to avoid
+# a race where uwsm-app/daemon launch doesn't inherit a proper tty stdin.
+[[ -o interactive && -z "$ZSH_EXECUTION_STRING" ]] || {
+  source "$DOTFILES/aliases.zsh"
+  source "$DOTFILES/path.zsh"
+  return
+}
+
 # Activate Oh-My-Zsh
 source "$ZSH/oh-my-zsh.sh"
 
@@ -89,35 +122,11 @@ if [[ -f "$HOME/.oh-my-zsh/custom/plugins/zsh-fast-syntax-highlighting/fast-synt
   source "$HOME/.oh-my-zsh/custom/plugins/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 fi
 
-# You may need to manually set your language environment
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-
-# GitHub Cli
-export NODE_AUTH_TOKEN=cAgPagfk7BnZJWVyLXpbaHUGFrFBgC2gDIwE
-
-# NPM publish
-export NPM_TOKEN=b8face04-74a7-418e-86e5-033a0ee9eae2
-export NPM_EMAIL=daniel@d2pro.es
-
+# iTerm2 shell integration (interactive only)
 test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh" || true
-
-# BUN
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-export BUN_INSTALL="$HOME/.bun"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# bun completions
+[ -s "/home/daniel/.bun/_bun" ] && source "/home/daniel/.bun/_bun"

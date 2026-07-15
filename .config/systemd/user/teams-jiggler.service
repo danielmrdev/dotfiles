@@ -1,0 +1,11 @@
+[Unit]
+Description=Teams presence jiggler
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/teams-jiggler
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

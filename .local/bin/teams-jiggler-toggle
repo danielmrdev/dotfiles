@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/teams-jiggler"
+MODE_FILE="$CONFIG_DIR/mode"
+mkdir -p "$CONFIG_DIR"
+mode=$(cat "$MODE_FILE" 2>/dev/null || printf 'off')
+
+case "${1:-cycle}" in
+  off)
+    next="off"
+    ;;
+  schedule)
+    next="schedule"
+    ;;
+  infinite)
+    next="infinite"
+    ;;
+  cycle|*)
+    case "$mode" in
+      off) next="schedule" ;;
+      schedule) next="infinite" ;;
+      infinite) next="off" ;;
+      *) next="off" ;;
+    esac
+    ;;
+esac
+
+printf '%s\n' "$next" > "$MODE_FILE"
+pkill -SIGRTMIN+11 waybar 2>/dev/null || true
+notify-send -u low "Teams jiggler: $next" 2>/dev/null || true

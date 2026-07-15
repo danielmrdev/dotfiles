@@ -22,7 +22,7 @@ elif command -v eza >/dev/null 2>&1; then
   alias la="eza -a"
 fi
 alias myip="ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'"
-alias ip="curl ifconfig.co"
+alias publicip="curl ifconfig.co"
 # alias updateip="php $HOME/.dotfiles/dns-auto-updater/do-dns-auto-updater.php"
 
 # Directories
@@ -32,29 +32,24 @@ if [[ -d "$HOME/Library" ]]; then
 fi
 
 # Laravel
-alias art="php artisan"
-alias t="clear && phpunit"
-alias p="clear && ./vendor/bin/pest"
-
-# Kill processes
-function kill () {
-  command kill -KILL $(pidof "$@")
-}
+# alias art="php artisan"
+# alias t="clear && phpunit"
+# alias p="clear && ./vendor/bin/pest"
 
 # Composer Package development
-composer-link() {
-  repositoryName=${3:-local}
+# composer-link() {
+#   repositoryName=${3:-local}
 
-  composer config repositories.$repositoryName '{"type": "path", "url": "'$1'", "options": {"symlink": true}}' --file composer.json
-  composer require $2 @dev
-}
+#   composer config repositories.$repositoryName '{"type": "path", "url": "'$1'", "options": {"symlink": true}}' --file composer.json
+#   composer require $2 @dev
+# }
 # Add HAYAI dependency to a project
-composer-hayai() {
-  branchName=dev-${1:-master}
+# composer-hayai() {
+#   branchName=dev-${1:-master}
 
-  composer config repositories.laravel-hayai '{"type": "vcs", "url": "git@bitbucket.org:d2pro/laravel-hayai.git"}' --file composer.json
-  composer require d2pro/laravel-hayai:$branchName
-}
+#   composer config repositories.laravel-hayai '{"type": "vcs", "url": "git@bitbucket.org:d2pro/laravel-hayai.git"}' --file composer.json
+#   composer require d2pro/laravel-hayai:$branchName
+# }
 
 # Git
 alias gaa="git add --all"
@@ -96,6 +91,11 @@ if [[ -x "/usr/bin/code" ]]; then
   alias code="/usr/bin/code"
 fi
 
+# Kill processes
+function kill () {
+  command kill -KILL $(pidof "$@")
+}
+
 # Help (colored with bat)
 # help() {
 #     "$@" --help 2>&1 | bat --plain --language=help
@@ -134,4 +134,9 @@ fi
 vps() {
   local session_name=${1:-default}
   ssh -t vps "tmux -u new-session -A -s $session_name"
+}
+# VPS-MAIL + tmux
+vps2() {
+  local session_name=${1:-default}
+  ssh -t vps-mail "tmux -u new-session -A -s $session_name"
 }

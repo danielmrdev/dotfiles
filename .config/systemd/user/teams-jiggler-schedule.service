@@ -1,0 +1,6 @@
+[Unit]
+Description=Switch Teams jiggler to scheduled mode
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/teams-jiggler-toggle schedule
