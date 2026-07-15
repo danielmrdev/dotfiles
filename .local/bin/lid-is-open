@@ -1,0 +1,5 @@
+#!/bin/bash
+
+LID_STATE=$(awk '{print $2}' /proc/acpi/button/lid/LID/state 2>/dev/null)
+[ -z "$LID_STATE" ] && exit 0
+[ "$LID_STATE" = "open" ] && exit 0 || exit 1

@@ -116,6 +116,15 @@ link_all ".config/omarchy/branding" "$HOME/.config/omarchy/branding"
 link_all ".local/bin" "$HOME/.local/bin"
 
 echo ""
+echo "=== System files (PAM + fingerprint script) ==="
+echo ""
+echo "These need root. Run after restore.sh:"
+echo ""
+echo '  sudo cp "$DOTFILES/.local/bin/lid-is-open" /usr/local/bin/lid-is-open'
+echo '  sudo chmod +x /usr/local/bin/lid-is-open'
+echo '  sudo cp "$DOTFILES/etc/pam.d/sudo" /etc/pam.d/sudo'
+echo '  sudo cp "$DOTFILES/etc/pam.d/polkit-1" /etc/pam.d/polkit-1'
+echo ""
 echo "=== Reloading systemd ==="
 systemctl --user daemon-reload 2>/dev/null || true
 

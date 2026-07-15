@@ -4,14 +4,18 @@ set -e
 
 DOTFILES="$HOME/.dotfiles"
 
-# Safe copy: skip if source and dest are the same file (e.g. via symlink)
+# Safe copy: skip if source and dest point to the same file (via symlink)
 safe_cp() {
   local src="$1" dst="$2"
-  if [ "$(stat -c '%d:%i' "$src" 2>/dev/null)" = "$(stat -c '%d:%i' "$dst" 2>/dev/null)" ]; then
+  # If dst is a directory, append src's basename
+  if [ -d "$dst" ]; then
+    dst="$dst/$(basename "$src")"
+  fi
+  if [ "$src" -ef "$dst" ]; then
     return 0  # same file, skip
   fi
   cp -a "$src" "$dst"
-}
+} 
 
 safe_cp_dir() {
   local src_dir="$1" dst_dir="$2" pattern="${3:-*}"

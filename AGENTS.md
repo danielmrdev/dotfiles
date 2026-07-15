@@ -38,6 +38,15 @@ edits the file inside the repo, so changes are always trackable.
 | systemd drop-in overrides | `.config/systemd/user/*.service.d/` |
 | autostart .desktop | `.config/autostart/*.desktop` |
 
+### System-Level Config (in `/etc/`)
+| File | Origin | Purpose |
+|------|--------|---------|
+| `etc/pam.d/sudo` | `/etc/pam.d/sudo` | PAM: skip fprintd on lid closed |
+| `etc/pam.d/polkit-1` | `/etc/pam.d/polkit-1` | PAM: skip fprintd on lid closed |
+
+These are plain copies (not symlinks — `/etc/` needs root).
+`save.sh` backs them up, `restore.sh` prints instructions for sudo deployment.
+
 ### Omarchy Customizations
 | Type | Path in `~/.dotfiles/` |
 |------|------------------------|
@@ -61,6 +70,9 @@ edits the file inside the repo, so changes are always trackable.
 | `nextcloud-external-guard` | Guard process for Nextcloud |
 | `neon-pilot-app` | Neon pilot launcher |
 | `omniroute` | Omni route tool |
+| `lid-is-open` | Skip fingerprint auth when laptop lid closed |
+
+Also deployed to `/usr/local/bin/lid-is-open` (system-wide, for PAM).
 
 ### The Scripts Themselves
 - `save.sh` — copy+commit+push
@@ -193,6 +205,8 @@ add to save.sh's script section, commit.
 │       ├── themes/harbor/
 │       ├── extensions/
 │       └── branding/
+├── etc/
+│   └── pam.d/                # PAM ref copies (system-level)
 └── .local/bin/               # Custom scripts
 ```
 

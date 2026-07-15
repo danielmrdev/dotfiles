@@ -1,0 +1,1 @@
+/home/daniel/.dotfiles/.config/omarchy/hooks/post-boot.d
