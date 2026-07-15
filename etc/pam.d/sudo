@@ -1,7 +1,0 @@
-# skip fprintd when lid closed -> pam_exec check lid state
-auth [success=ok default=1] pam_exec.so quiet /usr/local/bin/lid-is-open
-auth sufficient pam_fprintd.so
-#%PAM-1.0
-auth		include		system-auth
-account		include		system-auth
-session		include		system-auth
