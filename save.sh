@@ -141,7 +141,7 @@ safe_cp_dir "$HOME/.config/omarchy/branding" "$DOTFILES/.config/omarchy/branding
 echo "[scripts]"
 mkdir -p "$DOTFILES/.local/bin"
 for s in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-off \
-         nextcloud-external-guard neon-pilot-app omniroute; do
+         nextcloud-external-guard neon-pilot-app omniroute omarchy-webapp-patch; do
   [ -f "$HOME/.local/bin/$s" ] || continue
   safe_cp "$HOME/.local/bin/$s" "$DOTFILES/.local/bin/"
 done
@@ -157,6 +157,8 @@ safe_cp "$HOME/.local/share/applications/icons/Outlook.png" "$DOTFILES/.local/sh
 safe_cp "$HOME/.local/share/applications/icons/Teams.png" "$DOTFILES/.local/share/applications/icons/Teams.png"
 safe_cp "$HOME/.local/share/applications/icons/WhatsApp.png" "$DOTFILES/.local/share/applications/icons/WhatsApp.png"
 safe_cp "$HOME/.local/share/applications/icons/Hache.png" "$DOTFILES/.local/share/applications/icons/Hache.png"
+safe_cp "$HOME/.local/share/applications/Tailscale.desktop" "$DOTFILES/.local/share/applications/Tailscale.desktop"
+safe_cp "$HOME/.local/share/applications/icons/Tailscale.png" "$DOTFILES/.local/share/applications/icons/Tailscale.png"
 
 echo ""
 echo "=== Git add + commit ==="

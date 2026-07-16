@@ -1,0 +1,109 @@
+#!/bin/bash
+# omarchy-webapp-patch — Add StartupWMClass to webapp desktop files
+# created by omarchy-webapp-install, so hyprshell can resolve icons.
+#
+# Usage:
+#   omarchy-webapp-patch <name>          # patch by app name (e.g. Outlook)
+#   omarchy-webapp-patch --all           # patch all omarchy webapp desktop files
+#   omarchy-webapp-patch --check         # list missing StartupWMClass
+
+DESKTOP_DIR="$HOME/.local/share/applications"
+BROWSER="chrome"  # default browser for --app mode
+
+usage() {
+  sed -n '2,7p' "$0" | sed 's/^# //'
+  exit 0
+}
+
+# Derive StartupWMClass from a URL opened via --app in Chromium
+wmclass_from_url() {
+  local url="$1"
+  local domain
+  domain=$(echo "$url" | sed 's|https://||' | sed 's|/.*||')
+  echo "${BROWSER}-${domain}__-Default"
+}
+
+# Check if a desktop file looks like an omarchy webapp
+is_omarchy_webapp() {
+  local f="$1"
+  grep -q '^Exec=.*omarchy-launch-webapp' "$f" 2>/dev/null
+}
+
+# Extract URL from Exec line
+url_from_exec() {
+  local f="$1"
+  grep '^Exec=' "$f" | sed 's/^Exec=omarchy-launch-webapp *//'
+}
+
+patch_file() {
+  local f="$1"
+  if ! is_omarchy_webapp "$f"; then
+    return 1
+  fi
+  if grep -q '^StartupWMClass=' "$f"; then
+    return 0  # already has it
+  fi
+  local url wmclass
+  url=$(url_from_exec "$f")
+  if [[ -z "$url" ]]; then
+    echo "  SKIP $(basename "$f"): no URL in Exec"
+    return 1
+  fi
+  wmclass=$(wmclass_from_url "$url")
+  echo "StartupWMClass=$wmclass" >> "$f"
+  echo "  PATCH $(basename "$f"): $wmclass"
+}
+
+check_file() {
+  local f="$1"
+  if ! is_omarchy_webapp "$f"; then
+    return
+  fi
+  if grep -q '^StartupWMClass=' "$f"; then
+    echo "  OK   $(basename "$f"): $(grep '^StartupWMClass=' "$f" | cut -d= -f2)"
+  else
+    echo "  MISS $(basename "$f")"
+  fi
+}
+
+case "${1:-}" in
+  --help|-h)
+    usage
+    ;;
+  --all)
+    echo "Patching omarchy webapp desktop files..."
+    count=0
+    for f in "$DESKTOP_DIR"/*.desktop; do
+      if patch_file "$f"; then
+        ((count++))
+      fi
+    done
+    echo "Patched $count file(s)."
+    ;;
+  --check)
+    echo "Checking omarchy webapp desktop files..."
+    for f in "$DESKTOP_DIR"/*.desktop; do
+      check_file "$f"
+    done
+    ;;
+  "")
+    echo "Usage: $0 <name> | --all | --check | --help"
+    echo "  <name>    App name (e.g. Outlook) or full path to .desktop file"
+    echo "  --all     Patch all omarchy webapp desktop files"
+    echo "  --check   List which ones are missing StartupWMClass"
+    exit 1
+    ;;
+  *)
+    # Patch a single app by name or path
+    if [[ "$1" == */* ]]; then
+      f="$1"
+    else
+      f="$DESKTOP_DIR/$1.desktop"
+    fi
+    if [[ ! -f "$f" ]]; then
+      echo "File not found: $f"
+      exit 1
+    fi
+    patch_file "$f"
+    ;;
+esac
