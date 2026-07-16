@@ -118,6 +118,17 @@ link_all ".config/omarchy/branding" "$HOME/.config/omarchy/branding"
 # Custom scripts
 link_all ".local/bin" "$HOME/.local/bin"
 
+# Agent skills (whole dir symlink)
+link_with_parent() {
+  local target="$1" linkpath="$2"
+  mkdir -p "$(dirname "$linkpath")"
+  [ -L "$linkpath" ] || [ -f "$linkpath" ] && rm -f "$linkpath"
+  [ -d "$linkpath" ] && rmdir "$linkpath" 2>/dev/null || true
+  ln -s "$target" "$linkpath"
+  echo "  LINK $target → $linkpath"
+}
+link_with_parent "$DOTFILES/.agents/skills" "$HOME/.agents/skills"
+
 echo ""
 echo "=== System files (PAM + fingerprint script) ==="
 echo ""

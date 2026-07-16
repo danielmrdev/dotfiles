@@ -28,6 +28,13 @@ always versioned.
 - Any operation involving `~/.dotfiles/save.sh` or `~/.dotfiles/restore.sh`
 - "I changed something, commit it" — run save.sh
 
+> ⚠️ **MANDATORY: Track every new config after install.** Whenever you install a new program (Hyprland-adjacent, terminal, launcher, theme tool, CLI, etc.) that creates a config file at `~/.config/<name>/`, you **MUST** immediately:
+> 1. Copy/symlink it into `~/.dotfiles/` (dir + file)
+> 2. Add it to `save.sh` and `restore.sh`
+> 3. Commit + push
+>
+> Do not close the task until this is done. Past pattern: forgot to track hyprshell, ghostty, etc. — no more.
+
 **Do NOT use this skill for** modifying the content of config files themselves
 (use the omarchy skill for hypr/waybar/walker/terminal configs).
 
@@ -58,10 +65,12 @@ always versioned.
 │   ├── environment.d/  # fcitx.conf, omarchy-firefox-wayland.conf
 │   ├── chromium-flags.conf
 │   └── omarchy/        # hooks, themes/harbor (custom theme), extensions, branding
+├── .agents/
+│   └── skills/          # dotfiles, officecli SKILL.md; omarchy (symlink -> omarchy source)
 └── .local/bin/         # teams-jiggler*, nextcloud-external-guard, neon-pilot-app, omniroute
 ```
 
-Total: ~90 tracked files.
+Total: ~95 tracked files.
 
 ## Key Scripts
 
