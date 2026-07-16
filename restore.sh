@@ -140,6 +140,8 @@ link ".local/share/applications/icons/Outlook.png" "$HOME/.local/share/applicati
 link ".local/share/applications/icons/Teams.png" "$HOME/.local/share/applications/icons/Teams.png"
 link ".local/share/applications/icons/WhatsApp.png" "$HOME/.local/share/applications/icons/WhatsApp.png"
 link ".local/share/applications/icons/Hache.png" "$HOME/.local/share/applications/icons/Hache.png"
+link ".local/share/applications/Tailscale.desktop" "$HOME/.local/share/applications/Tailscale.desktop"
+link ".local/share/applications/icons/Tailscale.png" "$HOME/.local/share/applications/icons/Tailscale.png"
 
 echo ""
 echo "=== System files (PAM + fingerprint script) ==="

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Tailscale
+Comment=Tailscale
+Exec=omarchy-launch-webapp https://login.tailscale.com/admin/machines
+Terminal=false
+Type=Application
+Icon=/home/daniel/.local/share/applications/icons/Tailscale.png
+StartupNotify=true
+StartupWMClass=chrome-login.tailscale.com__-Default
