@@ -8,9 +8,7 @@
         switch: (
             modifier: "super",
             key: "Tab",
-            filter_by: [
-                current_monitor,
-            ],
+            filter_by: [],
             switch_workspaces: false,
             exclude_workspaces: "",
             kill_key: 'q',
