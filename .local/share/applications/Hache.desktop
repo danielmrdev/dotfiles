@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Hache
+Comment=Hache
+Exec=omarchy-launch-webapp https://hermes.danielmr.dev
+Terminal=false
+Type=Application
+Icon=/home/daniel/.local/share/applications/icons/Hache.png
+StartupNotify=true
+StartupWMClass=chrome-hermes.danielmr.dev__-Default

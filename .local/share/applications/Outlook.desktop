@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Outlook
+Comment=Outlook
+Exec=omarchy-launch-webapp https://outlook.cloud.microsoft/
+Terminal=false
+Type=Application
+Icon=/home/daniel/.local/share/applications/icons/Outlook.png
+StartupNotify=true
+StartupWMClass=chrome-outlook.cloud.microsoft__-Default

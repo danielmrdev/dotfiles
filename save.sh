@@ -146,6 +146,18 @@ for s in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-o
   safe_cp "$HOME/.local/bin/$s" "$DOTFILES/.local/bin/"
 done
 
+# Web app desktop files and icons (created by omarchy-webapp-install)
+echo "[webapps]"
+mkdir -p "$DOTFILES/.local/share/applications/icons"
+safe_cp "$HOME/.local/share/applications/Outlook.desktop" "$DOTFILES/.local/share/applications/Outlook.desktop"
+safe_cp "$HOME/.local/share/applications/Teams.desktop" "$DOTFILES/.local/share/applications/Teams.desktop"
+safe_cp "$HOME/.local/share/applications/WhatsApp.desktop" "$DOTFILES/.local/share/applications/WhatsApp.desktop"
+safe_cp "$HOME/.local/share/applications/Hache.desktop" "$DOTFILES/.local/share/applications/Hache.desktop"
+safe_cp "$HOME/.local/share/applications/icons/Outlook.png" "$DOTFILES/.local/share/applications/icons/Outlook.png"
+safe_cp "$HOME/.local/share/applications/icons/Teams.png" "$DOTFILES/.local/share/applications/icons/Teams.png"
+safe_cp "$HOME/.local/share/applications/icons/WhatsApp.png" "$DOTFILES/.local/share/applications/icons/WhatsApp.png"
+safe_cp "$HOME/.local/share/applications/icons/Hache.png" "$DOTFILES/.local/share/applications/icons/Hache.png"
+
 echo ""
 echo "=== Git add + commit ==="
 cd "$DOTFILES"
