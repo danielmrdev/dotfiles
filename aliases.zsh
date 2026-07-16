@@ -123,15 +123,15 @@ fi
 #   claude "$@"
 # }
 
-# Alias for openclaw tui
-# alias clau='openclaw tui'
-alias cds='claude --dangerously-skip-permissions'
-if [[ -x "$HOME/.nanoclaw/scripts/nc-manager.sh" ]]; then
-  alias ncm='~/.nanoclaw/scripts/nc-manager.sh'
-fi
+# (cds and ncm removed)
 
 # VPS + tmux
 vps() {
   local session_name=${1:-default}
   ssh -t vps "tmux -u new-session -A -s $session_name"
+}
+# VPS-MAIL + tmux
+vps2() {
+  local session_name=${1:-default}
+  ssh -t vps-mail "tmux -u new-session -A -s $session_name"
 }
