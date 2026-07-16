@@ -129,6 +129,18 @@ link_with_parent() {
 }
 link_with_parent "$DOTFILES/.agents/skills" "$HOME/.agents/skills"
 
+# Web app desktop files and icons
+echo "  LINK webapp desktop files + icons"
+mkdir -p "$HOME/.local/share/applications/icons"
+link ".local/share/applications/Outlook.desktop" "$HOME/.local/share/applications/Outlook.desktop"
+link ".local/share/applications/Teams.desktop" "$HOME/.local/share/applications/Teams.desktop"
+link ".local/share/applications/WhatsApp.desktop" "$HOME/.local/share/applications/WhatsApp.desktop"
+link ".local/share/applications/Hache.desktop" "$HOME/.local/share/applications/Hache.desktop"
+link ".local/share/applications/icons/Outlook.png" "$HOME/.local/share/applications/icons/Outlook.png"
+link ".local/share/applications/icons/Teams.png" "$HOME/.local/share/applications/icons/Teams.png"
+link ".local/share/applications/icons/WhatsApp.png" "$HOME/.local/share/applications/icons/WhatsApp.png"
+link ".local/share/applications/icons/Hache.png" "$HOME/.local/share/applications/icons/Hache.png"
+
 echo ""
 echo "=== System files (PAM + fingerprint script) ==="
 echo ""

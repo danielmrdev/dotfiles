@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=WhatsApp
+Comment=WhatsApp
+Exec=omarchy-launch-webapp https://web.whatsapp.com/
+Terminal=false
+Type=Application
+Icon=/home/daniel/.local/share/applications/icons/WhatsApp.png
+StartupNotify=true
+StartupWMClass=chrome-web.whatsapp.com__-Default
