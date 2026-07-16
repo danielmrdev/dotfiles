@@ -40,6 +40,12 @@ mkdir -p "$DOTFILES/.config/hypr"
 safe_cp_dir "$HOME/.config/hypr" "$DOTFILES/.config/hypr" "*.conf"
 safe_cp "$HOME/.config/hypr/hy3-layout-watch.sh" "$DOTFILES/.config/hypr/hy3-layout-watch.sh"
 
+# Hyprshell
+echo "[hyprshell]"
+mkdir -p "$DOTFILES/.config/hyprshell"
+safe_cp "$HOME/.config/hyprshell/config.ron" "$DOTFILES/.config/hyprshell/config.ron"
+safe_cp "$HOME/.config/hyprshell/styles.css" "$DOTFILES/.config/hyprshell/styles.css"
+
 # Waybar
 echo "[waybar]"
 safe_cp_dir "$HOME/.config/waybar" "$DOTFILES/.config/waybar"

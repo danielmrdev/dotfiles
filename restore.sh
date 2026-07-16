@@ -53,6 +53,9 @@ link ".p10k.zsh"                 "$HOME/.p10k.zsh"
 # Hyprland
 link_all ".config/hypr"    "$HOME/.config/hypr"
 
+# Hyprshell
+link ".config/hyprshell/config.ron" "$HOME/.config/hyprshell/config.ron"
+
 # Waybar
 link_all ".config/waybar"  "$HOME/.config/waybar"
 
