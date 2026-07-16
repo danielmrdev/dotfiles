@@ -61,6 +61,18 @@ These are plain copies (not symlinks — `/etc/` needs root).
 | env.d | `.config/environment.d/fcitx.conf`, `omarchy-firefox-wayland.conf` |
 | chromium flags | `.config/chromium-flags.conf` |
 
+### Web App Desktop Files (in `~/.local/share/applications/`)
+| File | Purpose |
+|------|---------|
+| `Outlook.desktop` + `icons/Outlook.png` | Outlook webapp |
+| `Teams.desktop` + `icons/Teams.png` | Teams webapp |
+| `WhatsApp.desktop` + `icons/WhatsApp.png` | WhatsApp webapp |
+| `Hache.desktop` + `icons/Hache.png` | Hermes (Open WebUI) webapp |
+| `Tailscale.desktop` + `icons/Tailscale.png` | Tailscale admin webapp |
+
+> These need `StartupWMClass=chrome-<domain>__-Default` for hyprshell to show icons in window switcher.
+> Use `omarchy-webapp-patch --all` after adding new ones.
+
 ### Custom Scripts (in `~/.local/bin/`)
 | Script | Purpose |
 |--------|---------|
@@ -70,6 +82,7 @@ These are plain copies (not symlinks — `/etc/` needs root).
 | `nextcloud-external-guard` | Guard process for Nextcloud |
 | `neon-pilot-app` | Neon pilot launcher |
 | `omniroute` | Omni route tool |
+| `omarchy-webapp-patch` | Add `StartupWMClass` to webapp .desktop files so hyprshell resolves icons for browser-app windows. Run after `omarchy webapp install`. |
 | `lid-is-open` | Skip fingerprint auth when laptop lid closed |
 
 Also deployed to `/usr/local/bin/lid-is-open` (system-wide, for PAM).
