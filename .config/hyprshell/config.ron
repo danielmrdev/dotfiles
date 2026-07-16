@@ -9,7 +9,7 @@
             modifier: "super",
             key: "Tab",
             filter_by: [],
-            switch_workspaces: false,
+            switch_workspaces: true,
             exclude_workspaces: "",
             kill_key: 'q',
         ),

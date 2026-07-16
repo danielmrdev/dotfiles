@@ -107,6 +107,10 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 # Activate Oh-My-Zsh
 source "$ZSH/oh-my-zsh.sh"
 
+# Aliases (also sourced in non-interactive path above)
+source "$DOTFILES/aliases.zsh"
+source "$DOTFILES/path.zsh"
+
 # Powerlevel10k theme: use the standard oh-my-zsh custom theme path.
 if [[ -f "$HOME/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme" ]]; then
   source "$HOME/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme"
