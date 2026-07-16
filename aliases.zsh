@@ -128,10 +128,10 @@ fi
 # VPS + tmux
 vps() {
   local session_name=${1:-default}
-  ssh -t vps "tmux -u new-session -A -s $session_name"
+  mosh vps -- tmux -u new-session -A -s $session_name
 }
 # VPS-MAIL + tmux
 vps2() {
   local session_name=${1:-default}
-  ssh -t vps-mail "tmux -u new-session -A -s $session_name"
+  mosh vps-mail -- tmux -u new-session -A -s $session_name
 }
