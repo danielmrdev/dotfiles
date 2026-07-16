@@ -141,7 +141,7 @@ safe_cp_dir "$HOME/.config/omarchy/branding" "$DOTFILES/.config/omarchy/branding
 echo "[scripts]"
 mkdir -p "$DOTFILES/.local/bin"
 for s in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-off \
-         nextcloud-external-guard neon-pilot-app omniroute omarchy-webapp-patch; do
+         nextcloud-external-guard neon-pilot-app omniroute omarchy-webapp-patch save-dotfiles restore-dotfiles; do
   [ -f "$HOME/.local/bin/$s" ] || continue
   safe_cp "$HOME/.local/bin/$s" "$DOTFILES/.local/bin/"
 done
