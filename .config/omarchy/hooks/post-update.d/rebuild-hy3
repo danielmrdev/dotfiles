@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Rebuild hy3 plugin after Hyprland updates to prevent version mismatch.
+# Requires manual sudo install after rebuild.
+
+CACHE_DIR="$HOME/.cache/yay/hyprland-plugin-hy3"
+
+if ! pacman -Qi hyprland-plugin-hy3 &>/dev/null; then
+    exit 0  # hy3 not installed, skip
+fi
+
+# Rebuild package
+yay -S hyprland-plugin-hy3 --rebuild --noconfirm &>/dev/null
+
+PKG=$(ls -t "$CACHE_DIR"/hyprland-plugin-hy3-*.pkg.tar.zst 2>/dev/null | head -1)
+if [ -n "$PKG" ]; then
+    notify-send -u normal "hy3 rebuilt" "Run to install:\nsudo pacman -U $PKG"
+fi
