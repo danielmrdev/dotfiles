@@ -71,6 +71,9 @@ link ".config/btop/btop.conf"    "$HOME/.config/btop/btop.conf"
 # Fastfetch
 link_all ".config/fastfetch" "$HOME/.config/fastfetch"
 
+# Focusd (pomodoro)
+link ".config/focusd/config.toml" "$HOME/.config/focusd/config.toml" 2>/dev/null || true
+
 # Terminals
 link ".config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml" 2>/dev/null || true
 link ".config/ghostty/config"           "$HOME/.config/ghostty/config" 2>/dev/null || true

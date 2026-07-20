@@ -107,6 +107,11 @@ safe_cp_dir "$HOME/.config/environment.d" "$DOTFILES/.config/environment.d"
 # Chromium flags
 safe_cp "$HOME/.config/chromium-flags.conf" "$DOTFILES/.config/chromium-flags.conf"
 
+# Focusd (pomodoro)
+echo "[focusd]"
+mkdir -p "$DOTFILES/.config/focusd"
+safe_cp "$HOME/.config/focusd/config.toml" "$DOTFILES/.config/focusd/config.toml"
+
 # Omarchy hooks (only regular files, skip dir symlinks)
 echo "[omarchy hooks]"
 mkdir -p "$DOTFILES/.config/omarchy/hooks"
@@ -141,7 +146,8 @@ safe_cp_dir "$HOME/.config/omarchy/branding" "$DOTFILES/.config/omarchy/branding
 echo "[scripts]"
 mkdir -p "$DOTFILES/.local/bin"
 for s in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-off \
-         nextcloud-external-guard neon-pilot-app omniroute omarchy-webapp-patch save-dotfiles restore-dotfiles; do
+         nextcloud-external-guard neon-pilot-app omniroute omarchy-webapp-patch \
+         focusd-menu save-dotfiles restore-dotfiles; do
   [ -f "$HOME/.local/bin/$s" ] || continue
   safe_cp "$HOME/.local/bin/$s" "$DOTFILES/.local/bin/"
 done
