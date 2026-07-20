@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Focusd pomodoro menu via Walker dmenu
+# Super+Shift+P to launch
+
+choice=$(printf '%s\n' \
+  ' Start' \
+  ' Pause' \
+  ' Resume' \
+  ' Toggle' \
+  ' Reset' \
+  '󰒭 Next' \
+  ' Stats' \
+  ' History' \
+  '󰧨 TUI' \
+  | walker --dmenu -p "focusd:")
+
+case "$choice" in
+  ' Start') focusd start ;;
+  ' Pause') focusd pause ;;
+  ' Resume') focusd resume ;;
+  ' Toggle') focusd toggle ;;
+  ' Reset') focusd reset ;;
+  '󰒭 Next') focusd next ;;
+  ' Stats') uwsm-app -- xdg-terminal-exec focusd stats ;;
+  ' History') uwsm-app -- xdg-terminal-exec focusd history ;;
+  '󰧨 TUI') uwsm-app -- xdg-terminal-exec focusd ;;
+esac

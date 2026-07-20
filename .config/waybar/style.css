@@ -145,3 +145,24 @@ tooltip {
 #custom-voxtype.recording {
   color: #a55555;
 }
+
+#custom-pomodoro {
+  min-width: 12px;
+  margin: 0 7.5px;
+}
+
+#custom-pomodoro.work {
+  color: #a6e3a1;
+}
+
+#custom-pomodoro.short-break {
+  color: #89b4fa;
+}
+
+#custom-pomodoro.long-break {
+  color: #cba6f7;
+}
+
+#custom-pomodoro.paused {
+  opacity: 0.6;
+}

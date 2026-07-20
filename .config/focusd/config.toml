@@ -1,0 +1,14 @@
+active_preset = "pomodoro"
+show_notifications = true
+
+[presets.deep_work]
+work_minutes = 50
+short_break_minutes = 10
+long_break_minutes = 30
+sessions_before_long_break = 4
+
+[presets.pomodoro]
+work_minutes = 25
+short_break_minutes = 5
+long_break_minutes = 15
+sessions_before_long_break = 4

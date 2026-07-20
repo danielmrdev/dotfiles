@@ -8,6 +8,7 @@
   "modules-center": ["clock", "custom/weather", "custom/update", "custom/voxtype", "custom/screenrecording-indicator", "custom/idle-indicator", "custom/notification-silencing-indicator"],
   "modules-right": [
     "group/tray-expander",
+    "custom/pomodoro",
     "bluetooth",
     "network",
     "pulseaudio",
@@ -213,6 +214,24 @@
     "tooltip": true,
     "on-click-right": "omarchy-voxtype-config",
     "on-click": "omarchy-voxtype-model"
+  },
+  "custom/pomodoro": {
+    "return-type": "json",
+    "exec": "focusd status",
+    "interval": 1,
+    "format": "{icon} {text}",
+    "tooltip": true,
+    "format-icons": {
+      "work": "",
+      "work-paused": "󰏤",
+      "short-break": "",
+      "short-break-paused": "󰏤",
+      "long-break": "󰒲",
+      "long-break-paused": "󰏤"
+    },
+    "on-click": "focusd toggle",
+    "on-click-right": "focusd next",
+    "on-click-middle": "focusd reset"
   },
   "tray": {
     "icon-size": 12,
