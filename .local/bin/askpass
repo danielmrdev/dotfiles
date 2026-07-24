@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+"""SUDO_ASKPASS helper — GTK dialog styled like Omarchy modals."""
+
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
+from gi.repository import Gtk, Gdk, Pango
+import os, sys
+
+# ── Read Omarchy theme colors ──────────────────────────────────────
+THEME_FILE = os.path.expanduser("~/.config/omarchy/current/theme/colors.toml")
+
+def read_colors():
+    try:
+        with open(THEME_FILE) as f:
+            raw = f.read()
+        def g(key):
+            for line in raw.splitlines():
+                line = line.strip()
+                if line.startswith(key + " ="):
+                    return line.split('"')[1]
+            return None
+        bg = g("background") or "#dfe4c4"
+        fg = g("foreground") or "#1c2d28"
+        accent = g("accent") or "#5e81ac"
+        border = g("color7") or "#384f54"
+        return bg, fg, accent, border
+    except Exception:
+        return "#dfe4c4", "#1c2d28", "#5e81ac", "#384f54"
+
+BG, FG, ACCENT, BORDER = read_colors()
+user = os.environ.get("USER", "")
+
+# ── Get the command that triggered sudo ─────────────────────────
+def get_sudo_command():
+    """Read parent (sudo) cmdline to find what command is being run."""
+    try:
+        ppid = os.getppid()
+        with open(f"/proc/{ppid}/cmdline", "rb") as f:
+            raw = f.read()
+        parts = raw.replace(b"\x00", b" ").decode("utf-8", errors="replace").strip().split()
+        # parts = e.g. ["sudo", "-A", "pacman", "-S", "foo"]
+        # Strip leading "sudo" and "-A" only
+        if parts and parts[0] == "sudo":
+            parts.pop(0)
+        if parts and parts[0] == "-A":
+            parts.pop(0)
+        return " ".join(parts) if parts else ""
+    except Exception:
+        return ""
+
+command = get_sudo_command()
+
+# ── CSS ────────────────────────────────────────────────────────────
+css = f"""
+window {{
+  background: transparent;
+}}
+.dialog-box {{
+  background: {BG};
+  border: 2px solid {BORDER};
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  padding: 22px 26px;
+  min-width: 360px;
+}}
+label.prompt {{
+  color: {FG};
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 4px;
+}}
+label.command {{
+  color: {BORDER};
+  font-family: monospace;
+  font-size: 12px;
+  margin-bottom: 12px;
+}}
+entry {{
+  background: {BG};
+  color: {FG};
+  border: 1px solid {BORDER};
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 15px;
+  caret-color: {ACCENT};
+}}
+entry:focus {{
+  border-color: {ACCENT};
+  box-shadow: 0 0 0 1px {ACCENT}44;
+}}
+"""
+
+class AskPassWindow(Gtk.Window):
+    def __init__(self):
+        super().__init__(title="sudo")
+        self.set_decorated(False)
+        self.set_resizable(False)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_keep_above(True)
+        self.set_urgency_hint(True)
+
+        screen = self.get_screen()
+        visual = screen.get_rgba_visual()
+        if visual:
+            self.set_visual(visual)
+
+        provider = Gtk.CssProvider()
+        provider.load_from_data(css.encode())
+        Gtk.StyleContext.add_provider_for_screen(
+            screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
+
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        vbox.set_valign(Gtk.Align.CENTER)
+        vbox.set_halign(Gtk.Align.CENTER)
+        self.add(vbox)
+
+        dialog = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        dialog.get_style_context().add_class("dialog-box")
+        vbox.pack_start(dialog, False, False, 0)
+
+        lbl = Gtk.Label(label=f"[sudo] password for {user}:")
+        lbl.get_style_context().add_class("prompt")
+        lbl.set_xalign(0)
+        dialog.pack_start(lbl, False, False, 0)
+
+        if command:
+            cmd_lbl = Gtk.Label(label=command)
+            cmd_lbl.get_style_context().add_class("command")
+            cmd_lbl.set_xalign(0)
+            cmd_lbl.set_ellipsize(Pango.EllipsizeMode.END)
+            dialog.pack_start(cmd_lbl, False, False, 0)
+
+        self.entry = Gtk.Entry()
+        self.entry.set_visibility(False)
+        self.entry.set_invisible_char("●")
+        self.entry.connect("activate", self.on_submit)
+        self.entry.connect("key_press_event", self.on_key)
+        dialog.pack_start(self.entry, False, False, 0)
+
+        self.show_all()
+        self.entry.grab_focus()
+
+    def on_submit(self, *_args):
+        pwd = self.entry.get_text()
+        sys.stdout.write(pwd + "\n")
+        sys.stdout.flush()
+        Gtk.main_quit()
+
+    def on_key(self, _widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            Gtk.main_quit()
+        return False
+
+if __name__ == "__main__":
+    win = AskPassWindow()
+    Gtk.main()

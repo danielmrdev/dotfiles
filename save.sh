@@ -147,10 +147,19 @@ echo "[scripts]"
 mkdir -p "$DOTFILES/.local/bin"
 for s in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-off \
          nextcloud-external-guard neon-pilot-app omniroute omarchy-webapp-patch \
-         focusd-menu save-dotfiles restore-dotfiles; do
+         focusd-menu save-dotfiles restore-dotfiles askpass; do
   [ -f "$HOME/.local/bin/$s" ] || continue
   safe_cp "$HOME/.local/bin/$s" "$DOTFILES/.local/bin/"
 done
+
+# Pi agent skills (ensure symlinks)
+echo "[pi agent skills]"
+mkdir -p "$HOME/.pi/agent/skills"
+if [ ! -L "$HOME/.pi/agent/skills/sudo-askpass" ]; then
+  echo "  SYMLINK .pi/agent/skills/sudo-askpass"
+  [ -e "$HOME/.pi/agent/skills/sudo-askpass" ] && rm -rf "$HOME/.pi/agent/skills/sudo-askpass"
+  ln -sf "$DOTFILES/.agents/skills/sudo-askpass" "$HOME/.pi/agent/skills/sudo-askpass"
+fi
 
 # Web app desktop files and icons (created by omarchy-webapp-install)
 echo "[webapps]"

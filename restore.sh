@@ -132,6 +132,9 @@ link_with_parent() {
 }
 link_with_parent "$DOTFILES/.agents/skills" "$HOME/.agents/skills"
 
+# Pi agent skills
+link_with_parent "$DOTFILES/.agents/skills/sudo-askpass" "$HOME/.pi/agent/skills/sudo-askpass"
+
 # Web app desktop files and icons
 echo "  LINK webapp desktop files + icons"
 mkdir -p "$HOME/.local/share/applications/icons"
