@@ -17,6 +17,9 @@ export DOTFILES=$HOME/.dotfiles
 # Node/pnpm installed via mise
 export PATH="$HOME/.local/share/mise/installs/node/26.2.0/bin:$HOME/.local/bin:$PATH"
 
+# Sudo askpass for AI agents (sudo -A)
+export SUDO_ASKPASS="$HOME/.local/bin/askpass"
+
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
