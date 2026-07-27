@@ -7,8 +7,31 @@
   border: none;
   border-radius: 0;
   min-height: 0;
-  font-family: 'iA Writer Mono S';
+  font-family: 'GeistMono Nerd Font Mono';
   font-size: 12px;
+}
+
+/* Modules with Nerd Font icons — use font: shorthand (not font-family:) so
+   omarchy font set's sed doesn't touch this rule. Stable regardless of system font.
+   Individual modules override font-size below. */
+#custom-update,
+#cpu,
+#memory,
+#temperature,
+#network,
+#battery,
+#bluetooth,
+#pulseaudio,
+#custom-expand-icon,
+#custom-voxtype,
+#custom-pomodoro,
+#custom-screenrecording-indicator,
+#custom-idle-indicator,
+#custom-teams-jiggler,
+#custom-notification-silencing-indicator,
+#custom-weather,
+#workspaces {
+  font: 12px 'Symbols Nerd Font Mono', 'GeistMono Nerd Font Mono';
 }
 
 .modules-left {
@@ -152,15 +175,15 @@ tooltip {
 }
 
 #custom-pomodoro.work {
-  color: #a6e3a1;
+  color: @success_bg_color;
 }
 
 #custom-pomodoro.short-break {
-  color: #89b4fa;
+  color: @warning_bg_color;
 }
 
 #custom-pomodoro.long-break {
-  color: #cba6f7;
+  color: @accent_color;
 }
 
 #custom-pomodoro.paused {

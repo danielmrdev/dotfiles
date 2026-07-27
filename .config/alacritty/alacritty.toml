@@ -7,10 +7,10 @@ osc52 = "CopyPaste"
 save_to_clipboard = true
 
 [font]
-normal = { family = "iA Writer Mono S" }
-bold = { family = "iA Writer Mono S" }
-italic = { family = "iA Writer Mono S" }
-size = 10
+normal = { family = "GeistMono Nerd Font Mono" }
+bold = { family = "GeistMono Nerd Font Mono" }
+italic = { family = "GeistMono Nerd Font Mono" }
+size = 12
 builtin_box_drawing = true
 
 [window]

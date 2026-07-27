@@ -217,7 +217,7 @@
   },
   "custom/pomodoro": {
     "return-type": "json",
-    "exec": "focusd status",
+    "exec": "focusd-status-wrapped",
     "interval": 1,
     "format": "{icon} {text}",
     "tooltip": true,
