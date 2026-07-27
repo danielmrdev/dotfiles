@@ -104,14 +104,6 @@ link ".config/chromium-flags.conf" "$HOME/.config/chromium-flags.conf" 2>/dev/nu
 # Omarchy hooks
 link_all ".config/omarchy/hooks" "$HOME/.config/omarchy/hooks"
 
-# Omarchy custom theme (files + backgrounds dir)
-link_all ".config/omarchy/themes/harbor" "$HOME/.config/omarchy/themes/harbor"
-for d in "$DOTFILES/.config/omarchy/themes/harbor/backgrounds/"*; do
-  [ -f "$d" ] || continue
-  b="$(basename "$d")"
-  link ".config/omarchy/themes/harbor/backgrounds/$b" "$HOME/.config/omarchy/themes/harbor/backgrounds/$b"
-done
-
 # Omarchy extensions
 link_all ".config/omarchy/extensions" "$HOME/.config/omarchy/extensions"
 

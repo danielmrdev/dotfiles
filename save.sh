@@ -122,18 +122,6 @@ for entry in "$HOME/.config/omarchy/hooks/"*; do
   safe_cp "$entry" "$DOTFILES/.config/omarchy/hooks/"
 done
 
-# Omarchy custom theme (files only)
-echo "[omarchy theme harbor]"
-for entry in "$HOME/.config/omarchy/themes/harbor/"*; do
-  [ -f "$entry" ] || continue
-  safe_cp "$entry" "$DOTFILES/.config/omarchy/themes/harbor/"
-done
-# Backgrounds (files only)
-for entry in "$HOME/.config/omarchy/themes/harbor/backgrounds/"*; do
-  [ -f "$entry" ] || continue
-  safe_cp "$entry" "$DOTFILES/.config/omarchy/themes/harbor/backgrounds/"
-done
-
 # Omarchy extensions
 echo "[omarchy extensions]"
 safe_cp_dir "$HOME/.config/omarchy/extensions" "$DOTFILES/.config/omarchy/extensions"
