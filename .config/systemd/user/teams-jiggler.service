@@ -1,5 +1,6 @@
 [Unit]
 Description=Teams presence jiggler
+After=wayland-session@hyprland.desktop.target
 
 [Service]
 Type=simple
@@ -8,4 +9,4 @@ Restart=always
 RestartSec=5
 
 [Install]
-WantedBy=default.target
+WantedBy=wayland-session@hyprland.desktop.target

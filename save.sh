@@ -55,6 +55,11 @@ echo "[walker]"
 mkdir -p "$DOTFILES/.config/walker"
 safe_cp "$HOME/.config/walker/config.toml" "$DOTFILES/.config/walker/config.toml"
 
+# Iris
+echo "[iris]"
+mkdir -p "$DOTFILES/.config/iris"
+safe_cp "$HOME/.config/iris/config.toml" "$DOTFILES/.config/iris/config.toml"
+
 # SwayOSD
 echo "[swayosd]"
 safe_cp_dir "$HOME/.config/swayosd" "$DOTFILES/.config/swayosd"

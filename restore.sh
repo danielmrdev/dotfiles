@@ -62,6 +62,9 @@ link_all ".config/waybar"  "$HOME/.config/waybar"
 # Walker
 link ".config/walker/config.toml" "$HOME/.config/walker/config.toml"
 
+# Iris
+link ".config/iris/config.toml" "$HOME/.config/iris/config.toml"
+
 # SwayOSD
 link_all ".config/swayosd" "$HOME/.config/swayosd"
 

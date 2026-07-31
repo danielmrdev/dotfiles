@@ -1,5 +1,6 @@
 [Unit]
 Description=espanso
+After=wayland-session@hyprland.desktop.target
 
 [Service]
 ExecStart=/usr/bin/espanso launcher 
@@ -7,5 +8,5 @@ Restart=on-failure
 RestartSec=3
 
 [Install]
-WantedBy=default.target
+WantedBy=wayland-session@hyprland.desktop.target
 
