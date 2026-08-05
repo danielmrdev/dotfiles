@@ -124,13 +124,13 @@ fi
 
 # (cds and ncm removed)
 
-# VPS + tmux
+# VPS + tmux (ssh directo, sin mosh: OSC52/portapapeles + scroll tmux completos)
 vps() {
   local session_name=${1:-default}
-  mosh vps -- tmux -u new-session -A -s $session_name
+  ssh -t vps "tmux -u new-session -A -s $session_name"
 }
 # VPS-MAIL + tmux
 vps2() {
   local session_name=${1:-default}
-  mosh vps-mail -- tmux -u new-session -A -s $session_name
+  ssh -t vps-mail "tmux -u new-session -A -s $session_name"
 }
