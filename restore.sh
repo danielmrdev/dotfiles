@@ -17,12 +17,16 @@ link() {
 
   mkdir -p "$(dirname "$linkpath")"
 
-  # Remove existing file/symlink/dir at destination
+  # Refuse non-empty directories: `ln -s target existing-dir` would create a
+  # nested link inside it instead of replacing the destination.
   if [ -L "$linkpath" ] || [ -f "$linkpath" ]; then
     rm -f "$linkpath"
   elif [ -d "$linkpath" ]; then
-    # Only remove if it's not a critical system dir
-    rmdir "$linkpath" 2>/dev/null || true
+    if find "$linkpath" -mindepth 1 -maxdepth 1 -print -quit | grep -q .; then
+      echo "  ERROR (destination directory is not empty): $linkpath" >&2
+      return 1
+    fi
+    rmdir "$linkpath"
   fi
 
   ln -s "$fulltarget" "$linkpath"
@@ -55,15 +59,13 @@ link_all ".config/hypr"    "$HOME/.config/hypr"
 
 # Hyprshell
 link ".config/hyprshell/config.ron" "$HOME/.config/hyprshell/config.ron"
+link ".config/hyprshell/styles.css" "$HOME/.config/hyprshell/styles.css"
 
 # Waybar
 link_all ".config/waybar"  "$HOME/.config/waybar"
 
 # Walker
 link ".config/walker/config.toml" "$HOME/.config/walker/config.toml"
-
-# Iris
-link ".config/iris/config.toml" "$HOME/.config/iris/config.toml"
 
 # SwayOSD
 link_all ".config/swayosd" "$HOME/.config/swayosd"
@@ -119,9 +121,22 @@ link_all ".local/bin" "$HOME/.local/bin"
 # Agent skills (whole dir symlink)
 link_with_parent() {
   local target="$1" linkpath="$2"
+  if [ ! -e "$target" ] && [ ! -L "$target" ]; then
+    echo "  SKIP (source missing): $target"
+    return
+  fi
+
   mkdir -p "$(dirname "$linkpath")"
-  [ -L "$linkpath" ] || [ -f "$linkpath" ] && rm -f "$linkpath"
-  [ -d "$linkpath" ] && rmdir "$linkpath" 2>/dev/null || true
+  if [ -L "$linkpath" ] || [ -f "$linkpath" ]; then
+    rm -f "$linkpath"
+  elif [ -d "$linkpath" ]; then
+    if find "$linkpath" -mindepth 1 -maxdepth 1 -print -quit | grep -q .; then
+      echo "  ERROR (destination directory is not empty): $linkpath" >&2
+      return 1
+    fi
+    rmdir "$linkpath"
+  fi
+
   ln -s "$target" "$linkpath"
   echo "  LINK $target → $linkpath"
 }
@@ -149,11 +164,14 @@ echo "=== System files (PAM + fingerprint script) ==="
 echo ""
 echo "These need root. Run after restore.sh:"
 echo ""
-echo '  sudo cp "$DOTFILES/.local/bin/lid-is-open" /usr/local/bin/lid-is-open'
-echo '  sudo chmod +x /usr/local/bin/lid-is-open'
-echo '  sudo cp "$DOTFILES/etc/pam.d/sudo" /etc/pam.d/sudo'
-echo '  sudo cp "$DOTFILES/etc/pam.d/polkit-1" /etc/pam.d/polkit-1'
+echo "  sudo cp \"$DOTFILES/.local/bin/lid-is-open\" /usr/local/bin/lid-is-open"
+echo "  sudo chmod +x /usr/local/bin/lid-is-open"
+echo "  sudo cp \"$DOTFILES/etc/pam.d/sudo\" /etc/pam.d/sudo"
+echo "  sudo cp \"$DOTFILES/etc/pam.d/polkit-1\" /etc/pam.d/polkit-1"
 echo ""
+echo "=== Enabling Git hooks ==="
+git -C "$DOTFILES" config core.hooksPath .githooks
+
 echo "=== Reloading systemd ==="
 systemctl --user daemon-reload 2>/dev/null || true
 

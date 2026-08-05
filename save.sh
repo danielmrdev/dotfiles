@@ -55,11 +55,6 @@ echo "[walker]"
 mkdir -p "$DOTFILES/.config/walker"
 safe_cp "$HOME/.config/walker/config.toml" "$DOTFILES/.config/walker/config.toml"
 
-# Iris
-echo "[iris]"
-mkdir -p "$DOTFILES/.config/iris"
-safe_cp "$HOME/.config/iris/config.toml" "$DOTFILES/.config/iris/config.toml"
-
 # SwayOSD
 echo "[swayosd]"
 safe_cp_dir "$HOME/.config/swayosd" "$DOTFILES/.config/swayosd"
@@ -140,10 +135,18 @@ echo "[scripts]"
 mkdir -p "$DOTFILES/.local/bin"
 for s in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-off \
          nextcloud-external-guard neon-pilot-app omniroute omarchy-webapp-patch \
-         focusd-menu save-dotfiles restore-dotfiles askpass; do
+         focusd-menu save-dotfiles restore-dotfiles askpass lid-is-open; do
   [ -f "$HOME/.local/bin/$s" ] || continue
   safe_cp "$HOME/.local/bin/$s" "$DOTFILES/.local/bin/"
 done
+
+# Root-owned PAM policy and lid-state helper (plain copies; restore needs sudo)
+echo "[system files]"
+mkdir -p "$DOTFILES/etc/pam.d"
+for f in sudo polkit-1; do
+  [ -f "/etc/pam.d/$f" ] && safe_cp "/etc/pam.d/$f" "$DOTFILES/etc/pam.d/$f"
+done
+[ -f /usr/local/bin/lid-is-open ] && safe_cp /usr/local/bin/lid-is-open "$DOTFILES/.local/bin/lid-is-open"
 
 # Pi agent skills (ensure symlinks)
 echo "[pi agent skills]"
@@ -171,6 +174,7 @@ safe_cp "$HOME/.local/share/applications/icons/Tailscale.png" "$DOTFILES/.local/
 echo ""
 echo "=== Git add + commit ==="
 cd "$DOTFILES"
+git config core.hooksPath .githooks
 
 # Update .gitignore
 cat > .gitignore << 'GITIGNORE'
