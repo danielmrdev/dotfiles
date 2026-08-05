@@ -9,20 +9,21 @@ description: >
 
 # Sudo Askpass Skill
 
-This machine has `sudo` configured with a Wayland-native askpass helper.
+This machine has `sudo` configured with an Omarchy-theme-aware GTK3 askpass helper.
 
 ## How sudo works here
 
 - **NEVER** use plain `sudo <command>` — it requires a TTY and will fail.
 - **ALWAYS** use `sudo -A <command>` instead.
 - `sudo -A` uses the program in `$SUDO_ASKPASS` (`~/.local/bin/askpass`) to show a
-  `bemenu` popup window asking for the password on Wayland (Hyprland).
-- The popup appears on the user's screen when the agent requests elevation.
+  GTK3 dialog using the current Omarchy theme colors.
+- The dialog appears on the user's screen when the agent requests elevation.
 
 ## Important notes
 
-- `SUDO_ASKPASS` is already exported in `~/.zshrc` pointing to `~/.local/bin/askpass`.
-- The askpass script uses `bemenu --password` (Wayland-native, part of Omarchy).
+- `SUDO_ASKPASS` is exported in `~/.zshrc` pointing to `~/.local/bin/askpass`.
+- The script reads `~/.config/omarchy/current/theme/colors.toml` every time it runs.
+- `lxqt-openssh-askpass` remains installed as a fallback but is unused.
 - If running non-interactively (headless), you may need to set `$WAYLAND_DISPLAY` or
   fall back to `sudo -S` with password from env — but prefer `sudo -A` when the user
   is at the desktop.
