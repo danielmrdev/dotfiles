@@ -22,7 +22,6 @@
 #battery,
 #bluetooth,
 #pulseaudio,
-#custom-expand-icon,
 #custom-voxtype,
 #custom-pomodoro,
 #custom-screenrecording-indicator,
@@ -88,10 +87,6 @@
 
 #network {
   margin-right: 13px;
-}
-
-#custom-expand-icon {
-  margin-right: 18px;
 }
 
 tooltip {
