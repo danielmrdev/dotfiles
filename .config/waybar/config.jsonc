@@ -97,7 +97,7 @@
     "on-click-right": "omarchy-launch-floating-terminal-with-presentation omarchy-tz-select"
   },
   "custom/weather": {
-    "exec": "$OMARCHY_PATH/default/waybar/weather.sh",
+    "exec": "/home/daniel/.config/waybar/weather.sh",
     "return-type": "json",
     "interval": 60,
     "tooltip": false,
