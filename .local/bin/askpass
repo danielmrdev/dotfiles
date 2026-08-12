@@ -50,6 +50,11 @@ def get_sudo_command():
         return ""
 
 command = get_sudo_command()
+# Env overrides (defaults keep sudo behavior identical). Used e.g. by
+# ops/lib/bw.sh to prompt for the Bitwarden master password.
+title = os.environ.get("ASKPASS_TITLE", "sudo")
+label_text = os.environ.get("ASKPASS_LABEL", f"[sudo] password for {user}:")
+display_command = os.environ.get("ASKPASS_COMMAND") or command or "sudo"
 
 # ── CSS ────────────────────────────────────────────────────────────
 css = f"""
@@ -90,7 +95,7 @@ entry:focus {{
 
 class AskPassWindow(Gtk.Window):
     def __init__(self):
-        super().__init__(title="sudo")
+        super().__init__(title=title)
         self.set_decorated(False)
         self.set_resizable(False)
         # GTK3 on Wayland: without an explicit size the compositor sizes the window to
@@ -121,7 +126,7 @@ class AskPassWindow(Gtk.Window):
         dialog.get_style_context().add_class("dialog-box")
         vbox.pack_start(dialog, False, False, 0)
 
-        lbl = Gtk.Label(label=f"[sudo] password for {user}:")
+        lbl = Gtk.Label(label=label_text)
         lbl.get_style_context().add_class("prompt")
         lbl.set_xalign(0)
         dialog.pack_start(lbl, False, False, 0)
@@ -129,11 +134,11 @@ class AskPassWindow(Gtk.Window):
         # Always render a bounded command line. GTK ellipsize alone does not
         # constrain a label's requested width, which makes long sudo commands
         # stretch the dialog across the monitor.
-        display_command = command or "sudo"
-        if len(display_command) > 108:
-            display_command = display_command[:107] + "…"
+        cmd_text = display_command
+        if len(cmd_text) > 108:
+            cmd_text = cmd_text[:107] + "…"
 
-        cmd_lbl = Gtk.Label(label=display_command)
+        cmd_lbl = Gtk.Label(label=cmd_text)
         cmd_lbl.get_style_context().add_class("command")
         cmd_lbl.set_xalign(0)
         cmd_lbl.set_line_wrap(True)

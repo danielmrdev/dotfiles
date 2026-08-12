@@ -22,6 +22,8 @@ Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, so th
 
 Before going further, confirm the fixed point resolves (`git rev-parse <fixed-point>`) and the diff is non-empty. A bad ref or empty diff should fail here — not inside two parallel sub-agents.
 
+Then **run the diff and keep the full output** — you will paste it inline into both sub-agent prompts in step 4. The sub-agents must NOT run `git diff` themselves: embedding the diff in the prompt keeps their tool usage minimal (large tool outputs degrade model discipline and bloat sub-agent context).
+
 ### 2. Identify the spec source
 
 Look for the originating spec, in this order:
@@ -61,15 +63,19 @@ Send a single message with two `Agent` tool calls. Use the `general-purpose` sub
 
 **Standards sub-agent prompt** — include:
 
-- The full diff command and commit list.
+- The full diff output from step 1, pasted inline (NOT the diff command).
+- The list of commits.
 - The list of standards-source files you found in step 3, **plus the smell baseline from step 3** pasted in full — the sub-agent has no other access to it.
 - The brief: "Report — per file/hunk where relevant — (a) every place the diff violates a documented standard: cite the standard (file + the rule); and (b) any baseline smell you spot: name it and quote the hunk. Distinguish hard violations from judgement calls — documented-standard breaches can be hard, but baseline smells are always judgement calls, and a documented repo standard overrides the baseline. Skip anything tooling enforces. Under 400 words."
 
 **Spec sub-agent prompt** — include:
 
-- The diff command and commit list.
+- The full diff output from step 1, pasted inline (NOT the diff command).
+- The list of commits.
 - The path or fetched contents of the spec.
 - The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong. Quote the spec line for each finding. Under 400 words."
+
+If the diff is too large to paste inline (say, > 1 MB), fall back to giving the sub-agent the diff command and let it run it — but that is the exception, not the default.
 
 If the spec is missing, skip the Spec sub-agent and note this in the final report.
 
