@@ -13,7 +13,8 @@ Personal configuration for Daniel's Omarchy/Arch laptop. Repository lives at `~/
 
 ## Commands
 
-- Validate scripts: `bash -n save.sh restore.sh`
+- Validate scripts: `bash -n save.sh restore.sh install.sh`
+- Post-clean-install extras (themes, plugins, gitleaks): `bash install.sh`
 - Inspect changes: `git status --short && git diff`
 - Restore symlinks on a fresh or reset system: `bash restore.sh`
 - Save selected live configs: `bash save.sh`

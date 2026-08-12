@@ -7,7 +7,8 @@ Personal dotfiles for the Omarchy (Arch + Hyprland) ThinkPad E15 Gen 4. Tracked 
 | Path | What |
 |---|---|
 | `.config/hypr/*.lua` | Hyprland v4 Lua config (bindings, input, looknfeel, monitors, workspaces, autostart) |
-| `.config/omarchy/` | Omarchy hooks (`.d` dirs), extensions, branding |
+| `.config/omarchy/` | `shell.json` (bar layout, idle), hooks (`.d` dirs), extensions, branding |
+| `install.sh` | Fresh-install entry point: restore + hooks + themes + plugins + gitleaks |
 | `.config/alacritty/`, `.config/foot/`, `.config/ghostty/` | Terminals |
 | `.config/btop/`, `.config/fastfetch/` | System info apps |
 | `.config/systemd/user/` | User units: `espanso`, `teams-jiggler*`, `omarchy-recover-internal-monitor` |
@@ -26,6 +27,26 @@ bash restore.sh
 ```
 
 Creates symlinks from `~/.dotfiles` to live config, reloads user systemd, prints the privileged commands needed for PAM/system files. Refuses non-empty destination directories. Inspect affected paths before running on an existing system.
+
+## Install (fresh system)
+
+On a fresh Omarchy install, run `install.sh` after cloning the repo — it drives everything: restore symlinks, enable the gitleaks hook, install Omarchy extras (Harbor theme, Omadoro plugin) and tooling (gitleaks):
+
+```bash
+git clone git@github.com:danielmrdev/dotfiles.git ~/.dotfiles
+bash ~/.dotfiles/install.sh
+```
+
+Idempotent — safe to re-run.
+
+## Omarchy plugins
+
+| Kind | Install | Backup |
+|---|---|---|
+| Built-in (`omarchy.*`) | shipped with Omarchy | nothing — layout lives in `shell.json` |
+| Cloned built-in (`omarchy plugin clone omarchy.X`) | `omarchy plugin clone <id>` | track `~/.config/omarchy/plugins/<user>.<id>/` in this repo |
+| Third-party git (e.g. `b.omadoro`) | `omarchy plugin add <git-url> --enable` | not tracked (own git); re-install via `install.sh`, update with `omarchy plugin update <id>` |
+| Hand-written | write under `~/.config/omarchy/plugins/<id>/` | track in this repo |
 
 ## Save
 

@@ -57,6 +57,9 @@ link ".p10k.zsh"                 "$HOME/.p10k.zsh"
 # Hyprland
 link_all ".config/hypr"    "$HOME/.config/hypr"
 
+# Omarchy shell (bar layout, idle)
+link ".config/omarchy/shell.json" "$HOME/.config/omarchy/shell.json"
+
 # Btop
 link ".config/btop/btop.conf"    "$HOME/.config/btop/btop.conf"
 

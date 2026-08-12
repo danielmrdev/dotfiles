@@ -88,6 +88,9 @@ safe_cp_dir "$HOME/.config/environment.d" "$DOTFILES/.config/environment.d"
 # Chromium flags
 safe_cp "$HOME/.config/chromium-flags.conf" "$DOTFILES/.config/chromium-flags.conf"
 
+# Omarchy shell config
+safe_cp "$HOME/.config/omarchy/shell.json" "$DOTFILES/.config/omarchy/shell.json"
+
 # Omarchy hooks (only regular files, skip dir symlinks)
 echo "[omarchy hooks]"
 mkdir -p "$DOTFILES/.config/omarchy/hooks"
