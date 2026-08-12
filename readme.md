@@ -8,6 +8,7 @@ Personal dotfiles for the Omarchy (Arch + Hyprland) ThinkPad E15 Gen 4. Tracked 
 |---|---|
 | `.config/hypr/*.lua` | Hyprland v4 Lua config (bindings, input, looknfeel, monitors, workspaces, autostart) |
 | `.config/omarchy/` | `shell.json` (bar layout, idle), hooks (`.d` dirs), extensions, branding |
+| `.config/omarchy/plugins/` | Customized clones: `daniel.weather` (temp in bar), `daniel.tray` (no drawer) |
 | `install.sh` | Fresh-install entry point: restore + hooks + themes + plugins + gitleaks |
 | `.config/alacritty/`, `.config/foot/`, `.config/ghostty/` | Terminals |
 | `.config/btop/`, `.config/fastfetch/` | System info apps |

@@ -7,7 +7,7 @@
           "id": "omarchy.indicators"
         },
         {
-          "format": "dddd HH:mm",
+          "format": "ddd d MMM HH:mm",
           "formatAlt": "d MMMM 'W'ww yyyy",
           "id": "omarchy.clock",
           "verticalFormat": "HH\n—\nmm"
@@ -16,7 +16,7 @@
           "id": "omarchy.keyboard-layout"
         },
         {
-          "id": "omarchy.weather"
+          "id": "daniel.weather"
         },
         {
           "id": "omarchy.system-update"
@@ -32,7 +32,7 @@
       ],
       "right": [
         {
-          "id": "omarchy.tray"
+          "id": "daniel.tray"
         },
         {
           "id": "b.omadoro"

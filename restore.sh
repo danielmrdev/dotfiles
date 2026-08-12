@@ -60,6 +60,9 @@ link_all ".config/hypr"    "$HOME/.config/hypr"
 # Omarchy shell (bar layout, idle)
 link ".config/omarchy/shell.json" "$HOME/.config/omarchy/shell.json"
 
+# Omarchy shell plugins (customized clones; git-installed plugins are handled by install.sh)
+link_all ".config/omarchy/plugins" "$HOME/.config/omarchy/plugins"
+
 # Btop
 link ".config/btop/btop.conf"    "$HOME/.config/btop/btop.conf"
 
