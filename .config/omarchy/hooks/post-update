@@ -1,6 +1,8 @@
 #!/bin/bash
-# post-update hook: verify dotfiles configs are intact after omarchy update
+# post-update hook: verify configs are intact after omarchy update
 # Runs automatically after every `omarchy update`
+# Updated for Omarchy v4 (2026-08): hypr .conf -> .lua, waybar/walker retired,
+# no plugins by default (hy3 dropped).
 
 set -uo pipefail
 
@@ -19,47 +21,27 @@ notify() {
 errors=()
 warnings=()
 
-# ── 1. Symlinks intact ──────────────────────────────────────────
-DOTFILES_CHECKLIST=(
-    ".config/hypr/bindings.conf"
-    ".config/hypr/monitors.conf"
-    ".config/hypr/autostart.conf"
-    ".config/hypr/workspaces.conf"
-    ".config/waybar/config.jsonc"
-    ".config/waybar/style.css"
-    ".config/walker/config.toml"
+# ── 1. v4 Hyprland lua configs present ─────────────────────────
+V4_CHECKLIST=(
+    ".config/hypr/hyprland.lua"
+    ".config/hypr/monitors.lua"
+    ".config/hypr/input.lua"
+    ".config/hypr/bindings.lua"
+    ".config/hypr/looknfeel.lua"
+    ".config/hypr/autostart.lua"
 )
 
-for relpath in "${DOTFILES_CHECKLIST[@]}"; do
-    target="$HOME/$relpath"
-    dotfile="$HOME/.dotfiles/$relpath"
-    if [ -L "$target" ]; then
-        link_target=$(readlink "$target")
-        if [ "$link_target" != "$dotfile" ]; then
-            warnings+=("$relpath → symlink points to $link_target, not $dotfile")
-        fi
-    elif [ -f "$target" ]; then
-        if cmp -s "$target" "$dotfile" 2>/dev/null; then
-            warnings+=("$relpath is a regular file (not symlinked) — run restore.sh")
-        else
-            errors+=("$relpath is a regular file with different content — run restore.sh")
-        fi
-    else
+for relpath in "${V4_CHECKLIST[@]}"; do
+    if [ ! -f "$HOME/$relpath" ]; then
         errors+=("$relpath missing")
     fi
 done
 
 # ── 2. Hyprland config errors ───────────────────────────────────
 if command -v hyprctl &>/dev/null; then
-    error_count=$(hyprctl configerrors 2>/dev/null | grep -c "Config error" || true)
+    error_count=$(hyprctl configerrors 2>/dev/null | grep -vcE '^\s*$' || true)
     if [ "$error_count" -gt 0 ]; then
         warnings+=("$error_count hyprland config errors — check 'hyprctl configerrors'")
-    fi
-
-    # ── 3. Plugins loaded ──────────────────────────────────────
-    plugin_count=$(hyprctl plugin list 2>/dev/null | grep -c "^Plugin" || true)
-    if [ "$plugin_count" -eq 0 ]; then
-        warnings+=("No hyprland plugins loaded — check exec-once in config")
     fi
 fi
 

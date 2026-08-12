@@ -1,235 +1,34 @@
-# Dotfiles System — AGENTS.md
+# Dotfiles Context
 
-## Overview
+Personal configuration for Daniel's Omarchy/Arch laptop. Repository lives at `~/.dotfiles`; tracked files are intended to back live config through symlinks created by `restore.sh`.
 
-Daniel's personal dotfiles managed with a **git repo + symlinks** approach.
-Repo: `~/.dotfiles/` → `git@github.com:danielmrdev/dotfiles.git` (branch `main`)
+## Workflow
 
-Configs live at their standard locations (`~/.config/hypr/bindings.conf`, etc.)
-but are **symlinked** into `~/.dotfiles/`. Editing any config automatically
-edits the file inside the repo, so changes are always trackable.
+- Inspect `git status` before editing. Preserve unrelated work.
+- Prefer editing tracked files in this repository. Do not assume a live config is still symlinked after an Omarchy reset; check with `readlink` when relevant.
+- Keep changes minimal. When tracking a new config or script, update both `save.sh` and `restore.sh` so save/restore remain symmetric.
+- Treat `readme.md`, `install.sh`, `Brewfile`, `.macos`, and Mackup files as legacy macOS material unless the user explicitly asks about them.
+- For desktop, Hyprland, terminal, theme, hook, or other Omarchy changes, follow [Omarchy guidance](.agents/skills/omarchy/SKILL.md).
+- For repository save/restore operations, follow [dotfiles guidance](.agents/skills/dotfiles/SKILL.md).
 
-## Tracked Areas
+## Commands
 
-### Shell
-| File | Location |
-|------|----------|
-| `.zshrc` | `~/.zshrc` → `~/.dotfiles/.zshrc` |
-| `.p10k.zsh` | `~/.p10k.zsh` → `~/.dotfiles/.p10k.zsh` |
-| `aliases.zsh` | NOT symlinked. Sourced directly by .zshrc from `~/.dotfiles/aliases.zsh` |
-| `path.zsh` | NOT symlinked. Sourced directly by .zshrc from `~/.dotfiles/path.zsh` |
+- Validate scripts: `bash -n save.sh restore.sh`
+- Inspect changes: `git status --short && git diff`
+- Restore symlinks on a fresh or reset system: `bash restore.sh`
+- Save selected live configs: `bash save.sh`
 
-### Omarchy / Desktop Config
-| Area | Path in `~/.dotfiles/` |
-|------|------------------------|
-| **Hyprland** (WM) | `.config/hypr/*.conf` — bindings, monitors, workspaces, input, idle, lock, envs, autostart, looknfeel |
-| **Waybar** (bar) | `.config/waybar/config.jsonc`, `style.css` |
-| **Walker** (launcher) | `.config/walker/config.toml` |
-| **SwayOSD** (OSD) | `.config/swayosd/config.toml`, `style.css` |
-| **Btop** (monitor) | `.config/btop/btop.conf` |
-| **Fastfetch** (fetch) | `.config/fastfetch/config.jsonc` |
-| **Mako** (notifs) | Not tracked directly — symlink managed by omarchy theme system |
-| **Terminals** | `.config/alacritty/alacritty.toml`, `.config/ghostty/config`, `.config/foot/foot.ini` |
+`save.sh` stages every repository change, creates a timestamped commit, and pushes when a remote exists. Run it only with explicit user approval. It does not accept a custom commit message.
 
-### System Services
-| Type | Path in `~/.dotfiles/` |
-|------|------------------------|
-| systemd user services | `.config/systemd/user/*.service`, `*.timer` |
-| systemd drop-in overrides | `.config/systemd/user/*.service.d/` |
-| autostart .desktop | `.config/autostart/*.desktop` |
+`restore.sh` replaces existing files/symlinks, refuses non-empty destination directories, reloads user systemd, and only prints the privileged commands needed for PAM/system files. Inspect affected paths before running it on an existing system.
 
-### System-Level Config (in `/etc/`)
-| File | Origin | Purpose |
-|------|--------|---------|
-| `etc/pam.d/sudo` | `/etc/pam.d/sudo` | PAM: skip fprintd on lid closed |
-| `etc/pam.d/polkit-1` | `/etc/pam.d/polkit-1` | PAM: skip fprintd on lid closed |
+## Safety and verification
 
-These are plain copies (not symlinks — `/etc/` needs root).
-`save.sh` backs them up, `restore.sh` prints instructions for sudo deployment.
-
-### Omarchy Customizations
-| Type | Path in `~/.dotfiles/` |
-|------|------------------------|
-| Hooks | `.config/omarchy/hooks/` — `theme-set`, sample hook dirs |
-| Extensions | `.config/omarchy/extensions/menu.sh` |
-| Branding | `.config/omarchy/branding/` — `about.txt`, `screensaver.txt` |
-
-### Environment & Misc
-| File | Path in `~/.dotfiles/` |
-|------|------------------------|
-| env.d | `.config/environment.d/fcitx.conf`, `omarchy-firefox-wayland.conf` |
-| chromium flags | `.config/chromium-flags.conf` |
-
-### Web App Desktop Files (in `~/.local/share/applications/`)
-| File | Purpose |
-|------|---------|
-| `Outlook.desktop` + `icons/Outlook.png` | Outlook webapp |
-| `Teams.desktop` + `icons/Teams.png` | Teams webapp |
-| `WhatsApp.desktop` + `icons/WhatsApp.png` | WhatsApp webapp |
-| `Hache.desktop` + `icons/Hache.png` | Hermes (Open WebUI) webapp |
-| `Tailscale.desktop` + `icons/Tailscale.png` | Tailscale admin webapp |
-
-> These need `StartupWMClass=chrome-<domain>__-Default` for hyprshell to show icons in window switcher.
-> Use `omarchy-webapp-patch --all` after adding new ones.
-
-### Custom Scripts (in `~/.local/bin/`)
-| Script | Purpose |
-|--------|---------|
-| `teams-jiggler` | Prevent Teams idle detection |
-| `teams-jiggler-status` | Check jiggler status |
-| `teams-jiggler-toggle` | Toggle jiggler on/off |
-| `nextcloud-external-guard` | Guard process for Nextcloud |
-| `neon-pilot-app` | Neon pilot launcher |
-| `omniroute` | Omni route tool |
-| `omarchy-webapp-patch` | Add `StartupWMClass` to webapp .desktop files so hyprshell resolves icons for browser-app windows. Run after `omarchy webapp install`. |
-| `lid-is-open` | Skip fingerprint auth when laptop lid closed |
-
-Also deployed to `/usr/local/bin/lid-is-open` (system-wide, for PAM).
-
-### The Scripts Themselves
-- `save.sh` — copy+commit+push
-- `restore.sh` — create symlinks
-- `AGENTS.md` — this file
-
-## Symlink Architecture
-
-**Current machine**: every tracked file at its original location is a symlink
-pointing to its counterpart inside `~/.dotfiles/`. Example:
-
-```
-~/.config/hypr/bindings.conf  →  ~/.dotfiles/.config/hypr/bindings.conf
-~/.zshrc                      →  ~/.dotfiles/.zshrc
-```
-
-This means:
-- Editing `~/.config/hypr/bindings.conf` edits `~/.dotfiles/.config/hypr/bindings.conf`
-- `git status` inside `~/.dotfiles/` shows real changes
-- No need to "copy back" after editing — it's automatic
-
-**On a fresh machine**: `restore.sh` recreates all symlinks after cloning.
-
-## Scripts
-
-### `save.sh` — Save current state
-```
-bash ~/.dotfiles/save.sh
-# or with a custom message:
-bash ~/.dotfiles/save.sh "custom commit message"
-```
-Steps:
-1. Copies all config files from original locations into `~/.dotfiles/`
-   (idempotent — works with or without symlinks)
-2. `git add -A` in `~/.dotfiles/`
-3. `git commit -m "dotfiles: save <timestamp>"` (or custom message)
-4. `git push` to origin
-
-### `restore.sh` — Restore symlinks (fresh machine or after reset)
-```
-bash ~/.dotfiles/restore.sh
-```
-Steps:
-1. Creates all necessary parent directories
-2. Creates symlinks from `~/.dotfiles/` → original locations
-3. Runs `systemctl --user daemon-reload`
-
-**When to use**:
-- On a brand new OS install after cloning the repo
-- After `omarchy reinstall configs` resets everything to defaults
-- After `omarchy refresh` overwrites files (they get overwritten in `~/.dotfiles/` too since they're symlinks, so `git checkout` can restore them)
-
-### What NOT to track
-`.bak.*` files (omarchy backup artifacts) are ignored via `.gitignore`.
-`default.target.wants/`, `graphical-session*.target.wants/`, and
-`timers.target.wants/` inside systemd/user are NOT tracked — they're
-regenerated by `systemctl enable`.
-
-## Omarchy Integration Notes
-
-- **omarchy refresh** follows symlinks — running `omarchy refresh hyprland`
-  copies the default into the symlink target (inside `~/.dotfiles/`). After
-  that, `git diff` shows what changed and `git checkout` restores the saved
-  version.
-- **omarchy theme set** manages `~/.config/mako/config` as a symlink to
-  `~/.config/omarchy/current/theme/` — this is outside the dotfiles repo.
-- **omarchy hooks** in `~/.config/omarchy/hooks/` are tracked and symlinked.
-  If omarchy recreates them as regular files, the symlinks break. Re-run
-  `restore.sh` to fix.
-- **Themes** are managed by Omarchy outside dotfiles. Never add theme files or wallpapers here.
-
-## Common Operations
-
-### Quick save after making changes
-```bash
-cd ~/.dotfiles && git add -A && git commit -m "dotfiles: update hypr keybinds" && git push
-```
-
-### See what's changed
-```bash
-cd ~/.dotfiles && git diff --stat
-```
-
-### Revert a single file to saved version
-```bash
-cd ~/.dotfiles && git checkout -- .config/hypr/bindings.conf
-# symlink means this restores ~/.config/hypr/bindings.conf too
-```
-
-### Add a new config file to the system
-1. Create the file at its standard location (e.g. `~/.config/newapp/config.toml`)
-2. Copy into repo: `cp ~/.config/newapp/config.toml ~/.dotfiles/.config/newapp/`
-3. Replace with symlink: `ln -sf ~/.dotfiles/.config/newapp/config.toml ~/.config/newapp/config.toml`
-4. Commit: `cd ~/.dotfiles && git add -A && git commit -m "dotfiles: add newapp config" && git push`
-
-Or simpler: add the path to `save.sh` and run it.
-
-### Add a new custom script
-Same pattern: place in `~/.local/bin/`, copy to `~/.dotfiles/.local/bin/`, symlink back,
-add to save.sh's script section, commit.
-
-## Repository Structure
-```
-~/.dotfiles/
-├── .zshrc                    # Symlinked to ~/.zshrc
-├── .p10k.zsh                 # Symlinked to ~/.p10k.zsh
-├── aliases.zsh               # Sourced by .zshrc
-├── path.zsh                  # Sourced by .zshrc
-├── save.sh                   # Save script
-├── restore.sh                # Restore script
-├── AGENTS.md                 # This file
-├── .gitignore
-├── .config/
-│   ├── hypr/                 # Hyprland configs
-│   ├── waybar/               # Waybar config
-│   ├── walker/               # Walker config
-│   ├── swayosd/              # SwayOSD config
-│   ├── btop/                 # Btop config
-│   ├── fastfetch/            # Fastfetch config
-│   ├── alacritty/            # Terminal config
-│   ├── ghostty/              # Terminal config
-│   ├── foot/                 # Terminal config
-│   ├── systemd/user/         # User services
-│   ├── autostart/            # Desktop autostart files
-│   ├── environment.d/        # Env vars
-│   ├── chromium-flags.conf   # Browser flags
-│   └── omarchy/              # Omarchy customizations
-│       ├── hooks/
-│       ├── extensions/
-│       └── branding/
-├── etc/
-│   └── pam.d/                # PAM ref copies (system-level)
-└── .local/bin/               # Custom scripts
-```
-
-## Safety Notes
-
-- **Never delete** original symlink targets inside `~/.dotfiles/` without
-  checking — it breaks the live config.
-- **restore.sh** removes whatever is at the destination (file or symlink)
-  before creating the symlink. It won't remove non-empty directories (uses
-  `rmdir` which only removes empty ones).
-- After `omarchy update`, the upgrade may change default configs. Since your
-  configs are symlinked to `~/.dotfiles/`, they're protected from being
-  overwritten by the update mechanism (which writes to `~/.config/`). But
-  `omarchy refresh` DOES follow symlinks and will overwrite them.
-- Always run `hyprctl configerrors` after any hyprland config change.
-- Always run `omarchy restart waybar` after waybar config changes.
+- Never commit, push, reset, delete tracked config, run privileged commands, or restart production/server services without explicit approval.
+- Never edit `/usr/share/omarchy/`; use user config under `~/.config/` or this repository.
+- Treat `etc/pam.d/` and `.local/bin/lid-is-open` as security-sensitive. Root-owned copies are not symlinks.
+- Omarchy refresh commands can overwrite symlink targets inside this repository. Confirm first and inspect the resulting diff.
+- Do not track Omarchy-managed themes, wallpapers, backup artifacts, or generated systemd `*.target.wants` links.
+- After Hyprland changes, run `hyprctl reload` and `hyprctl configerrors`.
+- After Waybar changes, run `omarchy restart waybar`.
+- After user unit changes, run `systemctl --user daemon-reload` and a targeted unit check.

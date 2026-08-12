@@ -23,7 +23,6 @@
 #bluetooth,
 #pulseaudio,
 #custom-voxtype,
-#custom-pomodoro,
 #custom-screenrecording-indicator,
 #custom-idle-indicator,
 #custom-teams-jiggler,
@@ -164,23 +163,3 @@ tooltip {
   color: #a55555;
 }
 
-#custom-pomodoro {
-  min-width: 12px;
-  margin: 0 7.5px;
-}
-
-#custom-pomodoro.work {
-  color: @success_bg_color;
-}
-
-#custom-pomodoro.short-break {
-  color: @warning_bg_color;
-}
-
-#custom-pomodoro.long-break {
-  color: @accent_color;
-}
-
-#custom-pomodoro.paused {
-  opacity: 0.6;
-}

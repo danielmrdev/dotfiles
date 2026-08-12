@@ -38,7 +38,7 @@ echo "=== Copying configs to $DOTFILES ==="
 echo "[hypr]"
 mkdir -p "$DOTFILES/.config/hypr"
 safe_cp_dir "$HOME/.config/hypr" "$DOTFILES/.config/hypr" "*.conf"
-safe_cp "$HOME/.config/hypr/hy3-layout-watch.sh" "$DOTFILES/.config/hypr/hy3-layout-watch.sh"
+safe_cp_dir "$HOME/.config/hypr" "$DOTFILES/.config/hypr" "*.lua"
 
 # Hyprshell
 echo "[hyprshell]"
@@ -49,11 +49,6 @@ safe_cp "$HOME/.config/hyprshell/styles.css" "$DOTFILES/.config/hyprshell/styles
 # Waybar
 echo "[waybar]"
 safe_cp_dir "$HOME/.config/waybar" "$DOTFILES/.config/waybar"
-
-# Walker
-echo "[walker]"
-mkdir -p "$DOTFILES/.config/walker"
-safe_cp "$HOME/.config/walker/config.toml" "$DOTFILES/.config/walker/config.toml"
 
 # SwayOSD
 echo "[swayosd]"
@@ -107,11 +102,6 @@ safe_cp_dir "$HOME/.config/environment.d" "$DOTFILES/.config/environment.d"
 # Chromium flags
 safe_cp "$HOME/.config/chromium-flags.conf" "$DOTFILES/.config/chromium-flags.conf"
 
-# Focusd (pomodoro)
-echo "[focusd]"
-mkdir -p "$DOTFILES/.config/focusd"
-safe_cp "$HOME/.config/focusd/config.toml" "$DOTFILES/.config/focusd/config.toml"
-
 # Omarchy hooks (only regular files, skip dir symlinks)
 echo "[omarchy hooks]"
 mkdir -p "$DOTFILES/.config/omarchy/hooks"
@@ -135,7 +125,7 @@ echo "[scripts]"
 mkdir -p "$DOTFILES/.local/bin"
 for s in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-off \
          nextcloud-external-guard neon-pilot-app omniroute omarchy-webapp-patch \
-         focusd-menu save-dotfiles restore-dotfiles askpass lid-is-open; do
+         save-dotfiles restore-dotfiles askpass lid-is-open; do
   [ -f "$HOME/.local/bin/$s" ] || continue
   safe_cp "$HOME/.local/bin/$s" "$DOTFILES/.local/bin/"
 done
@@ -160,16 +150,12 @@ fi
 # Web app desktop files and icons (created by omarchy-webapp-install)
 echo "[webapps]"
 mkdir -p "$DOTFILES/.local/share/applications/icons"
-safe_cp "$HOME/.local/share/applications/Outlook.desktop" "$DOTFILES/.local/share/applications/Outlook.desktop"
-safe_cp "$HOME/.local/share/applications/Teams.desktop" "$DOTFILES/.local/share/applications/Teams.desktop"
-safe_cp "$HOME/.local/share/applications/WhatsApp.desktop" "$DOTFILES/.local/share/applications/WhatsApp.desktop"
-safe_cp "$HOME/.local/share/applications/Hache.desktop" "$DOTFILES/.local/share/applications/Hache.desktop"
-safe_cp "$HOME/.local/share/applications/icons/Outlook.png" "$DOTFILES/.local/share/applications/icons/Outlook.png"
-safe_cp "$HOME/.local/share/applications/icons/Teams.png" "$DOTFILES/.local/share/applications/icons/Teams.png"
-safe_cp "$HOME/.local/share/applications/icons/WhatsApp.png" "$DOTFILES/.local/share/applications/icons/WhatsApp.png"
-safe_cp "$HOME/.local/share/applications/icons/Hache.png" "$DOTFILES/.local/share/applications/icons/Hache.png"
-safe_cp "$HOME/.local/share/applications/Tailscale.desktop" "$DOTFILES/.local/share/applications/Tailscale.desktop"
-safe_cp "$HOME/.local/share/applications/icons/Tailscale.png" "$DOTFILES/.local/share/applications/icons/Tailscale.png"
+for f in Outlook.desktop Teams.desktop WhatsApp.desktop Hache.desktop Tailscale.desktop \
+         icons/Outlook.png icons/Teams.png icons/WhatsApp.png icons/Hache.png icons/Tailscale.png; do
+  src="$HOME/.local/share/applications/$f"
+  [ -e "$src" ] || continue
+  safe_cp "$src" "$DOTFILES/.local/share/applications/$f"
+done
 
 echo ""
 echo "=== Git add + commit ==="

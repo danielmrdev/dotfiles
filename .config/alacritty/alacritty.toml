@@ -1,4 +1,4 @@
-general.import = [ "~/.config/omarchy/current/theme/alacritty.toml" ]
+general.import = [ "~/.local/state/omarchy/current/theme/alacritty.toml" ]
 
 [terminal]
 osc52 = "CopyPaste"
@@ -7,9 +7,9 @@ osc52 = "CopyPaste"
 save_to_clipboard = true
 
 [font]
-normal = { family = "GeistMono Nerd Font Mono" }
-bold = { family = "GeistMono Nerd Font Mono" }
-italic = { family = "GeistMono Nerd Font Mono" }
+normal = { family = "CaskaydiaMono Nerd Font" }
+bold = { family = "CaskaydiaMono Nerd Font" }
+italic = { family = "CaskaydiaMono Nerd Font" }
 size = 12
 builtin_box_drawing = true
 

@@ -1,8 +1,8 @@
 # Dynamic theme colors
-config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
+config-file = ?"~/.local/state/omarchy/current/theme/ghostty.conf"
 
 # Font
-font-family = "GeistMono Nerd Font Mono"
+font-family = "CaskaydiaMono Nerd Font"
 font-style = Regular
 font-size = 9
 
