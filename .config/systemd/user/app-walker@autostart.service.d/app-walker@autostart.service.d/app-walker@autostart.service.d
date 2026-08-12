@@ -1,1 +1,0 @@
-/home/daniel/.dotfiles/.config/systemd/user/app-walker@autostart.service.d

@@ -57,19 +57,6 @@ link ".p10k.zsh"                 "$HOME/.p10k.zsh"
 # Hyprland
 link_all ".config/hypr"    "$HOME/.config/hypr"
 
-# Hyprshell
-link ".config/hyprshell/config.ron" "$HOME/.config/hyprshell/config.ron"
-link ".config/hyprshell/styles.css" "$HOME/.config/hyprshell/styles.css"
-
-# Waybar
-link_all ".config/waybar"  "$HOME/.config/waybar"
-
-# Walker
-link ".config/walker/config.toml" "$HOME/.config/walker/config.toml"
-
-# SwayOSD
-link_all ".config/swayosd" "$HOME/.config/swayosd"
-
 # Btop
 link ".config/btop/btop.conf"    "$HOME/.config/btop/btop.conf"
 
@@ -175,6 +162,6 @@ systemctl --user daemon-reload 2>/dev/null || true
 echo ""
 echo "=== Done ==="
 echo "Symlinks created. You may want to:"
-echo "  omarchy restart waybar"
+echo "  omarchy restart shell"
 echo "  hyprctl reload"
 echo "  source ~/.zshrc"

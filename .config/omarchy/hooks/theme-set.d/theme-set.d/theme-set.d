@@ -1,1 +1,0 @@
-/home/daniel/.dotfiles/.config/omarchy/hooks/theme-set.d

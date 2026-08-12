@@ -40,20 +40,6 @@ mkdir -p "$DOTFILES/.config/hypr"
 safe_cp_dir "$HOME/.config/hypr" "$DOTFILES/.config/hypr" "*.conf"
 safe_cp_dir "$HOME/.config/hypr" "$DOTFILES/.config/hypr" "*.lua"
 
-# Hyprshell
-echo "[hyprshell]"
-mkdir -p "$DOTFILES/.config/hyprshell"
-safe_cp "$HOME/.config/hyprshell/config.ron" "$DOTFILES/.config/hyprshell/config.ron"
-safe_cp "$HOME/.config/hyprshell/styles.css" "$DOTFILES/.config/hyprshell/styles.css"
-
-# Waybar
-echo "[waybar]"
-safe_cp_dir "$HOME/.config/waybar" "$DOTFILES/.config/waybar"
-
-# SwayOSD
-echo "[swayosd]"
-safe_cp_dir "$HOME/.config/swayosd" "$DOTFILES/.config/swayosd"
-
 # Btop
 echo "[btop]"
 mkdir -p "$DOTFILES/.config/btop"
@@ -164,7 +150,6 @@ git config core.hooksPath .githooks
 
 # Update .gitignore
 cat > .gitignore << 'GITIGNORE'
-Brewfile.lock.json
 themes/
 .zshrc_old
 .zshenv.local

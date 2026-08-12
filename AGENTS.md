@@ -7,7 +7,7 @@ Personal configuration for Daniel's Omarchy/Arch laptop. Repository lives at `~/
 - Inspect `git status` before editing. Preserve unrelated work.
 - Prefer editing tracked files in this repository. Do not assume a live config is still symlinked after an Omarchy reset; check with `readlink` when relevant.
 - Keep changes minimal. When tracking a new config or script, update both `save.sh` and `restore.sh` so save/restore remain symmetric.
-- Treat `readme.md`, `install.sh`, `Brewfile`, `.macos`, and Mackup files as legacy macOS material unless the user explicitly asks about them.
+- The repo is scoped to Omarchy plus personal laptop config (zsh, terminals, custom scripts); macOS and v3-era leftovers were removed.
 - For desktop, Hyprland, terminal, theme, hook, or other Omarchy changes, follow [Omarchy guidance](.agents/skills/omarchy/SKILL.md).
 - For repository save/restore operations, follow [dotfiles guidance](.agents/skills/dotfiles/SKILL.md).
 
@@ -30,5 +30,5 @@ Personal configuration for Daniel's Omarchy/Arch laptop. Repository lives at `~/
 - Omarchy refresh commands can overwrite symlink targets inside this repository. Confirm first and inspect the resulting diff.
 - Do not track Omarchy-managed themes, wallpapers, backup artifacts, or generated systemd `*.target.wants` links.
 - After Hyprland changes, run `hyprctl reload` and `hyprctl configerrors`.
-- After Waybar changes, run `omarchy restart waybar`.
 - After user unit changes, run `systemctl --user daemon-reload` and a targeted unit check.
+- Gitleaks runs as a pre-commit hook (`.githooks/pre-commit`); never bypass it.
