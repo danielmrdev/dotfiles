@@ -13,6 +13,7 @@ Personal dotfiles for the Omarchy (Arch + Hyprland) ThinkPad E15 Gen 4. Tracked 
 | `.config/alacritty/`, `.config/foot/`, `.config/ghostty/` | Terminals |
 | `.config/btop/`, `.config/fastfetch/` | System info apps |
 | `.config/systemd/user/` | User units: `espanso`, `teams-jiggler*`, `omarchy-recover-internal-monitor` |
+| `.config/hyprshell/` | Window switcher (SUPER+TAB) config + theme — hyprshell is the v4 switcher, keep service enabled |
 | `.config/autostart/`, `.config/environment.d/` | Autostart desktop entries, env vars (`fcitx`, Wayland, `SUDO_ASKPASS`) |
 | `.zshrc`, `.p10k.zsh`, `aliases.zsh`, `path.zsh` | zsh + powerlevel10k |
 | `.local/bin/` | Custom scripts: `askpass`, `lid-is-open`, `teams-jiggler*`, `omniroute`, `neon-pilot-app`, `omarchy-webapp-patch`, `save-dotfiles`, `restore-dotfiles` |

@@ -91,6 +91,12 @@ safe_cp "$HOME/.config/chromium-flags.conf" "$DOTFILES/.config/chromium-flags.co
 # Omarchy shell config
 safe_cp "$HOME/.config/omarchy/shell.json" "$DOTFILES/.config/omarchy/shell.json"
 
+# Hyprshell (window switcher, SUPER+TAB)
+echo "[hyprshell]"
+mkdir -p "$DOTFILES/.config/hyprshell"
+safe_cp "$HOME/.config/hyprshell/config.ron" "$DOTFILES/.config/hyprshell/config.ron"
+safe_cp "$HOME/.config/hyprshell/styles.css" "$DOTFILES/.config/hyprshell/styles.css"
+
 # Omarchy hooks (only regular files, skip dir symlinks)
 echo "[omarchy hooks]"
 mkdir -p "$DOTFILES/.config/omarchy/hooks"

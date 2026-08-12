@@ -57,6 +57,10 @@ link ".p10k.zsh"                 "$HOME/.p10k.zsh"
 # Hyprland
 link_all ".config/hypr"    "$HOME/.config/hypr"
 
+# Hyprshell (window switcher, SUPER+TAB)
+link ".config/hyprshell/config.ron" "$HOME/.config/hyprshell/config.ron"
+link ".config/hyprshell/styles.css" "$HOME/.config/hyprshell/styles.css"
+
 # Omarchy shell (bar layout, idle)
 link ".config/omarchy/shell.json" "$HOME/.config/omarchy/shell.json"
 

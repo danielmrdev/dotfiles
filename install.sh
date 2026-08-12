@@ -40,6 +40,9 @@ omarchy theme set "Retro 82"
 # Omadoro — pomodoro timer bar widget (third-party git plugin)
 omarchy plugin add https://github.com/brianblakely/omadoro.git --enable
 
+# Omarchy Calendar — replaces the built-in clock (tmn73.calendar)
+omarchy plugin add https://github.com/tmn73/omarchy-calendar.git --enable
+
 echo ""
 echo "=== 4/4 Tooling required by the dotfiles repo ==="
 # Gitleaks — enforced by the repo's pre-commit hook (.githooks/pre-commit)
