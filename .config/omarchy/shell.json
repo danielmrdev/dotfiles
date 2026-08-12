@@ -7,18 +7,18 @@
           "id": "omarchy.indicators"
         },
         {
-          "id": "omarchy.keyboard-layout"
-        },
-        {
-          "id": "daniel.weather"
-        },
-        {
           "id": "tmn73.calendar",
           "format": "ddd d MMM HH:mm",
           "formatAlt": "d MMMM 'W'ww yyyy",
           "verticalFormat": "HH\n—\nmm",
           "weekStartDay": "monday",
           "showYearProgress": true
+        },
+        {
+          "id": "omarchy.keyboard-layout"
+        },
+        {
+          "id": "daniel.weather"
         },
         {
           "id": "omarchy.system-update"
