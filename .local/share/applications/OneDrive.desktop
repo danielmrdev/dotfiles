@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=OneDrive
+Comment=OneDrive
+Exec=omarchy-launch-webapp https://betterconsultantses-my.sharepoint.com/
+Terminal=false
+Type=Application
+Icon=/home/daniel/.local/share/applications/icons/OneDrive.png
+StartupNotify=true
+StartupWMClass=chrome-betterconsultantses-my.sharepoint.com__-Default

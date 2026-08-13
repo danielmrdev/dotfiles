@@ -8,15 +8,17 @@
 # Does everything needed to go from a clean Omarchy install to the full
 # personal setup:
 #   1. restore.sh — symlink config into place
-#   2. git hooks — enable gitleaks pre-commit
-#   3. Omarchy extras — custom themes and shell plugins
-#   4. tooling — gitleaks itself
+#   2. personal apps — install required packages and Hache launcher
+#   3. cleanup — remove unwanted Omarchy apps
+#   4. git hooks — enable gitleaks pre-commit
+#   5. Omarchy extras — custom themes and shell plugins
+#   6. tooling — gitleaks itself
 # Safe to re-run (idempotent).
 set -eu
 
 DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 
-echo "=== 1/4 Restoring config symlinks ==="
+echo "=== 1/6 Restoring config symlinks ==="
 if [ -f "$DOTFILES/restore.sh" ]; then
   bash "$DOTFILES/restore.sh"
 else
@@ -25,7 +27,18 @@ else
 fi
 
 echo ""
-echo "=== 2/5 Removing unwanted Omarchy apps ==="
+echo "=== 2/6 Installing personal apps ==="
+# Official repository packages. Obsidian is included in Omarchy v4, but keep it
+# explicit so setup remains correct if base package selection changes.
+omarchy pkg add calibre nextcloud-client obsidian remmina spotify tailscale typora
+
+# AUR packages.
+omarchy pkg aur add bitwarden-bin espanso-wayland
+
+# Hache is a custom web app; its launcher and icon were restored above.
+
+echo ""
+echo "=== 3/6 Removing unwanted Omarchy apps ==="
 for app in \
   "Basecamp" \
   "Discord" \
@@ -63,12 +76,12 @@ rm -f "$HOME/.local/share/applications/foot.desktop" \
 update-desktop-database "$HOME/.local/share/applications" >/dev/null 2>&1 || true
 
 echo ""
-echo "=== 3/5 Enabling gitleaks pre-commit hook ==="
+echo "=== 4/6 Enabling gitleaks pre-commit hook ==="
 git -C "$DOTFILES" config core.hooksPath .githooks
 echo "core.hooksPath = $(git -C "$DOTFILES" config core.hooksPath)"
 
 echo ""
-echo "=== 4/5 Installing Omarchy extras ==="
+echo "=== 5/6 Installing Omarchy extras ==="
 # Harbor — custom third-party theme (not part of stock Omarchy themes)
 omarchy theme install https://github.com/HANCORE-linux/omarchy-harbor-theme
 
@@ -85,7 +98,7 @@ omarchy plugin add https://github.com/tmn73/omarchy-calendar.git --enable
 omarchy plugin add https://github.com/codefriendly/omarchy-nightman.git --enable
 
 echo ""
-echo "=== 5/5 Tooling required by the dotfiles repo ==="
+echo "=== 6/6 Tooling required by the dotfiles repo ==="
 # Gitleaks — enforced by the repo's pre-commit hook (.githooks/pre-commit)
 if ! command -v gitleaks >/dev/null 2>&1; then
   echo "Installing gitleaks..."
@@ -95,6 +108,5 @@ fi
 echo ""
 echo "=== Done ==="
 echo "Optional extras (manual):"
-echo "  - espanso (user unit espanso.service linked by restore.sh): omarchy pkg add espanso"
 echo "  - teams-jiggler timer units need their helpers in ~/.local/bin (already restored)"
 echo "  - verify after login: hyprctl reload && hyprctl configerrors"

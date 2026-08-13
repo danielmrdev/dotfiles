@@ -145,8 +145,8 @@ fi
 # Web app desktop files and icons (created by omarchy-webapp-install)
 echo "[webapps]"
 mkdir -p "$DOTFILES/.local/share/applications/icons"
-for f in Outlook.desktop Teams.desktop Hache.desktop Tailscale.desktop \
-         icons/Outlook.png icons/Teams.png icons/Hache.png icons/Tailscale.png; do
+for f in Outlook.desktop Teams.desktop OneDrive.desktop Hache.desktop Tailscale.desktop \
+         icons/Outlook.png icons/Teams.png icons/OneDrive.png icons/Hache.png icons/Tailscale.png; do
   src="$HOME/.local/share/applications/$f"
   [ -e "$src" ] || continue
   safe_cp "$src" "$DOTFILES/.local/share/applications/$f"
