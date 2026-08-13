@@ -29,12 +29,15 @@
           "id": "omarchy.menu"
         },
         {
-          "id": "omarchy.workspaces"
+          "id": "daniel.workspaces"
         }
       ],
       "right": [
         {
           "id": "daniel.tray"
+        },
+        {
+          "id": "codefriendly.nightman"
         },
         {
           "id": "b.omadoro"

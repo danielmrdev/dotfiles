@@ -43,6 +43,9 @@ omarchy plugin add https://github.com/brianblakely/omadoro.git --enable
 # Omarchy Calendar — replaces the built-in clock (tmn73.calendar)
 omarchy plugin add https://github.com/tmn73/omarchy-calendar.git --enable
 
+# Nightman — night/day theme switching (codefriendly.nightman)
+omarchy plugin add https://github.com/codefriendly/omarchy-nightman.git --enable
+
 echo ""
 echo "=== 4/4 Tooling required by the dotfiles repo ==="
 # Gitleaks — enforced by the repo's pre-commit hook (.githooks/pre-commit)
