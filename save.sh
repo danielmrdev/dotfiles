@@ -119,7 +119,7 @@ safe_cp_dir "$HOME/.config/omarchy/branding" "$DOTFILES/.config/omarchy/branding
 echo "[scripts]"
 mkdir -p "$DOTFILES/.local/bin"
 for s in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-off \
-         nextcloud-external-guard neon-pilot-app omniroute omarchy-webapp-patch \
+         nextcloud-external-guard omarchy-webapp-patch \
          save-dotfiles restore-dotfiles askpass lid-is-open; do
   [ -f "$HOME/.local/bin/$s" ] || continue
   safe_cp "$HOME/.local/bin/$s" "$DOTFILES/.local/bin/"
@@ -145,8 +145,8 @@ fi
 # Web app desktop files and icons (created by omarchy-webapp-install)
 echo "[webapps]"
 mkdir -p "$DOTFILES/.local/share/applications/icons"
-for f in Outlook.desktop Teams.desktop WhatsApp.desktop Hache.desktop Tailscale.desktop \
-         icons/Outlook.png icons/Teams.png icons/WhatsApp.png icons/Hache.png icons/Tailscale.png; do
+for f in Outlook.desktop Teams.desktop Hache.desktop Tailscale.desktop \
+         icons/Outlook.png icons/Teams.png icons/Hache.png icons/Tailscale.png; do
   src="$HOME/.local/share/applications/$f"
   [ -e "$src" ] || continue
   safe_cp "$src" "$DOTFILES/.local/share/applications/$f"

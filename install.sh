@@ -25,12 +25,50 @@ else
 fi
 
 echo ""
-echo "=== 2/4 Enabling gitleaks pre-commit hook ==="
+echo "=== 2/5 Removing unwanted Omarchy apps ==="
+for app in \
+  "Basecamp" \
+  "Discord" \
+  "Google Contacts" \
+  "Google Maps" \
+  "Google Messages" \
+  "Google Photos" \
+  "HEY" \
+  "WhatsApp" \
+  "X" \
+  "YouTube"; do
+  omarchy webapp remove "$app"
+done
+
+# Keep Calibre installed; hide only its E-book editor launcher.
+mkdir -p "$HOME/.local/share/applications"
+cat > "$HOME/.local/share/applications/calibre-ebook-edit.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=E-book editor
+Hidden=true
+EOF
+update-desktop-database "$HOME/.local/share/applications" >/dev/null 2>&1 || true
+
+# omarchy-nvim depends on neovim, so remove both packages together.
+omarchy pkg drop aether cliamp foot kitty moonlight-qt omarchy-nvim neovim obs-studio zed
+
+# Remove stale per-user launchers left behind after package removal.
+rm -f "$HOME/.local/share/applications/foot.desktop" \
+      "$HOME/.local/share/applications/footclient.desktop" \
+      "$HOME/.local/share/applications/foot-server.desktop" \
+      "$HOME/.local/share/applications/kitty.desktop" \
+      "$HOME/.local/share/applications/kitty-open.desktop" \
+      "$HOME/.local/share/applications/nvim.desktop"
+update-desktop-database "$HOME/.local/share/applications" >/dev/null 2>&1 || true
+
+echo ""
+echo "=== 3/5 Enabling gitleaks pre-commit hook ==="
 git -C "$DOTFILES" config core.hooksPath .githooks
 echo "core.hooksPath = $(git -C "$DOTFILES" config core.hooksPath)"
 
 echo ""
-echo "=== 3/4 Installing Omarchy extras ==="
+echo "=== 4/5 Installing Omarchy extras ==="
 # Harbor — custom third-party theme (not part of stock Omarchy themes)
 omarchy theme install https://github.com/HANCORE-linux/omarchy-harbor-theme
 
@@ -47,7 +85,7 @@ omarchy plugin add https://github.com/tmn73/omarchy-calendar.git --enable
 omarchy plugin add https://github.com/codefriendly/omarchy-nightman.git --enable
 
 echo ""
-echo "=== 4/4 Tooling required by the dotfiles repo ==="
+echo "=== 5/5 Tooling required by the dotfiles repo ==="
 # Gitleaks — enforced by the repo's pre-commit hook (.githooks/pre-commit)
 if ! command -v gitleaks >/dev/null 2>&1; then
   echo "Installing gitleaks..."
