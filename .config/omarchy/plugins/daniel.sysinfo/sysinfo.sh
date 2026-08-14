@@ -22,7 +22,7 @@ di=$((i2 - i1))
 
 # Per-core CPU % ("cpuN ..." lines)
 cores=$(paste <(printf '%s\n' "$a") <(printf '%s\n' "$b") | tail -n +2 | awk '{
-  dt=$4-$2; di=$5-$3; p=0
+  dt=$5-$2; di=$6-$3; p=0
   if (dt > 0) p=int((dt-di)*100/dt)
   printf "%s%d", (NR > 1 ? "," : ""), p
 }')

@@ -108,8 +108,18 @@ BarWidget {
     property string iconText: ""
     property string valueText: ""
     property string tooltipText: ""
+    property color iconColor: metric.bar ? metric.bar.barForeground : Color.foreground
     property color valueColor: metric.bar ? metric.bar.barForeground : Color.foreground
     readonly property bool tooltipHovered: visible && mouse.containsMouse
+
+    function refreshTooltip() {
+      if (!metric.bar || !metric.tooltipHovered) return
+      if (metric.bar.tooltipTarget === metric) {
+        metric.bar.tooltipText = metric.tooltipText
+      } else {
+        metric.bar.showTooltip(metric, metric.tooltipText)
+      }
+    }
 
     // The bar's modulePointer MouseArea sits on top of every module and
     // routes clicks to registered targets (cursor + click both come from
@@ -126,6 +136,7 @@ BarWidget {
     }
 
     onBarChanged: syncClickRegistration()
+    onTooltipTextChanged: refreshTooltip()
     Component.onCompleted: syncClickRegistration()
     Component.onDestruction: {
       if (registeredBar && registeredBar.unregisterClickTarget) registeredBar.unregisterClickTarget(metric)
@@ -146,7 +157,7 @@ BarWidget {
         text: metric.iconText
         font.family: metric.bar ? metric.bar.fontFamily : Style.font.family
         font.pixelSize: Style.bar.iconFont
-        color: metric.valueColor
+        color: metric.iconColor
         renderType: Text.NativeRendering
       }
       Text {
@@ -177,7 +188,7 @@ BarWidget {
 
     Metric {
       bar: root.bar
-      iconText: "󰳛"
+      iconText: "󰍛"
       valueText: root.cpu + "%"
       valueColor: root.cpuColor
       tooltipText: root.cpuTooltip()
@@ -211,7 +222,7 @@ BarWidget {
 
     Metric {
       bar: root.bar
-      iconText: "󰳛"
+      iconText: "󰍛"
       valueText: root.cpu + "%"
       valueColor: root.cpuColor
       tooltipText: root.cpuTooltip()
