@@ -23,17 +23,19 @@ BarWidget {
   property int cpuWarn: Number(setting("cpuWarn", 60))
   property int cpuCrit: Number(setting("cpuCrit", 85))
 
+  readonly property color barTextColor: root.bar ? root.bar.barForeground : Color.foreground
+
   readonly property color cpuColor: {
     if (root.cpu >= root.cpuCrit) return Color.urgent
     if (root.cpu >= root.cpuWarn) {
       var t = (root.cpu - root.cpuWarn) / Math.max(1, root.cpuCrit - root.cpuWarn)
       return Qt.rgba(
-        Color.foreground.r + (Color.urgent.r - Color.foreground.r) * t,
-        Color.foreground.g + (Color.urgent.g - Color.foreground.g) * t,
-        Color.foreground.b + (Color.urgent.b - Color.foreground.b) * t,
+        root.barTextColor.r + (Color.urgent.r - root.barTextColor.r) * t,
+        root.barTextColor.g + (Color.urgent.g - root.barTextColor.g) * t,
+        root.barTextColor.b + (Color.urgent.b - root.barTextColor.b) * t,
         1)
     }
-    return root.bar ? root.bar.barForeground : Color.foreground
+    return root.barTextColor
   }
 
   function refresh() {
@@ -54,7 +56,8 @@ BarWidget {
 
   // Outer separation from neighboring widgets (the bar's ModuleList uses
   // spacing 0, so each widget carries its own margin, like WidgetButton).
-  property real horizontalMargin: Style.spacing.lg
+  // Match WidgetButton: each module contributes 8.5px per side.
+  property real horizontalMargin: Style.spaceReal(8.5)
 
   implicitWidth: root.vertical
     ? metricsColumn.implicitWidth
@@ -105,7 +108,7 @@ BarWidget {
     property string iconText: ""
     property string valueText: ""
     property string tooltipText: ""
-    property color valueColor: Color.foreground
+    property color valueColor: metric.bar ? metric.bar.barForeground : Color.foreground
     readonly property bool tooltipHovered: visible && mouse.containsMouse
 
     // The bar's modulePointer MouseArea sits on top of every module and
@@ -168,7 +171,7 @@ BarWidget {
   Row {
     id: metricsRow
     visible: !root.vertical
-    spacing: Style.spacing.lg
+    spacing: Style.spacing.xl
     anchors.left: parent.left
     anchors.leftMargin: root.horizontalMargin
 
@@ -202,7 +205,7 @@ BarWidget {
   Column {
     id: metricsColumn
     visible: root.vertical
-    spacing: Style.spacing.lg
+    spacing: Style.spacing.xl
     anchors.left: parent.left
     anchors.leftMargin: root.horizontalMargin
 

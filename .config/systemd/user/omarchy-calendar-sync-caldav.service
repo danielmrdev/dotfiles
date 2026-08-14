@@ -1,0 +1,8 @@
+[Unit]
+Description=Sync CalDAV calendars and refresh the Omarchy calendar widget events file
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/daniel/.dotfiles/.local/bin/omarchy-calendar-sync-caldav

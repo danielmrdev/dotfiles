@@ -1,0 +1,414 @@
+#!/usr/bin/env python3
+"""Omarchy calendar widget bridge: CalDAV (Stalwart) -> calendar-events.json.
+
+Syncs VCALENDAR items from a CalDAV server and writes the events file the
+omarchy-calendar widget consumes:
+
+    ~/.local/state/omarchy/calendar-events.json
+
+Why not vdirsyncer: Stalwart returns hrefs URL-encoded (`@` -> %40) and 404s
+on the decoded path. vdirsyncer decodes hrefs before GET, so any item whose
+filename contains `@` (e.g. `*@google.com.ics`) fails to sync. This script
+uses hrefs exactly as the server returns them.
+
+Contract (see the plugin README):
+- dateKey is YYYY-MM-DD in local time; the grid keys on it
+- multi-day events are emitted once per day they cover, sharing the same id
+- allDay events carry allDay=true (the widget skips their countdown)
+- the file is written atomically (temp + rename)
+
+State (etags) lives in ~/.local/state/omarchy/caldav-state.json so unchanged
+items are skipped on later runs. Credentials: HTTP Basic, username
+hello@danielmr.dev, password read from ~/.config/omarchy/calendar-caldav.password.
+"""
+import base64
+import datetime as dt
+import json
+import os
+import pathlib
+import re
+import sys
+import tempfile
+import urllib.error
+import urllib.parse
+import urllib.request
+import xml.etree.ElementTree as ET
+import zoneinfo
+
+from dateutil.rrule import rrulestr
+from icalendar import Calendar
+
+BASE_HOST = "https://jmap.danielmr.dev"
+BASE_PATH = "/dav/cal/hello%40danielmr.dev/"
+USERNAME = "hello@danielmr.dev"
+PASSWORD_FILE = pathlib.Path.home() / ".config/omarchy/calendar-caldav.password"
+STATE_FILE = pathlib.Path.home() / ".local/state/omarchy/caldav-state.json"
+OUT_FILE = pathlib.Path.home() / ".local/state/omarchy/calendar-events.json"
+TIMEOUT = 30
+STATE_VERSION = 3
+PAST_DAYS = 7
+FUTURE_DAYS = 60
+
+NAME_COLORS = [
+    (re.compile("trabajo|work", re.I), "#e64553"),
+    (re.compile("familia|family", re.I), "#3fae4a"),
+    (re.compile("personal|home", re.I), "#5e81ac"),
+]
+DEFAULT_COLOR = "#c792ea"
+
+
+def log(msg: str) -> None:
+    print(msg, file=sys.stderr)
+
+
+def calendar_color(name: str) -> str:
+    for pattern, color in NAME_COLORS:
+        if pattern.search(name):
+            return color
+    return DEFAULT_COLOR
+
+
+def local_tz() -> dt.tzinfo:
+    return dt.datetime.now().astimezone().tzinfo
+
+
+def as_aware(value, tz: dt.tzinfo):
+    """Attach a tzinfo to a naive datetime; leave dates and aware datetimes alone."""
+    if isinstance(value, dt.datetime) and value.tzinfo is None:
+        return value.replace(tzinfo=tz)
+    return value
+
+
+# ── CalDAV ────────────────────────────────────────────────────────────
+
+def auth_header() -> str:
+    token = base64.b64encode(f"{USERNAME}:{PASSWORD_FILE.read_text().strip()}".encode()).decode()
+    return f"Basic {token}"
+
+
+def request(path: str, method: str, body: bytes | None = None, depth: str | None = None) -> bytes:
+    headers = {
+        "Authorization": auth_header(),
+        "User-Agent": "omarchy-calendar-sync-caldav",
+    }
+    if body is not None:
+        headers["Content-Type"] = "application/xml"
+    if depth is not None:
+        headers["Depth"] = depth
+    req = urllib.request.Request(BASE_HOST + path, data=body, headers=headers, method=method)
+    with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+        return resp.read()
+
+
+def propfind(path: str, depth: str) -> dict[str, dict[str, str]]:
+    """PROPFIND and return {href: {localname: value}} for DAV: elements."""
+    body = b"""<?xml version="1.0"?>
+<d:propfind xmlns:d="DAV:" xmlns:cs="http://calendarserver.org/ns/" xmlns:ical="http://apple.com/ns/ical/">
+  <d:prop>
+    <d:displayname/>
+    <d:getetag/>
+    <ical:calendar-color/>
+  </d:prop>
+</d:propfind>"""
+    data = request(path, "PROPFIND", body=body, depth=depth)
+    root = ET.fromstring(data)
+    out: dict[str, dict[str, str]] = {}
+    for resp in root.iter():
+        if resp.tag.split("}")[-1] != "response":
+            continue
+        href = None
+        props = {}
+        for child in resp.iter():
+            name = child.tag.split("}")[-1]
+            text = child.text or ""
+            if name == "href" and href is None:
+                href = text.strip()
+            elif name in ("displayname", "getetag", "calendar-color"):
+                props[name] = text.strip()
+        if href:
+            out[href] = props
+    return out
+
+
+def get_ics(href: str) -> bytes:
+    return request(href, "GET")
+
+
+def discover_collections() -> dict[str, str]:
+    """{collection_name: display_name} for direct subcollections of the principal."""
+    found = {}
+    for href, props in propfind(BASE_PATH, "1").items():
+        if href == BASE_PATH or href.startswith("/dav/pal/"):
+            continue
+        name = href.rstrip("/").rsplit("/", 1)[-1]
+        found[name] = {
+            "display": props.get("displayname") or urllib.parse.unquote(name),
+            "color": props.get("calendar-color") or "",
+        }
+    return found
+
+
+def list_items(collection: str) -> dict[str, str]:
+    """{href: etag} for calendar items inside a collection."""
+    items = {}
+    for href, props in propfind(BASE_PATH + urllib.parse.quote(collection) + "/", "1").items():
+        if href.startswith("/dav/pal/") or href.endswith("/"):
+            continue
+        items[href] = props.get("getetag", "")
+    return items
+
+
+# ── ICS → rows ───────────────────────────────────────────────────────
+
+def event_duration(start: dt.datetime, end: dt.datetime | None, all_day: bool) -> dt.timedelta:
+    if end is not None:
+        return end - start
+    return dt.timedelta(days=1) if all_day else dt.timedelta(hours=1)
+
+
+def exdate_datetimes(vevent) -> list:
+    """Collect datetimes from EXDATE (icalendar nests vDDDLists)."""
+    out = []
+    exd = vevent.get("EXDATE")
+    if exd is None:
+        return out
+
+    def walk(value):
+        if isinstance(value, list):
+            for x in value:
+                walk(x)
+        elif hasattr(value, "dt"):
+            out.append(value.dt)
+
+    walk(exd)
+    return out
+
+
+UNTIL_RE = re.compile(r"UNTIL=([^;]+)")
+
+
+def split_until(rule: str):
+    """Remove UNTIL, returning (rule, parsed_until, is_utc).
+
+    Google emits both UTC UNTIL values (with Z) and local wall-time values.
+    dateutil requires UNTIL and DTSTART to use matching frames, so expand the
+    rule without UNTIL and apply this bound after expansion.
+    """
+    match = UNTIL_RE.search(rule)
+    if not match:
+        return rule, None, False
+    raw = match.group(1)
+    rule = UNTIL_RE.sub("", rule).strip(";").replace(";;", ";")
+    value = None
+    for fmt in ("%Y%m%dT%H%M%S", "%Y%m%d"):
+        try:
+            value = dt.datetime.strptime(raw.rstrip("Z"), fmt)
+            break
+        except ValueError:
+            pass
+    if value is None:
+        return rule, None, False
+    if raw.endswith("Z"):
+        return rule, value.replace(tzinfo=dt.timezone.utc), True
+    return rule, value, False
+
+
+def expand_occurrences(vevent, window_start: dt.datetime, window_end: dt.datetime):
+    start_raw = vevent.get("DTSTART").dt
+    all_day = not isinstance(start_raw, dt.datetime)
+    tz = local_tz()
+    if all_day:
+        # All-day: DTSTART is a plain date. Convert to midnight local time so
+        # comparisons and RRULE expansion stay datetime-based.
+        start = dt.datetime(start_raw.year, start_raw.month, start_raw.day, tzinfo=tz)
+    else:
+        start = as_aware(start_raw, tz)
+    end_raw = vevent.get("DTEND")
+    end_raw = end_raw.dt if end_raw is not None else None
+    if all_day and isinstance(end_raw, dt.date):
+        end = dt.datetime(end_raw.year, end_raw.month, end_raw.day, tzinfo=tz)
+    elif end_raw is not None:
+        end = as_aware(end_raw, tz)
+    else:
+        end = None
+    duration = event_duration(start, end, all_day)
+
+    if "RRULE" in vevent:
+        rule, until, until_utc = split_until(vevent["RRULE"].to_ical().decode())
+        tz = start.tzinfo
+        naive_start = start.replace(tzinfo=None)
+        rrule = rrulestr(rule, dtstart=naive_start)
+        for occ in rrule.between(window_start.replace(tzinfo=None),
+                                 window_end.replace(tzinfo=None), inc=True):
+            if until is not None:
+                if until_utc:
+                    if occ.replace(tzinfo=tz).astimezone(dt.timezone.utc) > until:
+                        continue
+                elif occ > until:
+                    continue
+            yield occ.replace(tzinfo=tz), (occ + duration).replace(tzinfo=tz), all_day
+    else:
+        if start < window_end and (start + duration) > window_start:
+            yield start, start + duration, all_day
+
+
+def vcalendar_rows(text: str, calendar_id: str, calendar_name: str, color: str,
+                   window_start, window_end) -> list[dict]:
+    cal = Calendar.from_ical(text)
+    events = [c for c in cal.walk() if c.name == "VEVENT"]
+    if not events:
+        return []
+
+    masters = {}
+    overrides = {}
+    for ev in events:
+        uid = str(ev.get("UID", ""))
+        if ev.get("RECURRENCE-ID") is not None:
+            overrides.setdefault(uid, []).append(ev)
+        else:
+            masters[uid] = ev
+
+    rows = []
+    for uid, master in masters.items():
+        if master.get("STATUS") == "CANCELLED":
+            continue
+        title = str(master.get("SUMMARY", "(sin título)"))
+        location = str(master.get("LOCATION", ""))
+        exdates = {as_aware(d, local_tz()) for d in exdate_datetimes(master)}
+        occurrences = [(s, e, a) for s, e, a in expand_occurrences(master, window_start, window_end)
+                       if s not in exdates]
+
+        for ov in overrides.get(uid, []):
+            if ov.get("STATUS") == "CANCELLED":
+                continue
+            occ = list(expand_occurrences(ov, window_start, window_end))
+            if occ:
+                s0 = occ[0][0]
+                occurrences = [(s, e, a) for s, e, a in occurrences if s != s0]
+                occurrences.extend(occ)
+
+        for start, end, all_day in sorted(occurrences, key=lambda o: o[0]):
+            last_day = (end - dt.timedelta(days=1)).date() if all_day else start.date()
+            day = start.date()
+            while day <= last_day and day <= window_end.date():
+                if day >= window_start.date():
+                    rows.append({
+                        "id": uid,
+                        "calendarId": calendar_id,
+                        "calendarName": calendar_name,
+                        "color": color,
+                        "dateKey": day.isoformat(),
+                        "start": start.isoformat(),
+                        "end": end.isoformat(),
+                        "allDay": all_day,
+                        "title": title,
+                        "location": location,
+                    })
+                day += dt.timedelta(days=1)
+    return rows
+
+
+# ── main ─────────────────────────────────────────────────────────────
+
+def load_state() -> dict:
+    try:
+        state = json.loads(STATE_FILE.read_text())
+        if state.get("_parserVersion") != STATE_VERSION:
+            return {"_parserVersion": STATE_VERSION}
+        return state
+    except (FileNotFoundError, ValueError):
+        return {"_parserVersion": STATE_VERSION}
+
+
+def save_state(state: dict) -> None:
+    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=STATE_FILE.parent, prefix=".caldav-state-", suffix=".tmp")
+    with os.fdopen(fd, "w") as fh:
+        json.dump(state, fh, indent=1)
+    os.replace(tmp, STATE_FILE)
+
+
+def cached_rows(entry: dict, display: str, source_color: str) -> list[dict]:
+    rows = entry.get("events", [])
+    color = source_color or calendar_color(display)
+    for row in rows:
+        row["calendarName"] = display
+        row["color"] = color
+    return rows
+
+
+def main() -> None:
+    tz = local_tz()
+    now = dt.datetime.now(tz)
+    window_start = now - dt.timedelta(days=PAST_DAYS)
+    window_end = now + dt.timedelta(days=FUTURE_DAYS)
+
+    collections = discover_collections()
+    state = load_state()
+    events = []
+
+    for name, metadata in sorted(collections.items()):
+        display = metadata["display"]
+        source_color = metadata.get("color") or calendar_color(display)
+        try:
+            items = list_items(name)
+        except urllib.error.HTTPError as exc:
+            log(f"  {name}: listing failed ({exc.code})")
+            continue
+
+        col_state = state.setdefault(name, {})
+        col_events = []
+
+        for href, etag in items.items():
+            cached = col_state.get(href)
+            if isinstance(cached, dict) and cached.get("etag") in ("", etag):
+                # Migrate the first run's cache, which predates nested DAV
+                # property parsing and therefore has empty etags.
+                cached["etag"] = etag
+                col_events.extend(cached_rows(cached, display, source_color))
+                continue
+            try:
+                ics = get_ics(href).decode("utf-8", errors="replace")
+                item_events = vcalendar_rows(ics, name, display,
+                                             source_color, window_start, window_end)
+                col_events.extend(item_events)
+                col_state[href] = {"etag": etag, "events": item_events}
+            except urllib.error.HTTPError as exc:
+                log(f"  {name}: GET failed {href} ({exc.code})")
+                if exc.code == 404:
+                    col_state.pop(href, None)
+                elif isinstance(cached, dict):
+                    col_events.extend(cached_rows(cached, display, source_color))
+            except Exception:
+                log(f"  {name}: parse failed {href}")
+                # Keep malformed items quiet on later runs, but retain the
+                # empty result as explicit cache rather than refetching it.
+                col_state[href] = {"etag": etag, "events": []}
+
+        for href in list(col_state):
+            if href not in items:
+                del col_state[href]
+
+        events.extend(col_events)
+        log(f"  {name}: {len(items)} items, {len(col_events)} rows in window")
+
+    save_state(state)
+    events.sort(key=lambda e: (e["dateKey"], e["start"]))
+    payload = {
+        "version": 1,
+        "syncedAt": now.isoformat(),
+        "source": "caldav:stalwart",
+        "events": events,
+    }
+
+    OUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=OUT_FILE.parent, prefix=".calendar-events-", suffix=".tmp")
+    with os.fdopen(fd, "w") as fh:
+        json.dump(payload, fh, ensure_ascii=False)
+    os.replace(tmp, OUT_FILE)
+
+    log(f"wrote {len(events)} events ({OUT_FILE})")
+
+
+if __name__ == "__main__":
+    main()

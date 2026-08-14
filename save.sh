@@ -120,7 +120,7 @@ echo "[scripts]"
 mkdir -p "$DOTFILES/.local/bin"
 for s in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-off \
          nextcloud-external-guard omarchy-webapp-patch \
-         save-dotfiles restore-dotfiles askpass lid-is-open; do
+         omarchy-calendar-sync-caldav save-dotfiles restore-dotfiles askpass lid-is-open; do
   [ -f "$HOME/.local/bin/$s" ] || continue
   safe_cp "$HOME/.local/bin/$s" "$DOTFILES/.local/bin/"
 done

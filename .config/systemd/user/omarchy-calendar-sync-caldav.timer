@@ -1,0 +1,12 @@
+[Unit]
+Description=Refresh the Omarchy calendar widget events file
+
+[Timer]
+# Wall-clock schedule with Persistent= so a missed run fires on the next
+# boot or wake after suspend. Mirrors the plugin's own gws timer cadence.
+OnCalendar=*:0/5
+Persistent=true
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target

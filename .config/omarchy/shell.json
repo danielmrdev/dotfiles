@@ -12,7 +12,10 @@
           "formatAlt": "d MMMM 'W'ww yyyy",
           "verticalFormat": "HH\n—\nmm",
           "weekStartDay": "monday",
-          "showYearProgress": true
+          "showYearProgress": true,
+          "hiddenCalendars": [
+            "trabajo"
+          ]
         },
         {
           "id": "omarchy.keyboard-layout"

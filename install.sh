@@ -105,6 +105,10 @@ if ! command -v gitleaks >/dev/null 2>&1; then
   omarchy pkg add gitleaks
 fi
 
+# CalDAV calendar sync (Stalwart -> omarchy-calendar widget): ICS parsing
+omarchy pkg add python-icalendar python-dateutil
+systemctl --user enable --now omarchy-calendar-sync-caldav.timer
+
 echo ""
 echo "=== Done ==="
 echo "Optional extras (manual):"

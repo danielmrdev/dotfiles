@@ -12,11 +12,11 @@ Personal dotfiles for the Omarchy (Arch + Hyprland) ThinkPad E15 Gen 4. Tracked 
 | `install.sh` | Fresh-install entry point: restore + hooks + themes + plugins + gitleaks |
 | `.config/alacritty/`, `.config/foot/`, `.config/ghostty/` | Terminals |
 | `.config/btop/`, `.config/fastfetch/` | System info apps |
-| `.config/systemd/user/` | User units: `espanso`, `teams-jiggler*`, `omarchy-recover-internal-monitor` |
+| `.config/systemd/user/` | User units: `espanso`, `teams-jiggler*`, `omarchy-recover-internal-monitor`, CalDAV calendar sync |
 | `.config/hyprshell/` | Window switcher (SUPER+TAB) config + theme — hyprshell is the v4 switcher, keep service enabled |
 | `.config/autostart/`, `.config/environment.d/` | Autostart desktop entries, env vars (`fcitx`, Wayland, `SUDO_ASKPASS`) |
 | `.zshrc`, `.p10k.zsh`, `aliases.zsh`, `path.zsh` | zsh + powerlevel10k |
-| `.local/bin/` | Custom scripts: `askpass`, `lid-is-open`, `teams-jiggler*`, `omniroute`, `neon-pilot-app`, `omarchy-webapp-patch`, `save-dotfiles`, `restore-dotfiles` |
+| `.local/bin/` | Custom scripts: `askpass`, `lid-is-open`, `teams-jiggler*`, `omniroute`, `neon-pilot-app`, `omarchy-webapp-patch`, `omarchy-calendar-sync-caldav`, `save-dotfiles`, `restore-dotfiles` |
 | `.local/share/applications/` | Webapp desktop entries + icons (Teams, Outlook, WhatsApp, Hache, Tailscale) |
 | `etc/pam.d/` | PAM policy (`sudo`, `polkit-1`) — root-owned copies, restore prints privileged commands |
 | `.agents/skills/` | Agent skills (omarchy, dotfiles, etc.) |
@@ -32,7 +32,7 @@ Creates symlinks from `~/.dotfiles` to live config, reloads user systemd, prints
 
 ## Install (fresh system)
 
-On a fresh Omarchy install, run `install.sh` after cloning the repo — it drives everything: restore symlinks, enable the gitleaks hook, install Omarchy extras (Harbor theme, Omadoro plugin) and tooling (gitleaks):
+On a fresh Omarchy install, run `install.sh` after cloning the repo — it drives everything: restore symlinks, enable the gitleaks hook, install Omarchy extras (Harbor theme, Omadoro and Calendar plugins), CalDAV widget dependencies, and tooling (gitleaks):
 
 ```bash
 git clone git@github.com:danielmrdev/dotfiles.git ~/.dotfiles
@@ -49,6 +49,42 @@ Idempotent — safe to re-run.
 | Cloned built-in (`omarchy plugin clone omarchy.X`) | `omarchy plugin clone <id>` | track `~/.config/omarchy/plugins/<user>.<id>/` in this repo |
 | Third-party git (e.g. `b.omadoro`) | `omarchy plugin add <git-url> --enable` | not tracked (own git); re-install via `install.sh`, update with `omarchy plugin update <id>` |
 | Hand-written | write under `~/.config/omarchy/plugins/<id>/` | track in this repo |
+
+## Barra de Omarchy
+
+Orden actual en `~/.config/omarchy/shell.json`. `CUSTOM` = plugin externo o widget propio; los `omarchy.*` son widgets first-party de Omarchy.
+
+| Sección | Orden | Widget | Origen |
+|---|---:|---|---|
+| Centro | 1 | `omarchy.indicators` | Omarchy |
+| Centro | 2 | `tmn73.calendar` | **CUSTOM** — plugin externo |
+| Centro | 3 | `omarchy.keyboard-layout` | Omarchy |
+| Centro | 4 | `daniel.weather` | **CUSTOM** — widget propio |
+| Centro | 5 | `omarchy.system-update` | Omarchy |
+| Izquierda | 1 | `omarchy.menu` | Omarchy |
+| Izquierda | 2 | `daniel.workspaces` | **CUSTOM** — widget propio |
+| Derecha | 1 | `daniel.tray` | **CUSTOM** — widget propio |
+| Derecha | 2 | `codefriendly.nightman` | **CUSTOM** — plugin externo |
+| Derecha | 3 | `b.omadoro` | **CUSTOM** — plugin externo |
+| Derecha | 4 | `omarchy.tailscale` | Omarchy |
+| Derecha | 5 | `omarchy.agents` | Omarchy |
+| Derecha | 6 | `omarchy.bluetooth` | Omarchy |
+| Derecha | 7 | `omarchy.network` | Omarchy |
+| Derecha | 8 | `omarchy.audio` | Omarchy |
+| Derecha | 9 | `daniel.sysinfo` | **CUSTOM** — widget propio |
+| Derecha | 10 | `omarchy.monitor` | Omarchy |
+| Derecha | 11 | `omarchy.power` | Omarchy |
+
+### Calendario
+
+`tmn73.calendar` reemplaza al reloj integrado. Eventos vienen de CalDAV/Stalwart mediante `.local/bin/omarchy-calendar-sync-caldav`.
+
+- Dependencias: `python-icalendar`, `python-dateutil` (las instala `install.sh`).
+- Timer: `omarchy-calendar-sync-caldav.timer`, cada 5 minutos.
+- Credencial local: `~/.config/omarchy/calendar-caldav.password` (`chmod 600`, no se versiona).
+- Fuente: `https://jmap.danielmr.dev/dav/cal`.
+- Widget consume: `~/.local/state/omarchy/calendar-events.json`.
+- Colores: usa `calendar-color` nativo de CalDAV; cada evento lleva color en JSON.
 
 ## Save
 
