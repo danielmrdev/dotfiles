@@ -5,28 +5,114 @@ import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk, Gdk, Pango
-import os, sys
+import os, re, sys
 
-# ── Read Omarchy theme colors ──────────────────────────────────────
-THEME_FILE = os.path.expanduser("~/.config/omarchy/current/theme/colors.toml")
+# ── Read active Omarchy v4 theme ───────────────────────────────────
+# v4 keeps the applied theme in XDG state and puts surface-specific colors
+# (including Polkit) in shell.toml. Keep the old config path as a fallback.
+THEME_DIRS = (
+    os.path.join(os.environ.get("XDG_STATE_HOME", os.path.expanduser("~/.local/state")),
+                 "omarchy", "current", "theme"),
+    os.path.expanduser("~/.config/omarchy/current/theme"),
+)
+
+
+def read_theme_file(path):
+    values = {}
+    section = ""
+    try:
+        with open(path) as f:
+            lines = f.readlines()
+    except OSError:
+        return values
+
+    for raw_line in lines:
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        section_match = re.match(r"^\[([A-Za-z0-9_-]+)\]$", line)
+        if section_match:
+            section = section_match.group(1).lower()
+            continue
+        match = re.match(r"^([A-Za-z0-9_-]+)\s*=\s*(.+)$", line)
+        if not match:
+            continue
+        key, value = match.groups()
+        value = value.strip()
+        if value.startswith(('\"', "'")) and value.endswith(value[0]):
+            value = value[1:-1]
+        else:
+            value = value.split(" #", 1)[0].strip()
+        values[f"{section}.{key.lower()}" if section else key.lower()] = value
+    return values
+
+
+def resolve_color(value, colors, surfaces, fallback, seen=None):
+    """Resolve hex colors and Omarchy surface references to GTK colors."""
+    if not value:
+        return fallback
+    text = str(value)
+    match = re.search(r"#[0-9A-Fa-f]{6}", text)
+    if match:
+        return match.group(0)
+    match = re.search(r"rgba?\(\s*([0-9A-Fa-f]{6})[0-9A-Fa-f]{0,2}", text)
+    if match:
+        return "#" + match.group(1)
+
+    key = text.strip().lower()
+    seen = seen or set()
+    if key in seen:
+        return fallback
+    seen.add(key)
+    if key in surfaces:
+        return resolve_color(surfaces[key], colors, surfaces, fallback, seen)
+    if key in colors:
+        return resolve_color(colors[key], colors, surfaces, fallback, seen)
+    return fallback
+
+
+def rgba(hex_color, alpha):
+    red, green, blue = (int(hex_color[i:i + 2], 16) for i in (1, 3, 5))
+    return f"rgba({red}, {green}, {blue}, {max(0.0, min(1.0, alpha)):.3f})"
+
 
 def read_colors():
+    defaults = {
+        "background": "#dfe4c4",
+        "foreground": "#1c2d28",
+        "accent": "#5e81ac",
+        "border": "#384f54",
+    }
+    theme_dir = next((path for path in THEME_DIRS
+                      if os.path.isfile(os.path.join(path, "colors.toml"))), None)
+    if not theme_dir:
+        return (defaults["background"], defaults["foreground"],
+                defaults["accent"], defaults["border"])
+
+    colors = read_theme_file(os.path.join(theme_dir, "colors.toml"))
+    surfaces = read_theme_file(os.path.join(theme_dir, "shell.toml"))
+    base_bg = resolve_color(colors.get("background"), colors, surfaces,
+                            defaults["background"])
+    base_fg = resolve_color(colors.get("foreground"), colors, surfaces,
+                            defaults["foreground"])
+    base_accent = resolve_color(colors.get("accent"), colors, surfaces,
+                                defaults["accent"])
+    base_border = resolve_color(colors.get("color7"), colors, surfaces,
+                                defaults["border"])
+    bg_hex = resolve_color(surfaces.get("polkit.background"), colors, surfaces,
+                           base_bg)
+    fg_hex = resolve_color(surfaces.get("polkit.text"), colors, surfaces,
+                           base_fg)
+    accent = resolve_color(surfaces.get("polkit.accent"), colors, surfaces,
+                           base_accent)
+    border = resolve_color(surfaces.get("polkit.border"), colors, surfaces,
+                           base_border)
     try:
-        with open(THEME_FILE) as f:
-            raw = f.read()
-        def g(key):
-            for line in raw.splitlines():
-                line = line.strip()
-                if line.startswith(key + " ="):
-                    return line.split('"')[1]
-            return None
-        bg = g("background") or "#dfe4c4"
-        fg = g("foreground") or "#1c2d28"
-        accent = g("accent") or "#5e81ac"
-        border = g("color7") or "#384f54"
-        return bg, fg, accent, border
-    except Exception:
-        return "#dfe4c4", "#1c2d28", "#5e81ac", "#384f54"
+        bg_alpha = float(surfaces.get("polkit.background-alpha", "1"))
+    except ValueError:
+        bg_alpha = 1.0
+    return rgba(bg_hex, bg_alpha), fg_hex, accent, border
+
 
 BG, FG, ACCENT, BORDER = read_colors()
 user = os.environ.get("USER", "")
