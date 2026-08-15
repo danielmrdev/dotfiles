@@ -109,7 +109,9 @@ link_all ".config/omarchy/extensions" "$HOME/.config/omarchy/extensions"
 # Omarchy branding
 link_all ".config/omarchy/branding" "$HOME/.config/omarchy/branding"
 
-# Custom scripts
+# Custom scripts, including update-fingerprint-libs. The package manifest stays
+# in the repository at packages/aur-fingerprint.txt and is consumed by install.sh
+# and the restored helper.
 link_all ".local/bin" "$HOME/.local/bin"
 
 # Agent skills (whole dir symlink)

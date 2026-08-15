@@ -16,7 +16,8 @@ Personal dotfiles for the Omarchy (Arch + Hyprland) ThinkPad E15 Gen 4. Tracked 
 | `.config/hyprshell/` | Window switcher (SUPER+TAB) config + theme — hyprshell is the v4 switcher, keep service enabled |
 | `.config/autostart/`, `.config/environment.d/` | Autostart desktop entries, env vars (`fcitx`, Wayland, `SUDO_ASKPASS`) |
 | `.zshrc`, `.p10k.zsh`, `aliases.zsh`, `path.zsh` | zsh + powerlevel10k |
-| `.local/bin/` | Custom scripts: `askpass`, `lid-is-open`, `teams-jiggler*`, `omniroute`, `neon-pilot-app`, `omarchy-webapp-patch`, `omarchy-calendar-sync-caldav`, `save-dotfiles`, `restore-dotfiles` |
+| `.local/bin/` | Custom scripts: `askpass`, `lid-is-open`, `teams-jiggler*`, `omniroute`, `neon-pilot-app`, `omarchy-webapp-patch`, `omarchy-calendar-sync-caldav`, `update-fingerprint-libs`, `save-dotfiles`, `restore-dotfiles` |
+| `packages/aur-fingerprint.txt` | AUR package manifest for ThinkPad Goodix fingerprint support |
 | `.local/share/applications/` | Webapp desktop entries + icons (Teams, Outlook, WhatsApp, Hache, Tailscale) |
 | `etc/pam.d/` | PAM policy (`sudo`, `polkit-1`) — root-owned copies, restore prints privileged commands |
 | `.agents/skills/` | Agent skills (omarchy, dotfiles, etc.) |
@@ -39,7 +40,48 @@ git clone git@github.com:danielmrdev/dotfiles.git ~/.dotfiles
 bash ~/.dotfiles/install.sh
 ```
 
-Idempotent — safe to re-run.
+Idempotent — safe to re-run. It also installs or updates the AUR packages listed in `packages/aur-fingerprint.txt`.
+
+## ThinkPad fingerprint reader
+
+This ThinkPad (`21E6004WSP`) has a Goodix USB reader with ID `27c6:550a`.
+The official Arch package `libfprint` does not include support for this device.
+Fingerprint support therefore uses two locally built AUR packages:
+
+- `libfprint-tod` — libfprint with the TOD API needed by external drivers.
+- `libfprint-2-tod1-goodix` — Lenovo's proprietary Goodix driver for `27c6:550a`.
+
+Do not replace them with the official `libfprint` package: it conflicts with
+`libfprint-tod` and leaves `fprintd` without a driver for this reader.
+
+Package lifecycle:
+
+- `install.sh` reads the manifest and runs `yay -S --needed`, installing or updating both packages.
+- `omarchy update` also runs Omarchy's AUR update step (`yay -Sua`).
+- The AUR Goodix entry currently advertises `0.0.9-1`, while the installed
+  `0.0.9.r3.g5f05f60-1` is newer. Its AUR `Out-of-date` flag is metadata noise,
+  not an available downgrade.
+- After `restore.sh`, update manually with:
+
+  ```bash
+  update-fingerprint-libs
+  ```
+
+- Inspect installed/AUR versions without changing anything:
+
+  ```bash
+  update-fingerprint-libs --check
+  ```
+
+- Rebuild locally when the AUR source changes without a version bump:
+
+  ```bash
+  update-fingerprint-libs --rebuild
+  ```
+
+`save.sh` preserves the updater script; `restore.sh` restores it with the other
+custom scripts. The package manifest is versioned in this repository, not
+symlinked into a live config path.
 
 ## Omarchy plugins
 

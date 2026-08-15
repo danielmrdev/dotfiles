@@ -35,6 +35,11 @@ omarchy pkg add calibre nextcloud-client obsidian remmina spotify tailscale typo
 # AUR packages.
 omarchy pkg aur add bitwarden-bin espanso-wayland
 
+# ThinkPad Goodix fingerprint support. These packages are intentionally built
+# locally because the official libfprint package does not support 27c6:550a.
+# Unlike `omarchy pkg aur add`, the helper also updates packages already present.
+"$DOTFILES/.local/bin/update-fingerprint-libs" update
+
 # Hache is a custom web app; its launcher and icon were restored above.
 
 echo ""

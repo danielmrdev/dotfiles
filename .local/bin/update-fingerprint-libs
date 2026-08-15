@@ -1,0 +1,45 @@
+#!/bin/bash
+# Update the AUR packages required by the ThinkPad Goodix fingerprint reader.
+set -euo pipefail
+
+DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+PACKAGE_FILE="$DOTFILES/packages/aur-fingerprint.txt"
+
+if [ ! -r "$PACKAGE_FILE" ]; then
+  echo "ERROR: package manifest not found: $PACKAGE_FILE" >&2
+  exit 1
+fi
+
+if ! command -v yay >/dev/null 2>&1; then
+  echo "ERROR: yay is required to install/update AUR packages." >&2
+  exit 1
+fi
+
+mapfile -t packages < <(sed -e 's/[[:space:]]*#.*//' -e '/^[[:space:]]*$/d' "$PACKAGE_FILE")
+if [ "${#packages[@]}" -eq 0 ]; then
+  echo "ERROR: package manifest is empty: $PACKAGE_FILE" >&2
+  exit 1
+fi
+
+case "${1:-update}" in
+  --check)
+    echo "== Installed fingerprint packages =="
+    for package in "${packages[@]}"; do
+      pacman -Qi "$package" 2>/dev/null | grep -E '^(Name|Version|Install Reason|Validated By)[[:space:]]*:' || \
+        echo "$package: not installed"
+    done
+    echo
+    echo "== AUR metadata =="
+    yay -Si "${packages[@]}"
+    ;;
+  --rebuild)
+    yay -S --noconfirm --rebuildall "${packages[@]}"
+    ;;
+  update)
+    yay -S --noconfirm --needed "${packages[@]}"
+    ;;
+  *)
+    echo "Usage: $0 [--check|--rebuild|update]" >&2
+    exit 2
+    ;;
+esac

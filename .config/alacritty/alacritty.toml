@@ -7,9 +7,9 @@ osc52 = "CopyPaste"
 save_to_clipboard = true
 
 [font]
-normal = { family = "GeistMono Nerd Font" }
-bold = { family = "GeistMono Nerd Font" }
-italic = { family = "GeistMono Nerd Font" }
+normal = { family = "CaskaydiaMono Nerd Font" }
+bold = { family = "CaskaydiaMono Nerd Font" }
+italic = { family = "CaskaydiaMono Nerd Font" }
 size = 10
 builtin_box_drawing = true
 
