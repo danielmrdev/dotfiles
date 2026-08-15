@@ -10,7 +10,7 @@ Personal dotfiles for the Omarchy (Arch + Hyprland) ThinkPad E15 Gen 4. Tracked 
 | `.config/omarchy/` | `shell.json` (bar layout, idle), hooks (`.d` dirs), extensions, branding |
 | `.config/omarchy/plugins/` | Customized clones: `daniel.weather` (temp in bar), `daniel.tray` (no drawer) |
 | `install.sh` | Fresh-install entry point: restore + hooks + themes + plugins + gitleaks |
-| `.config/alacritty/`, `.config/foot/`, `.config/ghostty/` | Terminals |
+| `.config/alacritty/` | Terminal config |
 | `.config/btop/`, `.config/fastfetch/` | System info apps |
 | `.config/systemd/user/` | User units: `espanso`, `teams-jiggler*`, `omarchy-recover-internal-monitor`, CalDAV calendar sync |
 | `.config/hyprshell/` | Window switcher (SUPER+TAB) config + theme — hyprshell is the v4 switcher, keep service enabled |

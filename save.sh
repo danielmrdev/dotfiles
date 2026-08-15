@@ -49,11 +49,9 @@ safe_cp "$HOME/.config/btop/btop.conf" "$DOTFILES/.config/btop/btop.conf"
 echo "[fastfetch]"
 safe_cp_dir "$HOME/.config/fastfetch" "$DOTFILES/.config/fastfetch"
 
-# Terminals
-echo "[terminals]"
+# Terminal
+echo "[terminal]"
 safe_cp "$HOME/.config/alacritty/alacritty.toml" "$DOTFILES/.config/alacritty/alacritty.toml"
-safe_cp "$HOME/.config/ghostty/config" "$DOTFILES/.config/ghostty/config"
-safe_cp "$HOME/.config/foot/foot.ini" "$DOTFILES/.config/foot/foot.ini"
 
 # Systemd user services
 echo "[systemd]"

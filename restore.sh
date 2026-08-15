@@ -73,10 +73,8 @@ link ".config/btop/btop.conf"    "$HOME/.config/btop/btop.conf"
 # Fastfetch
 link_all ".config/fastfetch" "$HOME/.config/fastfetch"
 
-# Terminals
+# Terminal
 link ".config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml" 2>/dev/null || true
-link ".config/ghostty/config"           "$HOME/.config/ghostty/config" 2>/dev/null || true
-link ".config/foot/foot.ini"            "$HOME/.config/foot/foot.ini" 2>/dev/null || true
 
 # Systemd user services
 link_all ".config/systemd/user" "$HOME/.config/systemd/user" "*.service"
