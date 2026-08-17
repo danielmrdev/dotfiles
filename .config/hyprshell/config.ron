@@ -10,7 +10,7 @@
             key: "Tab",
             filter_by: [],
             switch_workspaces: true,
-            exclude_workspaces: "",
+            exclude_workspaces: "special",
             kill_key: 'q',
         ),
         switch_2: None,
