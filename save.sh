@@ -40,6 +40,12 @@ mkdir -p "$DOTFILES/.config/hypr"
 safe_cp_dir "$HOME/.config/hypr" "$DOTFILES/.config/hypr" "*.conf"
 safe_cp_dir "$HOME/.config/hypr" "$DOTFILES/.config/hypr" "*.lua"
 
+# PipeWire AirPlay
+echo "[pipewire]"
+mkdir -p "$DOTFILES/.config/pipewire/pipewire.conf.d"
+safe_cp "$HOME/.config/pipewire/pipewire.conf.d/raop-discover.conf" "$DOTFILES/.config/pipewire/pipewire.conf.d/raop-discover.conf"
+safe_cp "$HOME/.config/pipewire/pipewire.conf.d/oficina-stereo.conf" "$DOTFILES/.config/pipewire/pipewire.conf.d/oficina-stereo.conf"
+
 # Btop
 echo "[btop]"
 mkdir -p "$DOTFILES/.config/btop"

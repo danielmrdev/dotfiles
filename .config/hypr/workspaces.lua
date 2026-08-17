@@ -20,6 +20,7 @@ o.window("chrome-teams.cloud.microsoft__-Default", { workspace = "4" })
 o.window("chrome-outlook.cloud.microsoft__-Default", { workspace = "4" })
 o.window("org.remmina.Remmina", { workspace = "8" })
 o.window("pith", { workspace = "3" })
+o.window("Z-Library", { workspace = "5" })
 
 -- Toggle between current and last focused workspace
 o.bind("SUPER + code:49", "Toggle current and last workspace", hl.dsp.focus({ workspace = "previous" }))

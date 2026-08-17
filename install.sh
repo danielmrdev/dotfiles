@@ -30,7 +30,15 @@ echo ""
 echo "=== 2/6 Installing personal apps ==="
 # Official repository packages. Obsidian is included in Omarchy v4, but keep it
 # explicit so setup remains correct if base package selection changes.
-omarchy pkg add calibre nextcloud-client obsidian remmina spotify tailscale typora
+omarchy pkg add calibre nextcloud-client obsidian pipewire-zeroconf remmina spotify tailscale typora
+
+# AirPlay RAOP needs two UDP ports for Sonos and similar devices.
+if command -v ufw >/dev/null 2>&1 && sudo -A ufw status | grep -q '^Status: active'; then
+  sudo -A ufw allow 6001/udp comment "Stream to Airplay"
+  sudo -A ufw allow 6002/udp comment "Stream to Airplay"
+else
+  echo "UFW inactive or unavailable; skipping AirPlay firewall rules."
+fi
 
 # AUR packages.
 omarchy pkg aur add bitwarden-bin espanso-wayland

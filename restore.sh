@@ -67,6 +67,10 @@ link ".config/omarchy/shell.json" "$HOME/.config/omarchy/shell.json"
 # Omarchy shell plugins (customized clones; git-installed plugins are handled by install.sh)
 link_all ".config/omarchy/plugins" "$HOME/.config/omarchy/plugins"
 
+# PipeWire AirPlay
+link ".config/pipewire/pipewire.conf.d/raop-discover.conf" "$HOME/.config/pipewire/pipewire.conf.d/raop-discover.conf"
+link ".config/pipewire/pipewire.conf.d/oficina-stereo.conf" "$HOME/.config/pipewire/pipewire.conf.d/oficina-stereo.conf"
+
 # Btop
 link ".config/btop/btop.conf"    "$HOME/.config/btop/btop.conf"
 
