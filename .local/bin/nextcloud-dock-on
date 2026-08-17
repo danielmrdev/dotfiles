@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MOUNT=/mnt/nextcloud
+SYNC_DIR="$MOUNT/Nextcloud"
+NEXTCLOUD_SERVICE=app-Nextcloud@autostart.service
+
+notify() {
+  notify-send "Nextcloud" "$1" 2>/dev/null || true
+}
+
+printf 'Mounting %s…\n' "$MOUNT"
+if ! sudo -A systemctl start mnt-nextcloud.automount mnt-nextcloud.mount; then
+  notify "Could not mount $MOUNT. Check dock and HD connection."
+  exit 1
+fi
+
+if ! mountpoint -q "$MOUNT" || [ ! -d "$SYNC_DIR" ]; then
+  notify "HD mounted incorrectly or sync folder is missing. Nextcloud not started."
+  exit 1
+fi
+
+printf 'Starting Nextcloud…\n'
+if ! systemctl --user start "$NEXTCLOUD_SERVICE"; then
+  notify "HD mounted, but Nextcloud could not be started."
+  exit 1
+fi
+
+notify "HD mounted. Nextcloud started."
+printf 'HD mounted. Nextcloud started.\n'

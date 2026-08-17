@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MOUNT=/mnt/nextcloud
+NEXTCLOUD_SERVICE=app-Nextcloud@autostart.service
+
+notify() {
+  notify-send "Nextcloud" "$1" 2>/dev/null || true
+}
+
+printf 'Stopping Nextcloud…\n'
+systemctl --user stop "$NEXTCLOUD_SERVICE"
+sync
+
+printf 'Unmounting %s…\n' "$MOUNT"
+if ! sudo -A systemctl stop mnt-nextcloud.automount mnt-nextcloud.mount; then
+  notify "Could not unmount $MOUNT. Do not disconnect the dock."
+  exit 1
+fi
+
+if mountpoint -q "$MOUNT"; then
+  notify "$MOUNT is still mounted. Do not disconnect the dock."
+  exit 1
+fi
+
+notify "HD unmounted. Safe to disconnect the dock."
+printf 'HD unmounted. Safe to disconnect the dock.\n'
