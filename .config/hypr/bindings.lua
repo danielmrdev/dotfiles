@@ -37,3 +37,6 @@ o.bind("CTRL + SHIFT + P", "Screenshot", "omarchy capture screenshot")
 
 -- Let Pith receive this shortcut instead of dismissing notifications.
 hl.unbind("SUPER + COMMA")
+
+-- Google Maps was removed; disable its Omarchy shortcut.
+hl.unbind("SUPER + SHIFT + S")

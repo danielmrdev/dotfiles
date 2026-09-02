@@ -116,6 +116,10 @@ link_all ".config/omarchy/branding" "$HOME/.config/omarchy/branding"
 # and the restored helper.
 link_all ".local/bin" "$HOME/.local/bin"
 
+# Omarchy → Zen Browser theme sync
+# Link directory, not individual files: sync.sh rejects final-file symlinks.
+link ".local/share/omarchy-zen-sync" "$HOME/.local/share/omarchy-zen-sync"
+
 # Agent skills (whole dir symlink)
 link_with_parent() {
   local target="$1" linkpath="$2"

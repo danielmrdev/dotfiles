@@ -130,6 +130,11 @@ for s in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-o
   safe_cp "$HOME/.local/bin/$s" "$DOTFILES/.local/bin/"
 done
 
+# Omarchy → Zen Browser theme sync
+# Keep renderer/template reproducible; the live files may be symlinks into repo.
+echo "[omarchy-zen-sync]"
+safe_cp_dir "$HOME/.local/share/omarchy-zen-sync" "$DOTFILES/.local/share/omarchy-zen-sync"
+
 # Root-owned PAM policy and lid-state helper (plain copies; restore needs sudo)
 echo "[system files]"
 mkdir -p "$DOTFILES/etc/pam.d"
