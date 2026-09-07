@@ -10,7 +10,7 @@ save_to_clipboard = true
 normal = { family = "CaskaydiaMono Nerd Font" }
 bold = { family = "CaskaydiaMono Nerd Font" }
 italic = { family = "CaskaydiaMono Nerd Font" }
-size = 10
+size = 8
 builtin_box_drawing = true
 
 [window]

@@ -40,6 +40,9 @@
           "id": "daniel.tray"
         },
         {
+          "id": "io.github.danielmrdev.omarchy-awake"
+        },
+        {
           "id": "codefriendly.nightman"
         },
         {
@@ -72,7 +75,7 @@
       ]
     },
     "position": "top",
-    "transparent": false
+    "transparent": true
   },
   "idle": {
     "lock": 300,

@@ -1,0 +1,10 @@
+[Unit]
+Description=Awake session service
+
+[Service]
+Type=simple
+ExecStart=/home/daniel/Projects/omarchy-awake/bin/omarchy-awake-service
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
