@@ -79,6 +79,8 @@ link_all ".config/fastfetch" "$HOME/.config/fastfetch"
 
 # Terminal
 link ".config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml" 2>/dev/null || true
+link ".config/foot/foot.ini" "$HOME/.config/foot/foot.ini" 2>/dev/null || true
+link ".local/share/icons/foot.svg" "$HOME/.local/share/icons/foot.svg" 2>/dev/null || true
 
 # Systemd user services
 link_all ".config/systemd/user" "$HOME/.config/systemd/user" "*.service"
@@ -146,6 +148,10 @@ link_with_parent "$DOTFILES/.agents/skills" "$HOME/.agents/skills"
 
 # Pi agent skills
 link_with_parent "$DOTFILES/.agents/skills/sudo-askpass" "$HOME/.pi/agent/skills/sudo-askpass"
+
+# Pith config (db/ intentionally not tracked)
+link_with_parent "$DOTFILES/.pith/skills" "$HOME/.pith/skills"
+link_with_parent "$DOTFILES/.pith/memory" "$HOME/.pith/memory"
 
 # Web app desktop files and icons
 echo "  LINK webapp desktop files + icons"

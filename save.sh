@@ -58,6 +58,9 @@ safe_cp_dir "$HOME/.config/fastfetch" "$DOTFILES/.config/fastfetch"
 # Terminal
 echo "[terminal]"
 safe_cp "$HOME/.config/alacritty/alacritty.toml" "$DOTFILES/.config/alacritty/alacritty.toml"
+safe_cp "$HOME/.config/foot/foot.ini" "$DOTFILES/.config/foot/foot.ini"
+mkdir -p "$DOTFILES/.local/share/icons"
+safe_cp "$HOME/.local/share/icons/foot.svg" "$DOTFILES/.local/share/icons/foot.svg"
 
 # Systemd user services
 echo "[systemd]"
@@ -142,6 +145,24 @@ for f in sudo polkit-1; do
   [ -f "/etc/pam.d/$f" ] && safe_cp "/etc/pam.d/$f" "$DOTFILES/etc/pam.d/$f"
 done
 [ -f /usr/local/bin/lid-is-open ] && safe_cp /usr/local/bin/lid-is-open "$DOTFILES/.local/bin/lid-is-open"
+
+# Pith config (whole-dir symlinks; db/ is live SQLite state — never tracked)
+echo "[pith]"
+mkdir -p "$HOME/.pith"
+for d in skills memory; do
+  src="$HOME/.pith/$d"
+  dst="$DOTFILES/.pith/$d"
+  if [ -L "$src" ] && [ "$src" -ef "$dst" ]; then
+    :  # already symlinked into repo
+  elif [ -d "$src" ]; then
+    mkdir -p "$DOTFILES/.pith"
+    rm -rf "$dst"
+    cp -a "$src" "$dst"
+    rm -rf "$src"
+    ln -s "$dst" "$src"
+    echo "  TRACK+LINK .pith/$d -> $src"
+  fi
+done
 
 # Pi agent skills (ensure symlinks)
 echo "[pi agent skills]"
