@@ -1,6 +1,0 @@
-[Unit]
-Description=Switch Teams jiggler off
-
-[Service]
-Type=oneshot
-ExecStart=%h/.local/bin/teams-jiggler-toggle off

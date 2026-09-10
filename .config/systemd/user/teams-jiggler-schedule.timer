@@ -1,9 +1,0 @@
-[Unit]
-Description=Enable Teams jiggler schedule on weekdays
-
-[Timer]
-OnCalendar=Mon..Fri 07:54
-Persistent=false
-
-[Install]
-WantedBy=timers.target

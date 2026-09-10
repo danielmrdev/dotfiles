@@ -12,12 +12,12 @@ hl.workspace_rule({ workspace = "7", monitor = "DP-4" })
 hl.workspace_rule({ workspace = "8", monitor = "DP-4" })
 
 -- App placement
-o.window("Alacritty", { workspace = "1" })
+o.window("foot", { workspace = "1" })
 o.window("zen", { workspace = "2" })
 o.window("obsidian", { workspace = "5" })
 o.window("org.mozilla.Thunderbird", { workspace = "4" })
 o.window("chrome-teams.cloud.microsoft__-Default", { workspace = "4" })
-o.window("chrome-outlook.cloud.microsoft__-Default", { workspace = "4" })
+o.window("chrome-outlook.office.com__mail_-Default", { workspace = "4" })
 o.window("org.remmina.Remmina", { workspace = "8" })
 o.window("pith", { workspace = "3" })
 o.window("Z-Library", { workspace = "5" })
@@ -53,7 +53,7 @@ local ws4_teams = hl.window_rule({
 })
 local ws4_outlook = hl.window_rule({
     name = "ws4-group-outlook",
-    match = { class = "chrome-outlook.cloud.microsoft__-Default" },
+    match = { class = "chrome-outlook.office.com__mail_-Default" },
     group = "set",
 })
 

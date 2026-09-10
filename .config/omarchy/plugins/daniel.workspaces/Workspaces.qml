@@ -417,6 +417,26 @@ BarWidget {
                 icon: "󰀉"
             },
             {
+                pattern: 'pith',
+                icon: "󰣆"
+            },
+            {
+                pattern: 'chrome-outlook[.]office[.]com__mail_|chrome-outlook[.]cloud[.]microsoft__|outlook',
+                icon: "󰴢"
+            },
+            {
+                pattern: 'chrome-teams[.]cloud[.]microsoft__|teams',
+                icon: "󰊻"
+            },
+            {
+                pattern: 'chrome-www[.]office[.]com__launch_onedrive|onedrive',
+                icon: "󰏊"
+            },
+            {
+                pattern: 'chrome-www[.]office[.]com__login|microsoft office',
+                icon: "󰏆"
+            },
+            {
                 pattern: 'Chromium|Thorium|[Cc]hrome',
                 icon: "󰊯"
             }
