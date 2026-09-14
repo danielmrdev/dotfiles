@@ -64,4 +64,4 @@ hl.config({
 })
 
 -- Keep the graphical sudo prompt as a small floating dialog.
-o.window("^(askpass)$", { float = true, center = true })
+o.window("^(askpass)$", { float = true, center = true, workspace = "current" })
