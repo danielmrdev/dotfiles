@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${HERDR_ENV:-}" != "1" || -z "${HERDR_PANE_ID:-}" ]]; then
+  echo "herdr-broot: ejecuta este comando desde un pane de Herdr" >&2
+  exit 1
+fi
+
+for command in herdr broot jq; do
+  if ! command -v "$command" >/dev/null 2>&1; then
+    echo "herdr-broot: comando requerido no encontrado: $command" >&2
+    exit 1
+  fi
+done
+
+root="${1:-$PWD}"
+if [[ ! -d "$root" ]]; then
+  echo "herdr-broot: directorio no encontrado: $root" >&2
+  exit 1
+fi
+root="$(realpath -- "$root")"
+ratio="${HERDR_BROOT_RATIO:-0.30}"
+
+split_response="$(herdr pane split \
+  --current \
+  --direction right \
+  --ratio "$ratio" \
+  --cwd "$root" \
+  --no-focus)"
+pane_id="$(printf '%s\n' "$split_response" | jq -r '.. | objects | .pane_id? // empty' | tail -n 1)"
+
+if [[ -z "$pane_id" ]]; then
+  echo "herdr-broot: Herdr no devolvió ID del pane creado" >&2
+  printf '%s\n' "$split_response" >&2
+  exit 1
+fi
+
+herdr pane rename "$pane_id" "🌳 broot" >/dev/null
+herdr pane run "$pane_id" broot "$root" >/dev/null
+
+echo "broot abierto en pane derecho: $pane_id"

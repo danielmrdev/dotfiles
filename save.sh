@@ -128,7 +128,7 @@ mkdir -p "$DOTFILES/.local/bin"
 for s in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-off \
          nextcloud-external-guard nextcloud-dock-off nextcloud-dock-on \
          omarchy-webapp-patch omarchy-calendar-sync-caldav update-fingerprint-libs \
-         save-dotfiles restore-dotfiles askpass lid-is-open; do
+         save-dotfiles restore-dotfiles askpass lid-is-open herdr-broot; do
   [ -f "$HOME/.local/bin/$s" ] || continue
   safe_cp "$HOME/.local/bin/$s" "$DOTFILES/.local/bin/"
 done
