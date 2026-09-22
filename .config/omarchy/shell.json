@@ -8,7 +8,7 @@
         },
         {
           "id": "tmn73.calendar",
-          "format": "ddd d MMM HH:mm",
+          "format": "ddd d MMM h:mm AP",
           "formatAlt": "d MMMM 'W'ww yyyy",
           "verticalFormat": "HH\n—\nmm",
           "weekStartDay": "monday",

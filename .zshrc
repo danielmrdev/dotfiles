@@ -17,6 +17,12 @@ export DOTFILES=$HOME/.dotfiles
 # Node/pnpm installed via mise
 export PATH="$HOME/.local/share/mise/installs/node/26.2.0/bin:$HOME/.local/bin:$PATH"
 
+# Default terminal editor
+export EDITOR="fresh"
+export VISUAL="$EDITOR"
+export GIT_EDITOR="$EDITOR"
+export SUDO_EDITOR="$EDITOR"
+
 # Sudo askpass for AI agents (sudo -A) — GTK3 dialog themed with omarchy colors
 #export SUDO_ASKPASS="/usr/bin/lxqt-openssh-askpass"  # alt: stock Qt dialog
 export SUDO_ASKPASS="$HOME/.local/bin/askpass"

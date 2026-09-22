@@ -62,6 +62,10 @@ safe_cp "$HOME/.config/foot/foot.ini" "$DOTFILES/.config/foot/foot.ini"
 mkdir -p "$DOTFILES/.local/share/icons"
 safe_cp "$HOME/.local/share/icons/foot.svg" "$DOTFILES/.local/share/icons/foot.svg"
 
+# Fresh terminal IDE
+echo "[fresh]"
+safe_cp "$HOME/.config/fresh/config.json" "$DOTFILES/.config/fresh/config.json"
+
 # Systemd user services
 echo "[systemd]"
 mkdir -p "$DOTFILES/.config/systemd/user"

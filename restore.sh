@@ -82,6 +82,9 @@ link ".config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
 link ".config/foot/foot.ini" "$HOME/.config/foot/foot.ini" 2>/dev/null || true
 link ".local/share/icons/foot.svg" "$HOME/.local/share/icons/foot.svg" 2>/dev/null || true
 
+# Fresh terminal IDE
+link ".config/fresh/config.json" "$HOME/.config/fresh/config.json" 2>/dev/null || true
+
 # Systemd user services
 link_all ".config/systemd/user" "$HOME/.config/systemd/user" "*.service"
 link_all ".config/systemd/user" "$HOME/.config/systemd/user" "*.timer"

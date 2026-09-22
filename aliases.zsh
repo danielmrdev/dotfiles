@@ -25,6 +25,9 @@ alias myip="ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-
 alias ip="curl ifconfig.co"
 # alias updateip="php $HOME/.dotfiles/dns-auto-updater/do-dns-auto-updater.php"
 
+# Espanso
+alias espanso-triggers='fresh "$HOME/.config/espanso/match/base.yml"'
+
 # Directories
 alias dotfiles="cd $DOTFILES"
 if [[ -d "$HOME/Library" ]]; then

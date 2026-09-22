@@ -1,0 +1,15 @@
+{
+  "theme": "builtin://terminal",
+  "editor": {
+    "status_bar": {
+      "right": ["{git_statusbar:branch}", "{read_only}", "{line_ending}", "{encoding}", "{language}", "{lsp}", "{warnings}"]
+    }
+  },
+  "plugins": {
+    "git_explorer": {
+      "settings": {
+        "colorNames": true
+      }
+    }
+  }
+}
