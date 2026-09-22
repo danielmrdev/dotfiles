@@ -1,0 +1,16 @@
+[Unit]
+Description=hyprshell daemon
+PartOf=graphical-session.target
+After=graphical-session.target
+StartLimitIntervalSec=120
+StartLimitBurst=3
+
+[Service]
+Type=simple
+ExecStartPre=/bin/sh -c '[ "$XDG_CURRENT_DESKTOP" = "Hyprland" ] || exit 0'
+ExecStart=/home/daniel/.local/share/mise/shims/hyprshell run
+Restart=on-failure
+RestartSec=20
+
+[Install]
+WantedBy=graphical-session.target

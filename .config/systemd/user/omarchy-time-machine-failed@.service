@@ -1,0 +1,7 @@
+[Unit]
+Description=Report a failed Time Machine backup of %i
+
+[Service]
+Type=oneshot
+Environment=PATH=/home/daniel/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/daniel/.config/omarchy/plugins/jankeesvw.time-machine/bin/omarchy-time-machine report-failure --dest %i

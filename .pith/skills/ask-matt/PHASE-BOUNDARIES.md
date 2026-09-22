@@ -9,7 +9,7 @@ The **phase boundary** is the gap between two phases, and it is the only place t
 | Option       | What it does                                                    |
 | ------------ | --------------------------------------------------------------- |
 | **Continue** | Stay in the session. No context switch at all.                    |
-| **`/clear`** | Empty the context window and start from nothing.                  |
+| **`a fresh session`** | Empty the context window and start from nothing.                  |
 | **`/handoff`** | Write a portable markdown file and seed a session anywhere with it. |
 | **Subagent** | Send the task to its own context window and get a report back.     |
 | **compaction** | Compress this context and seed a fresh session with the summary.  |
@@ -20,7 +20,7 @@ Work top to bottom at the boundary. The first **yes** wins.
 
 **1. Can you continue in this session?** Two things make the answer yes: the next phase needs this phase as a **primary source**, or you have enough [smart zone](https://www.aihero.dev/ai-coding-dictionary/smart-zone) left (~150k tokens) for the next phase to fit. Grilling → implementation is the standard yes: the implementation wants the reasoning verbatim, not a summary of it. Continue costs nothing and loses nothing, so rule it out before anything else.
 
-**2. Is the context irrelevant to what comes next?** Is everything in this session (the exploration, the decisions, the dead ends) disposable? If so, **`/clear`**. It is the cheapest move on the board: it takes no time and hands back the whole window. `/clear` also isn't terminal: the old session stays resumable.
+**2. Is the context irrelevant to what comes next?** Is everything in this session (the exploration, the decisions, the dead ends) disposable? If so, **`a fresh session`**. It is the cheapest move on the board: it takes no time and hands back the whole window. `a fresh session` also isn't terminal: the old session stays resumable.
 
 The cost of getting this wrong is one-way. Clear a *relevant* context and you lose the **why** behind what you built, and no amount of reading the diff back gets it returned.
 

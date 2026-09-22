@@ -7,6 +7,15 @@ export PATH="$HOME/.node/bin:$PATH"
 # Use project specific binaries before global ones
 export PATH="node_modules/.bin:vendor/bin:$PATH"
 
+# beautiful-pi has a local Pi CLI peer for development; use global Pi here.
+pi() {
+  if [[ "$PWD" == "$HOME/Projects/beautiful-pi" || "$PWD" == "$HOME/Projects/beautiful-pi/"* ]]; then
+    "$HOME/.local/bin/pi" "$@"
+  else
+    command pi "$@"
+  fi
+}
+
 # Make sure coreutils are loaded before system commands
 # I've disabled this for now because I only use "ls" which is
 # referenced in my aliases.zsh file directly.

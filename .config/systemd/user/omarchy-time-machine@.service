@@ -1,0 +1,19 @@
+[Unit]
+Description=Time Machine backup to %i
+Documentation=https://github.com/jankeesvw/omarchy-time-machine
+After=network-online.target
+Wants=network-online.target
+OnFailure=omarchy-time-machine-failed@%i.service
+
+[Service]
+Type=oneshot
+Environment=PATH=/home/daniel/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/daniel/.config/omarchy/plugins/jankeesvw.time-machine/bin/omarchy-time-machine backup --dest %i
+
+# The first run takes hours, later ones minutes. Leave room, so a slow night is
+# not cut off halfway.
+TimeoutStartSec=8h
+
+# A backup must not make the machine unusable while you work on it.
+Nice=10
+IOSchedulingClass=idle

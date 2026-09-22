@@ -27,7 +27,8 @@ require("hypr.workspaces")
 require("default.hypr.toggles")
 
 -- Add any other personal Hyprland configuration below.
--- o.window("qemu", { workspace = "5" })
+-- Keep Spotify hidden in the default scratchpad; SUPER+S toggles it.
+o.window("^(spotify)$", { workspace = "special:scratchpad silent" })
 
 -- Use a cursor that stays visible on light and dark backgrounds.
 hl.env("HYPRCURSOR_THEME", "Bibata-Modern-Classic")
