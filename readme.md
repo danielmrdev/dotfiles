@@ -12,7 +12,7 @@ Personal dotfiles for the Omarchy (Arch + Hyprland) ThinkPad E15 Gen 4. Tracked 
 | `install.sh` | Fresh-install entry point: restore + hooks + themes + plugins + gitleaks |
 | `.config/alacritty/` | Terminal config |
 | `.config/btop/`, `.config/fastfetch/` | System info apps |
-| `.config/systemd/user/` | User units: `espanso`, `teams-jiggler*`, `omarchy-recover-internal-monitor`, CalDAV calendar sync |
+| `.config/systemd/user/` | User units: `espanso`, Espanso hotplug recovery, `teams-jiggler*`, `omarchy-recover-internal-monitor`, CalDAV calendar sync |
 | `.config/hyprshell/` | Window switcher (SUPER+TAB) config + theme — hyprshell is the v4 switcher, keep service enabled |
 | `.config/autostart/`, `.config/environment.d/` | Autostart desktop entries, env vars (`fcitx`, Wayland, `SUDO_ASKPASS`) |
 | `.zshrc`, `.p10k.zsh`, `aliases.zsh`, `path.zsh` | zsh + powerlevel10k |
@@ -82,6 +82,22 @@ Package lifecycle:
 `save.sh` preserves the updater script; `restore.sh` restores it with the other
 custom scripts. The package manifest is versioned in this repository, not
 symlinked into a live config path.
+
+## Espanso and dock hotplug
+
+Espanso runs through `espanso.service` after the Hyprland session starts. Its Wayland
+EVDEV backend does not rediscover keyboards after USB hotplug, so
+`espanso-hotplug.path` watches `/dev/input/by-id` and restarts Espanso after dock
+connect/disconnect events. This covers both external dock keyboards and the built-in
+laptop keyboard.
+
+Units:
+
+- `.config/systemd/user/espanso.service`
+- `.config/systemd/user/espanso-hotplug.path`
+- `.config/systemd/user/espanso-hotplug.service`
+
+`restore.sh` links `.path` units in addition to `.service` and `.timer` units.
 
 ## Omarchy plugins
 

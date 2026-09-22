@@ -1,0 +1,7 @@
+[Unit]
+Description=Reattach Espanso after keyboard hotplug
+After=espanso.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/sh -c 'sleep 1; /usr/bin/systemctl --user restart espanso.service'

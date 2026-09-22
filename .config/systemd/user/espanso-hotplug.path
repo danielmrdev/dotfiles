@@ -1,0 +1,10 @@
+[Unit]
+Description=Watch keyboard hotplug for Espanso
+After=espanso.service
+
+[Path]
+PathChanged=/dev/input/by-id
+Unit=espanso-hotplug.service
+
+[Install]
+WantedBy=wayland-session@hyprland.desktop.target

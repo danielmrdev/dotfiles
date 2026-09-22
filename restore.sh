@@ -85,6 +85,7 @@ link ".local/share/icons/foot.svg" "$HOME/.local/share/icons/foot.svg" 2>/dev/nu
 # Systemd user services
 link_all ".config/systemd/user" "$HOME/.config/systemd/user" "*.service"
 link_all ".config/systemd/user" "$HOME/.config/systemd/user" "*.timer"
+link_all ".config/systemd/user" "$HOME/.config/systemd/user" "*.path"
 for d in "$DOTFILES/.config/systemd/user/"*.service.d; do
   [ -d "$d" ] || continue
   b="$(basename "$d")"
