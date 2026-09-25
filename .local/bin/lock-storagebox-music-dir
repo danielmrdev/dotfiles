@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+MOUNTPOINT='/home/daniel/Music'
+if ! '/usr/bin/mountpoint' -q "$MOUNTPOINT"; then
+  # Best effort: on a stale FUSE endpoint chmod fails, and that must not turn
+  # a normal stop into a unit failure.
+  /usr/bin/chmod 0555 "$MOUNTPOINT" 2>/dev/null || true
+fi

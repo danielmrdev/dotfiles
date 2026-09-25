@@ -1,0 +1,17 @@
+[Unit]
+Description=Rclone read-write mount of Storage Box music at ~/Music
+Requires=storagebox-music-tunnel.service
+After=storagebox-music-tunnel.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+ExecStartPre=/home/daniel/.local/bin/check-storagebox-music-mount
+TimeoutStartSec=120s
+ExecStart=/usr/bin/rclone --config /home/daniel/.config/rclone/music-storagebox.conf mount storagebox-music: /home/daniel/Music --cache-dir=/home/daniel/.cache/rclone/storagebox-music --vfs-cache-mode=writes --vfs-cache-max-size=2G --vfs-cache-max-age=24h --dir-cache-time=1m --attr-timeout=1s --log-level=INFO
+ExecStopPost=/home/daniel/.local/bin/lock-storagebox-music-dir
+Restart=on-failure
+RestartSec=20s
+
+[Install]
+WantedBy=default.target

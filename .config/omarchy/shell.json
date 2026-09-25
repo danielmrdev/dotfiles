@@ -8,7 +8,7 @@
         },
         {
           "id": "tmn73.calendar",
-          "format": "ddd d MMM h:mm AP",
+          "format": "ddd d MMM HH:mm",
           "formatAlt": "d MMMM 'W'ww yyyy",
           "verticalFormat": "HH\n—\nmm",
           "weekStartDay": "monday",
@@ -29,7 +29,9 @@
         {
           "id": "io.github.elevate08.qs-bitwarden-cli",
           "colorizeIcon": false,
-          "fingerprintUnlock": true
+          "fingerprintUnlock": true,
+          "autoLockMinutes": 0,
+          "clearClipboardSec": 60
         },
         {
           "id": "omarchy.system-update"
@@ -41,6 +43,17 @@
         },
         {
           "id": "daniel.workspaces"
+        },
+        {
+          "id": "gladimdim.ai-limits",
+          "barLength": 20,
+          "barStyle": "squares",
+          "barsPerColumn": 2,
+          "columns": 1,
+          "tracked": [
+            "codex:5h-window",
+            "codex:weekly-7-day"
+          ]
         }
       ],
       "right": [

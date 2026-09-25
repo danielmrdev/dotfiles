@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+MOUNTPOINT='/home/daniel/Music'
+RCLONE_CONFIG='/home/daniel/.config/rclone/music-storagebox.conf'
+if '/usr/bin/mountpoint' -q "$MOUNTPOINT"; then
+  if /usr/bin/cat "$MOUNTPOINT/.navidrome-root" >/dev/null 2>&1; then
+    echo "Refusing to start: $MOUNTPOINT already mounted and healthy" >&2
+    exit 1
+  fi
+  # Stale FUSE endpoint: the rclone process behind it died, usually after the
+  # SSH tunnel dropped. Clear it, otherwise every restart refuses forever.
+  echo "Stale mount at $MOUNTPOINT; clearing before start" >&2
+  if ! '/usr/bin/fusermount3' -u "$MOUNTPOINT" 2>/dev/null &&
+     ! '/usr/bin/fusermount3' -uz "$MOUNTPOINT" 2>/dev/null; then
+    echo "Could not clear stale mount" >&2
+    exit 1
+  fi
+  sleep 1
+fi
+if [[ -n "$("/usr/bin/find" "$MOUNTPOINT" -mindepth 1 -maxdepth 1 -print -quit)" ]]; then
+  echo "Refusing to cover local files in $MOUNTPOINT" >&2
+  exit 1
+fi
+# The tunnel unit is Type=simple, so its forwarding port may not be open yet.
+# Bounded so ExecStartPre stays well under TimeoutStartSec=120s.
+marker=""
+for attempt in {1..6}; do
+  if marker=$("/usr/bin/timeout" 10s "/usr/bin/rclone" --config "$RCLONE_CONFIG" cat 'storagebox-music:.navidrome-root' 2>/dev/null); then
+    break
+  fi
+  marker=""
+  sleep 1
+done
+if [[ -z "$marker" ]]; then
+  echo "Storage Box marker check failed; mount not started" >&2
+  exit 1
+fi
+[[ "$marker" == 'navidrome-only-media-directory-v1' ]] || { echo "Storage Box marker mismatch; mount not started" >&2; exit 1; }
+/usr/bin/chmod 0755 "$MOUNTPOINT"

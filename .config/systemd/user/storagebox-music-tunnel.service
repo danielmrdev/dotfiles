@@ -1,0 +1,12 @@
+[Unit]
+Description=Loopback SSH tunnel to Storage Box music SFTP via vps
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ssh -nNT -o BatchMode=yes -o ConnectTimeout=10 -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o ControlMaster=no -o ControlPath=none -L 127.0.0.1:24323:u605052-sub1.your-storagebox.de:23 vps
+Restart=always
+RestartSec=20s
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,11 @@
+[Unit]
+Description=Watch ~/Music and move files to Hetzner Storage Box
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/music-to-storagebox
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=default.target

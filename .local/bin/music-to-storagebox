@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+readonly MUSIC_DIR="${HOME}/Music"
+readonly REMOTE='storagebox:music'
+readonly QUIET_SECONDS=150
+readonly RETRY_SECONDS=300
+
+RETRY_PENDING=0
+
+run_move() {
+  /usr/bin/rclone move "$MUSIC_DIR" "$REMOTE" \
+    --min-age 2m \
+    --checksum \
+    --immutable \
+    --delete-empty-src-dirs \
+    --log-level INFO
+}
+
+record_attempt() {
+  if run_move; then
+    RETRY_PENDING=0
+  else
+    printf 'music-to-storagebox: transfer failed; local originals retained, retry scheduled\n' >&2
+    RETRY_PENDING=1
+  fi
+}
+
+coproc MUSIC_WATCHER {
+  exec /usr/bin/inotifywait \
+    --monitor \
+    --recursive \
+    --quiet \
+    --event create \
+    --event close_write \
+    --event moved_to \
+    --format '%e' \
+    "$MUSIC_DIR"
+}
+watcher_pid="$MUSIC_WATCHER_PID"
+event_fd="${MUSIC_WATCHER[0]}"
+trap 'kill "$watcher_pid" 2>/dev/null || true' EXIT
+
+# Start watching before reconciling, so changes during the initial scan queue up.
+sleep 1
+record_attempt
+# Catch files that were too new for the first min-age check when the watcher started.
+sleep "$QUIET_SECONDS"
+record_attempt
+
+while true; do
+  if IFS= read -r -t "$RETRY_SECONDS" -u "$event_fd" _event; then
+    # Batch bursts; transfer only after directory activity settles.
+    while IFS= read -r -t "$QUIET_SECONDS" -u "$event_fd" _event; do
+      :
+    done
+    record_attempt
+  else
+    read_status=$?
+    if (( read_status > 128 )); then
+      if (( RETRY_PENDING )); then
+        record_attempt
+      fi
+    else
+      printf 'music-to-storagebox: inotify watcher stopped unexpectedly\n' >&2
+      break
+    fi
+  fi
+done
+
+wait "$watcher_pid" || true
+exit 1
