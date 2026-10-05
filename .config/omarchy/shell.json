@@ -24,6 +24,9 @@
           "id": "daniel.weather"
         },
         {
+          "id": "io.github.nixfred.tailscale-host-monitor"
+        },
+        {
           "id": "oma.nearby"
         },
         {
@@ -43,22 +46,20 @@
         },
         {
           "id": "daniel.workspaces"
-        },
-        {
-          "id": "gladimdim.ai-limits",
-          "barLength": 20,
-          "barStyle": "squares",
-          "barsPerColumn": 2,
-          "columns": 1,
-          "tracked": [
-            "codex:5h-window",
-            "codex:weekly-7-day"
-          ]
         }
       ],
       "right": [
         {
           "id": "daniel.tray"
+        },
+        {
+          "id": "io.github.etroll.omarchy-airplay"
+        },
+        {
+          "id": "io.github.maikunari.magic-mouse"
+        },
+        {
+          "id": "tahayvr.postcard"
         },
         {
           "id": "io.github.ilyazar.syncthing"

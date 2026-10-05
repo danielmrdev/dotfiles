@@ -2,7 +2,8 @@
 set -euo pipefail
 MOUNTPOINT='/home/daniel/Music'
 RCLONE_CONFIG='/home/daniel/.config/rclone/music-storagebox.conf'
-if '/usr/bin/mountpoint' -q "$MOUNTPOINT"; then
+# Query mountinfo directly: mountpoint can return false when stale FUSE stat fails.
+if /usr/bin/awk -v target="$MOUNTPOINT" '$5 == target { found = 1; exit } END { exit !found }' /proc/self/mountinfo; then
   if /usr/bin/cat "$MOUNTPOINT/.navidrome-root" >/dev/null 2>&1; then
     echo "Refusing to start: $MOUNTPOINT already mounted and healthy" >&2
     exit 1

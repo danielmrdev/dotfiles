@@ -11,5 +11,12 @@
         "colorNames": true
       }
     }
+  },
+  "file_browser": {
+    "show_hidden": true
+  },
+  "file_explorer": {
+    "show_gitignored": true,
+    "show_hidden": true
   }
 }
