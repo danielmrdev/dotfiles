@@ -46,6 +46,9 @@
         },
         {
           "id": "daniel.workspaces"
+        },
+        {
+          "id": "tallahootie.dromify"
         }
       ],
       "right": [
@@ -53,10 +56,13 @@
           "id": "daniel.tray"
         },
         {
-          "id": "io.github.etroll.omarchy-airplay"
+          "id": "taskwarrior-time"
         },
         {
-          "id": "io.github.maikunari.magic-mouse"
+          "id": "streamdock"
+        },
+        {
+          "id": "io.github.etroll.omarchy-airplay"
         },
         {
           "id": "tahayvr.postcard"

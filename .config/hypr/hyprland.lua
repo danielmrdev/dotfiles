@@ -30,6 +30,9 @@ require("default.hypr.toggles")
 -- Keep Spotify hidden in the default scratchpad; SUPER+S toggles it.
 o.window("^[Ss]potify$", { workspace = "special:scratchpad silent" })
 
+-- Keep the resident StreamDock editor out of the tiling layout.
+o.window("^omarchy-streamdock$", { float = true, center = true })
+
 -- Use a cursor that stays visible on light and dark backgrounds.
 hl.env("HYPRCURSOR_THEME", "Bibata-Modern-Classic")
 hl.env("HYPRCURSOR_SIZE", "32")

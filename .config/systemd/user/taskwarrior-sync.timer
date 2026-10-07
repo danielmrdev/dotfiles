@@ -1,0 +1,11 @@
+[Unit]
+Description=Run Taskwarrior sync every five minutes
+
+[Timer]
+OnStartupSec=1min
+OnUnitActiveSec=5min
+AccuracySec=30s
+Unit=taskwarrior-sync.service
+
+[Install]
+WantedBy=timers.target

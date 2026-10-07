@@ -40,3 +40,5 @@ hl.unbind("SUPER + COMMA")
 
 -- Google Maps was removed; disable its Omarchy shortcut.
 hl.unbind("SUPER + SHIFT + S")
+
+o.bind("SUPER + SHIFT + T", "New task", "qs ipc --path /usr/share/omarchy/shell call taskwarrior-time newTask")

@@ -1,0 +1,6 @@
+[Unit]
+Description=Synchronize Taskwarrior with TaskChampion
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/task sync
