@@ -14,7 +14,7 @@ hl.workspace_rule({ workspace = "8", monitor = "DP-4" })
 -- App placement
 o.window("foot", { workspace = "1" })
 o.window("zen", { workspace = "2" })
-o.window("obsidian", { workspace = "5" })
+o.window("^md[.]obsidian[.]Obsidian$", { workspace = "5" })
 o.window("org.mozilla.Thunderbird", { workspace = "4" })
 o.window("chrome-teams.cloud.microsoft__-Default", { workspace = "4" })
 o.window("chrome-outlook.office.com__mail_-Default", { workspace = "4" })

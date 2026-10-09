@@ -9,6 +9,7 @@ Personal configuration for Daniel's Omarchy/Arch laptop. Repository lives at `~/
 - Keep changes minimal. When tracking a new config or script, update both `save.sh` and `restore.sh` so save/restore remain symmetric.
 - The repo is scoped to Omarchy plus personal laptop config (zsh, terminals, custom scripts); macOS leftovers were removed. Note: `hyprshell` is NOT legacy — it is the v4 window switcher (SUPER+TAB); its config is tracked and its user service must stay enabled.
 - For desktop, Hyprland, terminal, theme, hook, or other Omarchy changes, follow [Omarchy guidance](.agents/skills/omarchy/SKILL.md).
+- For Espanso keyboard hotplug, resume recovery, and watcher behavior, see [docs/espanso-recovery.md](docs/espanso-recovery.md).
 - For repository save/restore operations, follow [dotfiles guidance](.agents/skills/dotfiles/SKILL.md).
 
 ## Commands

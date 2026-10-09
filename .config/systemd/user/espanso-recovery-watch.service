@@ -1,0 +1,15 @@
+[Unit]
+Description=Recover Espanso only after confirmed keyboard input loss
+After=wayland-session@hyprland.desktop.target espanso.service
+Wants=espanso.service
+PartOf=wayland-session@hyprland.desktop.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/espanso_recovery_watch.py
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=5
+
+[Install]
+WantedBy=wayland-session@hyprland.desktop.target

@@ -42,3 +42,18 @@ hl.unbind("SUPER + COMMA")
 hl.unbind("SUPER + SHIFT + S")
 
 o.bind("SUPER + SHIFT + T", "New task", "qs ipc --path /usr/share/omarchy/shell call taskwarrior-time newTask")
+
+-- Open DA Tracking quick entry instead of Docker.
+hl.unbind("SUPER + SHIFT + D")
+o.bind("SUPER + SHIFT + D", "DA Tracking", "omarchy-shell danielmrdev.da-tracking quickEntry")
+
+-- flea --default: begin. Written by `flea --default`; `flea --default off` removes the block whole.
+hl.unbind("SUPER + SHIFT + F")
+o.bind("SUPER + SHIFT + F", "File manager", { launch = 'flea --gui' })
+hl.unbind("SUPER + ALT + SHIFT + F")
+o.bind("SUPER + ALT + SHIFT + F", "File manager (cwd)", { launch = 'flea --gui "$(omarchy-cmd-terminal-cwd)"' })
+-- flea --default: end.
+
+-- flea --picker: begin. Written by `flea --picker`; `flea --picker off` removes the block whole.
+o.window("com.thisisgm.flea.picker", { tag = "+floating-window" })
+-- flea --picker: end.

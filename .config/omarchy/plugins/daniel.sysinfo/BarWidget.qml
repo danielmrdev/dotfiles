@@ -51,6 +51,16 @@ BarWidget {
 
   property real horizontalMargin: Style.spaceReal(8.5)
 
+  Text {
+    id: maximumCpuLabel
+    visible: false
+    textFormat: Text.PlainText
+    text: "100%"
+    font.family: root.bar ? root.bar.fontFamily : Style.font.family
+    font.pixelSize: Style.font.body
+    renderType: Text.NativeRendering
+  }
+
   implicitWidth: metricButton.implicitWidth + 2 * root.horizontalMargin
   implicitHeight: root.vertical ? metricButton.implicitHeight : (root.bar ? root.bar.barSize : metricButton.implicitHeight)
 
@@ -139,6 +149,7 @@ BarWidget {
     property var registeredBar: null
     property string iconText: ""
     property string valueText: ""
+    property real valueSlotWidth: 0
     property string tooltipText: ""
     readonly property bool tooltipHovered: visible && mouse.containsMouse
     property color iconColor: metric.bar ? metric.bar.barForeground : Color.foreground
@@ -168,7 +179,10 @@ BarWidget {
       if (registeredBar && registeredBar.unregisterClickTarget) registeredBar.unregisterClickTarget(metric)
     }
 
-    implicitWidth: row.implicitWidth
+    readonly property real contentWidth: iconLabel.implicitWidth + row.spacing
+      + Math.max(metric.valueSlotWidth, valueLabel.implicitWidth)
+
+    implicitWidth: contentWidth
     implicitHeight: !metric.bar || metric.bar.vertical ? row.implicitHeight : metric.bar.barSize
 
     Row {
@@ -177,6 +191,7 @@ BarWidget {
       spacing: Style.spacing.lg
 
       Text {
+        id: iconLabel
         textFormat: Text.PlainText
         text: metric.iconText
         font.family: metric.bar ? metric.bar.fontFamily : Style.font.family
@@ -185,6 +200,7 @@ BarWidget {
         renderType: Text.NativeRendering
       }
       Text {
+        id: valueLabel
         textFormat: Text.PlainText
         text: metric.valueText
         font.family: metric.bar ? metric.bar.fontFamily : Style.font.family
@@ -214,6 +230,7 @@ BarWidget {
     bar: root.bar
     iconText: "󰍛"
     valueText: root.dataAvailable ? root.cpu + "%" : "—"
+    valueSlotWidth: maximumCpuLabel.implicitWidth
     valueColor: root.cpuColor
     tooltipText: root.tooltipSummary()
   }

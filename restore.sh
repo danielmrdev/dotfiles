@@ -50,6 +50,9 @@ link_all() {
 
 echo "=== Creating symlinks ==="
 
+# Home-wide agent context stays separate from this repo's AGENTS.md.
+link ".agents/context/AGENTS.md" "$HOME/AGENTS.md"
+
 # Shell
 link ".zshrc"                    "$HOME/.zshrc"
 link ".p10k.zsh"                 "$HOME/.p10k.zsh"
