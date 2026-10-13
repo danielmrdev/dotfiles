@@ -60,7 +60,6 @@ hl.config({
   input = {
     -- Keep Omarchy's Caps Lock behavior; use Right Super as AltGr/level 3.
     kb_options = "compose:caps,shift:both_capslock_cancel,lv3:rwin_switch",
-    accel_profile = "flat",
 
     touchpad = {
       natural_scroll = true,
@@ -69,11 +68,4 @@ hl.config({
   },
 })
 
--- Apple Magic Mouse 2 / Bluetooth mouse tuning.
-hl.device({
-  name = "black-mice",
-  sensitivity = -0.45,
-  accel_profile = "flat",
-  scroll_factor = 1.8,
-})
 

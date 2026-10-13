@@ -39,9 +39,9 @@ hl.env("HYPRCURSOR_SIZE", "32")
 hl.env("XCURSOR_THEME", "Bibata-Modern-Classic")
 hl.env("XCURSOR_SIZE", "32")
 
--- Prevent accidental paste from middle/right-click emulation.
+-- Keep middle-click paste enabled.
 hl.config({
   misc = {
-    middle_click_paste = false,
+    middle_click_paste = true,
   },
 })

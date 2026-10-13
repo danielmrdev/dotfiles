@@ -48,12 +48,17 @@
           "id": "daniel.workspaces"
         },
         {
-          "id": "tallahootie.dromify"
+          "id": "tallahootie.dromify",
+          "showNowPlaying": true
         }
       ],
       "right": [
         {
           "id": "daniel.tray"
+        },
+        {
+          "id": "danielmrdev.omarchy-keychron-mouse",
+          "showBatteryInBar": true
         },
         {
           "id": "danielmrdev.da-tracking"

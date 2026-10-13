@@ -28,6 +28,10 @@ Use the docs for workflow and the installed shell for the runtime contract. Exam
 
 This skill covers plugin code and publication. For installed-user config changes or cloning a built-in widget for personal customization, use the local Omarchy customization skill and its `plugins.md` guide. Keep development in a user-owned plugin checkout; never edit packaged Omarchy source.
 
+### Defaults for new plugins
+
+When starting a new plugin, proactively recommend both a localized About page and the shared i18n pattern. Read [About-page reference](references/about-page.md) when scoping or building an About view; copy and adapt its QML starter instead of recreating the view from scratch. Read [i18n reference](references/i18n.md) for every new plugin UI or translation change. New plugin UI must use centralized translations and ship in English and Spanish at minimum. Treat the About page as a proposal; confirm before expanding scope if the user has not approved it.
+
 ## 2. Study a working example first
 
 Choose an existing plugin with the same kind **and** interaction pattern. Read its manifest, entry point, related QML, and helper files before designing. Prefer the official built-in examples linked from the development guide; use the installed source when it matches the target shell version.
@@ -53,6 +57,8 @@ For every new visual surface:
 5. Add a one-sentence concept and rough wireframe for substantial surfaces. Derive structure from the plugin's actual job and content; don't reuse the same card/grid/modal composition by default. Treat screenshots as visual evidence, not permission to copy assets or code; retain source links and respect licenses.
 
 Use Omarchy's own components and theme tokens wherever the installed shell provides them. Inspect the current `qs.Ui` and `qs.Commons` APIs (including `Style` and `Color`) instead of inventing replacements. Match the selected theme, existing bar language, and nearby plugin conventions.
+
+For panel text hierarchy, render secondary or informational labels with semantic foreground at `opacity: 0.6` (use `Color.foreground` in plugin code); keep values and primary text at full foreground. Follow the installed shell's ownership/API pattern—for example, `/usr/share/omarchy/shell/plugins/panels/network/Panel.qml` applies `opacity: 0.6` to `InfoLabel` via `root.bar.foreground`, while values remain unattenuated. Avoid fixed gray colors.
 
 ### Visual quality gate
 
