@@ -7,15 +7,15 @@
           "id": "omarchy.indicators"
         },
         {
-          "id": "tmn73.calendar",
           "format": "ddd d MMM HH:mm",
           "formatAlt": "d MMMM 'W'ww yyyy",
-          "verticalFormat": "HH\n—\nmm",
-          "weekStartDay": "monday",
-          "showYearProgress": true,
           "hiddenCalendars": [
             "trabajo"
-          ]
+          ],
+          "id": "tmn73.calendar",
+          "showYearProgress": true,
+          "verticalFormat": "HH\n—\nmm",
+          "weekStartDay": "monday"
         },
         {
           "id": "omarchy.keyboard-layout"
@@ -30,11 +30,11 @@
           "id": "oma.nearby"
         },
         {
-          "id": "io.github.elevate08.qs-bitwarden-cli",
+          "autoLockMinutes": 0,
+          "clearClipboardSec": 60,
           "colorizeIcon": false,
           "fingerprintUnlock": true,
-          "autoLockMinutes": 0,
-          "clearClipboardSec": 60
+          "id": "io.github.elevate08.qs-bitwarden-cli"
         },
         {
           "id": "omarchy.system-update"
@@ -57,8 +57,12 @@
           "id": "daniel.tray"
         },
         {
+          "id": "jankeesvw.meeting-recorder"
+        },
+        {
           "id": "danielmrdev.omarchy-keychron-mouse",
-          "showBatteryInBar": true
+          "showBatteryInBar": true,
+          "uiLanguage": "system"
         },
         {
           "id": "danielmrdev.da-tracking"
@@ -103,7 +107,8 @@
           "id": "omarchy.audio"
         },
         {
-          "id": "daniel.sysinfo"
+          "id": "danielmrdev.sysinfo",
+          "uiLanguage": "system"
         },
         {
           "id": "omarchy.monitor"

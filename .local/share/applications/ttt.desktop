@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=TTT
+GenericName=Terminal Text Editor
+Comment=Terminal Text Tool
+Exec=/home/daniel/.local/bin/ttt --welcome %F
+Icon=accessories-text-editor
+Terminal=true
+Type=Application
+Categories=Utility;TextEditor;
+Keywords=editor;terminal;text;code;programming;
+MimeType=text/plain;text/x-csrc;text/x-chdr;text/x-c++src;text/x-c++hdr;text/x-java;text/x-python;text/x-script.python;application/x-python;text/x-rust;text/x-go;text/javascript;application/javascript;text/x-typescript;application/json;text/html;text/css;text/x-shellscript;text/x-lua;text/x-ruby;text/x-php;text/x-csharp;text/markdown;
+StartupNotify=false

@@ -18,7 +18,7 @@ export DOTFILES=$HOME/.dotfiles
 export PATH="$HOME/.local/share/mise/installs/node/26.2.0/bin:$HOME/.local/bin:$PATH"
 
 # Default terminal editor
-export EDITOR="fresh"
+export EDITOR="ttt"
 export VISUAL="$EDITOR"
 export GIT_EDITOR="$EDITOR"
 export SUDO_EDITOR="$EDITOR"

@@ -189,6 +189,12 @@ for f in Outlook.desktop Teams.desktop OneDrive.desktop Hache.desktop Tailscale.
   safe_cp "$src" "$DOTFILES/.local/share/applications/$f"
 done
 
+# TTT terminal editor launcher
+echo "[ttt]"
+if [ -f "$HOME/.local/share/applications/ttt.desktop" ]; then
+  safe_cp "$HOME/.local/share/applications/ttt.desktop" "$DOTFILES/.local/share/applications/ttt.desktop"
+fi
+
 echo ""
 echo "=== Git add + commit ==="
 cd "$DOTFILES"
