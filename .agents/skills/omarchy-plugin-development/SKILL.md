@@ -93,6 +93,10 @@ find "$PLUGIN_DIR" -type f -name '*.qml' -print0 \
 
 Check that every entry point exists, uses a safe relative path, and matches its declared kind. Third-party IDs must not use the reserved `omarchy.*` namespace; plugin directories must not contain symlinks.
 
+### Warning triage
+
+When investigating warnings, capture a fresh baseline after the relevant shell restart and inspect only logs since that point; boot-wide grep can surface stale warnings from older plugin versions. Classify each warning as plugin-owned, host-owned, or test/tooling noise before changing code. Compare static-linter output against the same tool/import setup and baseline; dynamic shell APIs can produce false positives. Timebox external or delegated investigation: if it stalls or cannot verify a cause, stop, report evidence and remaining uncertainty, then continue with checks available locally.
+
 Validation and linting do not prove the interface works. With user approval before changing their active bar, enabling a plugin, or restarting shell services, test in the actual shell. For live review of changes to an active plugin, sync the latest files into `~/.config/omarchy/plugins/<plugin-id>`, then run `omarchy restart shell`; a file watcher or `omarchy-shell shell rescanPlugins` alone does not confirm the running UI uses the new version. Verify `omarchy-shell shell ping` returns `ok`, then exercise the changed UI in the shell. If restart or runtime verification fails, report that clearly and do not claim the change is active. Follow the development guide's relevant checks: plugin discovery/status, click or summon, close/Escape, shell open/close routes, disable/re-enable, restart, and removal. For data-driven or asynchronous behavior, use deterministic fixtures and cover applicable empty, offline, malformed, partial-failure, stale-completion, retry, and disable/reload states; keep distinct outcomes distinct instead of masking them with generic fallback data. Capture screenshots of meaningful states and compare them with the visual brief. If runtime access is unavailable, say which checks remain unverified.
 
 ## 6. Publish only when asked
