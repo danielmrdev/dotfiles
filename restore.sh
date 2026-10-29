@@ -160,8 +160,16 @@ link_with_parent "$DOTFILES/.agents/skills/sudo-askpass" "$HOME/.pi/agent/skills
 link_with_parent "$DOTFILES/.pith/skills" "$HOME/.pith/skills"
 link_with_parent "$DOTFILES/.pith/memory" "$HOME/.pith/memory"
 
+# ONLYOFFICE scaled desktop launcher
+link ".local/share/applications/onlyoffice-desktopeditors.desktop" "$HOME/.local/share/applications/onlyoffice-desktopeditors.desktop"
+
 # TTT terminal editor launcher
 link ".local/share/applications/ttt.desktop" "$HOME/.local/share/applications/ttt.desktop"
+
+# Tizen Studio GTK2/SWT launchers
+link ".local/share/applications/tizen-studio-ide.desktop" "$HOME/.local/share/applications/tizen-studio-ide.desktop"
+link ".local/share/applications/tizen-studio-packagemanager.desktop" "$HOME/.local/share/applications/tizen-studio-packagemanager.desktop"
+link ".local/share/applications/tizen-studio-devicemanager.desktop" "$HOME/.local/share/applications/tizen-studio-devicemanager.desktop"
 
 # Web app desktop files and icons
 echo "  LINK webapp desktop files + icons"

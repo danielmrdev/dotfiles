@@ -30,14 +30,14 @@
           "id": "oma.nearby"
         },
         {
+          "id": "omarchy.system-update"
+        },
+        {
           "autoLockMinutes": 0,
           "clearClipboardSec": 60,
           "colorizeIcon": false,
           "fingerprintUnlock": true,
           "id": "io.github.elevate08.qs-bitwarden-cli"
-        },
-        {
-          "id": "omarchy.system-update"
         }
       ],
       "left": [
@@ -57,6 +57,9 @@
           "id": "daniel.tray"
         },
         {
+          "id": "io.github.thisisgm.flea-shelf"
+        },
+        {
           "id": "jankeesvw.meeting-recorder"
         },
         {
@@ -69,9 +72,6 @@
         },
         {
           "id": "taskwarrior-time"
-        },
-        {
-          "id": "streamdock"
         },
         {
           "id": "io.github.etroll.omarchy-airplay"
@@ -96,6 +96,9 @@
         },
         {
           "id": "omarchy.agents"
+        },
+        {
+          "id": "streamdock"
         },
         {
           "id": "omarchy.bluetooth"

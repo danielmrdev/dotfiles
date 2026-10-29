@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+StartupNotify=true
+NoDisplay=false
+Categories=Development;IDE;
+Version=1.0
+Comment=Device manager of Tizen Studio is a tool which controls connected device and log view.
+Name=Device Manager
+Icon=/home/daniel/tizen-studio/tools/device-manager/icons/device_manager.ico
+Exec=/home/daniel/.local/bin/tizen-device-manager
+StartupWMClass=Device Manager

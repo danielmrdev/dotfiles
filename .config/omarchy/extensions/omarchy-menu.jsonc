@@ -27,4 +27,13 @@
   // Example: replace the default About action by reusing the same id. Existing
   // fields are kept unless overridden.
   // "about": {"icon":"","label":"About","action":"omarchy-launch-or-focus-tui \"zsh -c 'fastfetch; read -k 1'\""},
+
+  // Route Omarchy's built-in config editor actions through TTT.
+  "style.hyprland": {"action":"omarchy-launch-tui \"$HOME/.local/bin/ttt\" -- \"$HOME/.config/hypr/looknfeel.lua\""},
+  "setup.monitors": {"action":"omarchy-launch-tui \"$HOME/.local/bin/ttt\" -- \"$HOME/.config/hypr/monitors.lua\""},
+  "setup.keybindings": {"action":"omarchy-launch-tui \"$HOME/.local/bin/ttt\" -- \"$HOME/.config/hypr/bindings.lua\""},
+  "setup.input": {"action":"omarchy-launch-tui \"$HOME/.local/bin/ttt\" -- \"$HOME/.config/hypr/input.lua\""},
+  "setup.config.hyprland": {"action":"omarchy-launch-tui \"$HOME/.local/bin/ttt\" -- \"$HOME/.config/hypr/hyprland.lua\""},
+  "setup.config.hyprsunset": {"action":"omarchy-launch-tui \"$HOME/.local/bin/ttt\" -- \"$HOME/.config/hypr/hyprsunset.conf\" && omarchy-restart-hyprsunset"},
+  "setup.config.xcompose": {"action":"omarchy-launch-tui \"$HOME/.local/bin/ttt\" -- \"$HOME/.XCompose\" && omarchy-restart-xcompose"}
 }

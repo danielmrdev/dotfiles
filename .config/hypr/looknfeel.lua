@@ -51,14 +51,16 @@
 
 hl.config({
   general = {
-    gaps_in = 2,
+    gaps_in = 4,
     gaps_out = 2,
     border_size = 3,
     resize_on_border = true,
   },
 
   decoration = {
-    dim_inactive = true,
+    active_opacity = 1.0,
+    inactive_opacity = 1.0,
+    dim_inactive = false,
     dim_strength = 0.5,
   },
 })

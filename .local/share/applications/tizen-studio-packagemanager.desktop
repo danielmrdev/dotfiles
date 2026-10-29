@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Comment=Package Manager for Tizen Studio 
+Name=Package Manager
+Categories=Development;IDE;
+StartupNotify=true
+NoDisplay=false
+Icon=/home/daniel/tizen-studio/package-manager/tizen-studio-package-manager.png
+Exec=/home/daniel/.local/bin/tizen-package-manager

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Comment=Tizen Studio 
+Name=Tizen Studio
+Categories=Development;IDE;
+StartupNotify=true
+NoDisplay=false
+Icon=/home/daniel/tizen-studio/ide/icon.xpm
+Exec=/home/daniel/.local/bin/tizen-studio
+StartupWMClass=Tizen Studio

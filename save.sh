@@ -134,7 +134,7 @@ for s in teams-jiggler teams-jiggler-status teams-jiggler-toggle teams-jiggler-o
          omarchy-webapp-patch omarchy-calendar-sync-caldav update-fingerprint-libs \
          save-dotfiles restore-dotfiles askpass lid-is-open \
          music-to-storagebox check-storagebox-music-mount lock-storagebox-music-dir \
-         espanso_recovery_watch.py; do
+         espanso_recovery_watch.py tizen-studio tizen-package-manager tizen-device-manager; do
   [ -f "$HOME/.local/bin/$s" ] || continue
   safe_cp "$HOME/.local/bin/$s" "$DOTFILES/.local/bin/"
 done
@@ -189,11 +189,25 @@ for f in Outlook.desktop Teams.desktop OneDrive.desktop Hache.desktop Tailscale.
   safe_cp "$src" "$DOTFILES/.local/share/applications/$f"
 done
 
+# ONLYOFFICE scaled desktop launcher
+echo "[onlyoffice]"
+if [ -f "$HOME/.local/share/applications/onlyoffice-desktopeditors.desktop" ]; then
+  safe_cp "$HOME/.local/share/applications/onlyoffice-desktopeditors.desktop" "$DOTFILES/.local/share/applications/onlyoffice-desktopeditors.desktop"
+fi
+
 # TTT terminal editor launcher
 echo "[ttt]"
 if [ -f "$HOME/.local/share/applications/ttt.desktop" ]; then
   safe_cp "$HOME/.local/share/applications/ttt.desktop" "$DOTFILES/.local/share/applications/ttt.desktop"
 fi
+
+# Tizen Studio GTK2/SWT launchers
+echo "[tizen]"
+for f in tizen-studio-ide.desktop tizen-studio-packagemanager.desktop tizen-studio-devicemanager.desktop; do
+  if [ -f "$HOME/.local/share/applications/$f" ]; then
+    safe_cp "$HOME/.local/share/applications/$f" "$DOTFILES/.local/share/applications/$f"
+  fi
+done
 
 echo ""
 echo "=== Git add + commit ==="

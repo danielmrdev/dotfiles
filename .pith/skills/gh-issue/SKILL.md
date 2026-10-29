@@ -27,7 +27,7 @@ Set `GH_REPO=owner/repo` from that result and pass `--repo "$GH_REPO"` to comman
 - Follow the user's and repository's language and format conventions; examples below are templates, not mandatory wording.
 - Ask for explicit approval before an external write the user did not clearly request. A clearly requested create/update/comment/close authorizes only that stated action and scope.
 - Deleting issues is destructive: confirm the exact issue and deletion explicitly before proceeding, even when deletion was requested.
-- Treat bulk edits, attachments, and project-board changes as separate writes. Do not add them unless requested or included in the user's explicit approval.
+- Treat bulk edits, attachments, and project-board changes as separate writes. Do not add them unless requested or included in the user's explicit approval. For images on a new issue, attach only the exact files the user explicitly names or approves; creating an issue alone is not blanket upload consent.
 
 ## Issue body
 
@@ -62,7 +62,7 @@ Use `gh search issues` for cross-repository searches. For advanced search syntax
 
 ## Create
 
-After checking duplicates, templates, and existing labels, create only the issue the user asked for or the project workflow requires. Do not auto-assign, add labels, or attach local images unless requested or established by the repository's conventions.
+After checking duplicates, templates, and existing labels, create only the issue the user asked for or the project workflow requires. Do not auto-assign or add labels unless requested or established by the repository's conventions. Attach local images only when the user explicitly names or approves the exact files; repository conventions alone do not authorize image uploads.
 
 ```bash
 gh issue create --repo "$GH_REPO" \
@@ -70,7 +70,7 @@ gh issue create --repo "$GH_REPO" \
   --body-file /path/to/issue.md
 ```
 
-Add `--label` or `--assignee` only with an existing, relevant value. Report the resulting issue number and URL. Image upload instructions are in [images](references/images.md); uploading is a separate external write and requires a clear request or approval.
+Add `--label` or `--assignee` only with an existing, relevant value. Report the resulting issue number and URL. For explicitly requested images, add one `--attach '/path/to/image.png#Alt text'` per exact file and keep `--repo "$GH_REPO"` explicit. Never scan directories or select extra images. Use GitHub CLI's native `gh issue create --attach` flow for new issues; do not use the third-party browser-cookie uploader or its login flow for issue creation. See [images](references/images.md) for irreversible, visibility, and partial-failure caveats.
 
 ## Work on an issue
 

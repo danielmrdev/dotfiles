@@ -32,19 +32,15 @@ o.bind("SUPER + CTRL + M", "Move current workspace to other monitor", hl.dsp.wor
 -- Tab group for teams + outlook on ws 4, only when the laptop monitor is the
 -- sole display. Docked (2 externals): ws 4 lives on DP-4, keep them separate.
 local function laptop_only_monitor()
-    local f = io.popen("hyprctl monitors -j")
-    if not f then
-        return false
-    end
-    local out = f:read("*a")
-    f:close()
-    local external = false
-    for name in out:gmatch('"name"%s*:%s*"([^"]+)"') do
-        if name ~= "eDP-1" then
-            external = true
+    -- hl.get_monitors() instead of io.popen("hyprctl monitors -j"): calling
+    -- hyprctl from inside the compositor deadlocks config load for ~5s
+    -- (the reload cannot answer its own child until hyprctl's timeout).
+    for _, monitor in ipairs(hl.get_monitors()) do
+        if monitor.name ~= "eDP-1" then
+            return false
         end
     end
-    return not external
+    return true
 end
 
 local ws4_teams = hl.window_rule({

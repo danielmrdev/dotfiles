@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+
+gtk2_lib="$HOME/.local/opt/tizen-gtk2/usr/lib"
+export LD_LIBRARY_PATH="$gtk2_lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export GTK_PATH="$gtk2_lib/gtk-2.0${GTK_PATH:+:$GTK_PATH}"
+
+# Bundled Package Manager SWT 4.2.3 does not support swt.autoScale.
+exec "$HOME/tizen-studio/package-manager/package-manager.bin" "$@"

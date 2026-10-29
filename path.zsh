@@ -7,12 +7,12 @@ export PATH="$HOME/.node/bin:$PATH"
 # Use project specific binaries before global ones
 export PATH="node_modules/.bin:vendor/bin:$PATH"
 
-# beautiful-pi has a local Pi CLI peer for development; use global Pi here.
+# Use beautiful-pi's local Pi CLI there; use global Pi everywhere else.
 pi() {
   if [[ "$PWD" == "$HOME/Projects/beautiful-pi" || "$PWD" == "$HOME/Projects/beautiful-pi/"* ]]; then
-    "$HOME/.local/bin/pi" "$@"
+    "$HOME/Projects/beautiful-pi/node_modules/.bin/pi" "$@"
   else
-    command pi "$@"
+    "$HOME/.local/bin/pi" "$@"
   fi
 }
 
