@@ -1,5 +1,5 @@
 #!/bin/bash
-# restore.sh — Create symlinks from ~/.dotfiles/ to original locations
+# restore.sh — Restore tracked config from ~/.dotfiles to original locations
 # Run AFTER cloning dotfiles repo to a (new) machine.
 set -e
 
@@ -48,7 +48,26 @@ link_all() {
   done
 }
 
-echo "=== Creating symlinks ==="
+# Copy custom mod files: Herdr rejects mod imports resolving through symlinks outside its app directory.
+copy_tree_files() {
+  local source_rel="$1" destdir="$2" srcdir="$DOTFILES/$1" file rel base dest
+  [ -d "$srcdir" ] || return 0
+  while IFS= read -r -d '' file; do
+    rel="${file#"$srcdir"/}"
+    base="$(basename "$file")"
+    case "/$rel/" in
+      */node_modules/*|*/.state/*|*/.git/*) continue ;;
+    esac
+    [[ "$base" == "jsconfig.json" || "$base" == *.d.ts ]] && continue
+    [[ "$base" == *.bak.* || "$base" == *.bak[0-9]* || "$base" == *.bak_* ]] && continue
+    dest="$destdir/$rel"
+    mkdir -p "$(dirname "$dest")"
+    [ ! -L "$dest" ] || rm -f "$dest"
+    cp -a "$file" "$dest"
+  done < <(find "$srcdir" -type f -print0)
+}
+
+echo "=== Restoring tracked config ==="
 
 # Home-wide agent context stays separate from this repo's AGENTS.md.
 link ".agents/context/AGENTS.md" "$HOME/AGENTS.md"
@@ -114,8 +133,23 @@ link ".config/chromium-flags.conf" "$HOME/.config/chromium-flags.conf" 2>/dev/nu
 # Omarchy hooks
 link_all ".config/omarchy/hooks" "$HOME/.config/omarchy/hooks"
 
-# Herdr app: the current Omarchy theme JSON is generated, not tracked.
+# Herdr app: user config and custom mods; runtime state, bundled assets and current theme stay local/generated.
+link ".config/herdr-app/keys.json" "$HOME/.config/herdr-app/keys.json"
+if [ -f "$DOTFILES/.config/herdr-app/settings.json" ]; then
+  chmod 600 "$DOTFILES/.config/herdr-app/settings.json"
+fi
+link ".config/herdr-app/settings.json" "$HOME/.config/herdr-app/settings.json"
+link ".config/herdr-app/programs.json" "$HOME/.config/herdr-app/programs.json"
+link_all ".config/herdr-app/layouts" "$HOME/.config/herdr-app/layouts" "*.json"
+link_all ".config/herdr-app/layouts" "$HOME/.config/herdr-app/layouts" "*.svg"
+link_all ".config/herdr-app/themes" "$HOME/.config/herdr-app/themes" "*.json"
+for moddir in "$DOTFILES/.config/herdr-app/mods/"*; do
+  [ -d "$moddir" ] || continue
+  mod="$(basename "$moddir")"
+  copy_tree_files ".config/herdr-app/mods/$mod" "$HOME/.config/herdr-app/mods/$mod"
+done
 link ".config/herdr-app/sync-omarchy-theme.py" "$HOME/.config/herdr-app/sync-omarchy-theme.py"
+link ".local/share/applications/herdr-app.desktop" "$HOME/.local/share/applications/herdr-app.desktop"
 if [ -f "$HOME/.local/state/omarchy/current/theme/colors.toml" ] && command -v omarchy-theme-color >/dev/null 2>&1; then
   if ! python3 "$HOME/.config/herdr-app/sync-omarchy-theme.py"; then
     echo "  WARN could not sync Herdr theme from Omarchy's current palette" >&2

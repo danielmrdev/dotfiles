@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Herdr
+Comment=Terminals and coding agents that keep running
+Exec=/home/daniel/.local/bin/herdr-app
+Icon=/home/daniel/.local/share/icons/hicolor/scalable/apps/herdr-app.svg
+Terminal=false
+Categories=Development;
+StartupWMClass=herdr-app

@@ -1,4 +1,6 @@
 themes/
+!.config/herdr-app/themes/
+!.config/herdr-app/themes/**
 .zshrc_old
 .zshenv.local
 *.bak.*
