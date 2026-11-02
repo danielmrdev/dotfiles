@@ -118,6 +118,13 @@ for entry in "$HOME/.config/omarchy/hooks/"*; do
   safe_cp "$entry" "$DOTFILES/.config/omarchy/hooks/"
 done
 
+# Herdr app: track the sync helper, not its generated current-theme palette.
+echo "[herdr-app]"
+if [ -f "$HOME/.config/herdr-app/sync-omarchy-theme.py" ]; then
+  mkdir -p "$DOTFILES/.config/herdr-app"
+  safe_cp "$HOME/.config/herdr-app/sync-omarchy-theme.py" "$DOTFILES/.config/herdr-app/sync-omarchy-theme.py"
+fi
+
 # Omarchy extensions
 echo "[omarchy extensions]"
 safe_cp_dir "$HOME/.config/omarchy/extensions" "$DOTFILES/.config/omarchy/extensions"

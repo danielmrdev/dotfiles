@@ -26,7 +26,7 @@ alias ip="curl ifconfig.co"
 # alias updateip="php $HOME/.dotfiles/dns-auto-updater/do-dns-auto-updater.php"
 
 # Espanso
-alias espanso-triggers='fresh "$HOME/.config/espanso/match/base.yml"'
+alias espanso-triggers='"$EDITOR" "$HOME/.config/espanso/match/base.yml"'
 
 # Directories
 alias dotfiles="cd $DOTFILES"

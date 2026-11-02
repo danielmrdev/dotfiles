@@ -1,3 +1,4 @@
 #!/bin/bash
 # This hook is called with the snake-cased name of the theme that has just been set.
+python3 "$HOME/.config/herdr-app/sync-omarchy-theme.py"
 

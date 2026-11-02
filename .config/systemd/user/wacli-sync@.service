@@ -1,0 +1,44 @@
+# Written by OmaWhatsApp (sha256 e077e74b384fa729229ecaf779d254b2bcce23e4769c2bd380526fd5a4d93ad8 of the lines below). Once edited, the app leaves it as it is.
+[Unit]
+Description=Keep the local OmaWhatsApp index and new media in sync for account %I
+Documentation=https://wacli.sh
+PartOf=graphical-session.target
+After=graphical-session.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Settings → Media can empty this through a drop-in (10-omawhatsapp-media.conf).
+Environment=OMAW_MEDIA_FLAGS=--download-media
+# Only the helper knows where a named account's store lives, so it decides
+# whether this instance has a linked session to follow.
+ExecCondition=%h/.local/bin/omawhatsapp session-ready --account %i
+ExecStart=%h/.local/bin/wacli --account %i --lock-wait 30s sync --follow $OMAW_MEDIA_FLAGS --max-reconnect 10m --stale-threshold 2m --presence-mode quiet --max-db-size 1GB --refresh-groups
+Restart=on-failure
+RestartSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+# Account stores live under wacli's state directory; an account configured
+# with a store outside it needs a drop-in that adds that path.
+ReadWritePaths=%h/.local/state/wacli
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+UMask=0077
+
+[Install]
+WantedBy=graphical-session.target

@@ -114,6 +114,14 @@ link ".config/chromium-flags.conf" "$HOME/.config/chromium-flags.conf" 2>/dev/nu
 # Omarchy hooks
 link_all ".config/omarchy/hooks" "$HOME/.config/omarchy/hooks"
 
+# Herdr app: the current Omarchy theme JSON is generated, not tracked.
+link ".config/herdr-app/sync-omarchy-theme.py" "$HOME/.config/herdr-app/sync-omarchy-theme.py"
+if [ -f "$HOME/.local/state/omarchy/current/theme/colors.toml" ] && command -v omarchy-theme-color >/dev/null 2>&1; then
+  if ! python3 "$HOME/.config/herdr-app/sync-omarchy-theme.py"; then
+    echo "  WARN could not sync Herdr theme from Omarchy's current palette" >&2
+  fi
+fi
+
 # Omarchy extensions
 link_all ".config/omarchy/extensions" "$HOME/.config/omarchy/extensions"
 

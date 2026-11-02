@@ -48,6 +48,9 @@
           "id": "daniel.workspaces"
         },
         {
+          "id": "io.github.moizibnyousaf.omawhatsapp"
+        },
+        {
           "id": "tallahootie.dromify",
           "showNowPlaying": true
         }
@@ -89,16 +92,10 @@
           "id": "codefriendly.nightman"
         },
         {
-          "id": "b.omadoro"
-        },
-        {
           "id": "omarchy.tailscale"
         },
         {
           "id": "omarchy.agents"
-        },
-        {
-          "id": "streamdock"
         },
         {
           "id": "omarchy.bluetooth"
@@ -114,7 +111,7 @@
           "uiLanguage": "system"
         },
         {
-          "id": "omarchy.monitor"
+          "id": "crmne.hyprmoncfg"
         },
         {
           "id": "omarchy.power"
@@ -128,6 +125,16 @@
     "lock": 300,
     "screensaver": 150
   },
-  "plugins": [],
-  "version": 1
+  "plugins": [
+    {
+      "id": "io.github.sirjul1337.lock-explorer"
+    }
+  ],
+  "version": 1,
+  "disabledPlugins": [
+    "omarchy.lock"
+  ],
+  "cloneSourceRestores": [
+    "io.github.sirjul1337.lock-explorer"
+  ]
 }

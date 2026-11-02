@@ -1,0 +1,42 @@
+# Written by OmaWhatsApp (sha256 c4a4467b87b137a64e1c0c8a62828605200e7c68909516022db51228a5c362c7 of the lines below). Once edited, the app leaves it as it is.
+[Unit]
+Description=Keep the local OmaWhatsApp index and new media in sync
+Documentation=https://wacli.sh
+ConditionPathExists=%h/.local/state/wacli/session.db
+PartOf=graphical-session.target
+After=graphical-session.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Settings → Media can empty this through a drop-in (10-omawhatsapp-media.conf).
+Environment=OMAW_MEDIA_FLAGS=--download-media
+# A revoked session may leave session.db behind; inspect credentials locally.
+ExecCondition=%h/.local/bin/omawhatsapp session-ready
+ExecStart=%h/.local/bin/wacli --store %h/.local/state/wacli --lock-wait 30s sync --follow $OMAW_MEDIA_FLAGS --max-reconnect 10m --stale-threshold 2m --presence-mode quiet --max-db-size 1GB --refresh-groups
+Restart=on-failure
+RestartSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.local/state/wacli
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+UMask=0077
+
+[Install]
+WantedBy=graphical-session.target
