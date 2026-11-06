@@ -1,11 +1,7 @@
 {
   "bar": {
-    "centerAnchor": "tmn73.calendar",
     "layout": {
       "center": [
-        {
-          "id": "omarchy.indicators"
-        },
         {
           "format": "ddd d MMM HH:mm",
           "formatAlt": "d MMMM 'W'ww yyyy",
@@ -16,28 +12,6 @@
           "showYearProgress": true,
           "verticalFormat": "HH\n—\nmm",
           "weekStartDay": "monday"
-        },
-        {
-          "id": "omarchy.keyboard-layout"
-        },
-        {
-          "id": "daniel.weather"
-        },
-        {
-          "id": "io.github.nixfred.tailscale-host-monitor"
-        },
-        {
-          "id": "oma.nearby"
-        },
-        {
-          "id": "omarchy.system-update"
-        },
-        {
-          "autoLockMinutes": 0,
-          "clearClipboardSec": 60,
-          "colorizeIcon": false,
-          "fingerprintUnlock": true,
-          "id": "io.github.elevate08.qs-bitwarden-cli"
         }
       ],
       "left": [
@@ -57,7 +31,13 @@
       ],
       "right": [
         {
+          "id": "omarchy.keyboard-layout"
+        },
+        {
           "id": "daniel.tray"
+        },
+        {
+          "id": "omarchy-taskwarrior"
         },
         {
           "id": "io.github.thisisgm.flea-shelf"
@@ -72,9 +52,6 @@
         },
         {
           "id": "danielmrdev.da-tracking"
-        },
-        {
-          "id": "taskwarrior-time"
         },
         {
           "id": "io.github.etroll.omarchy-airplay"
@@ -114,27 +91,60 @@
           "id": "crmne.hyprmoncfg"
         },
         {
-          "id": "omarchy.power"
+          "id": "omarchy.power",
+          "showPercentage": true
         }
-      ]
+      ],
+      "centerBegin": [
+        {
+          "id": "omarchy.indicators"
+        }
+      ],
+      "centerEnd": [
+        {
+          "id": "daniel.weather"
+        },
+        {
+          "id": "io.github.nixfred.tailscale-host-monitor"
+        },
+        {
+          "id": "omarchy.system-update"
+        },
+        {
+          "id": "oma.nearby",
+          "receiverEnabled": true
+        },
+        {
+          "autoLockMinutes": 0,
+          "clearClipboardSec": 60,
+          "colorizeIcon": false,
+          "fingerprintUnlock": true,
+          "id": "io.github.elevate08.qs-bitwarden-cli"
+        }
+      ],
+      "tray": []
     },
     "position": "top",
     "transparent": false
   },
+  "cloneSourceRestores": [
+    "io.github.sirjul1337.lock-explorer"
+  ],
+  "disabledPlugins": [
+    "omarchy.lock"
+  ],
   "idle": {
     "lock": 300,
     "screensaver": 150
   },
   "plugins": [
     {
-      "id": "io.github.sirjul1337.lock-explorer"
+      "id": "io.github.sirjul1337.lock-explorer",
+      "openAs": "panel",
+      "tourSeen": true,
+      "unlock": "zoom",
+      "design": "weather"
     }
   ],
-  "version": 1,
-  "disabledPlugins": [
-    "omarchy.lock"
-  ],
-  "cloneSourceRestores": [
-    "io.github.sirjul1337.lock-explorer"
-  ]
+  "version": 1
 }

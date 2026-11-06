@@ -12,12 +12,14 @@ hl.workspace_rule({ workspace = "7", monitor = "DP-4" })
 hl.workspace_rule({ workspace = "8", monitor = "DP-4" })
 
 -- App placement
+o.window("herdr-app", { workspace = "1" })
 o.window("foot", { workspace = "1" })
 o.window("zen", { workspace = "2" })
 o.window("^md[.]obsidian[.]Obsidian$", { workspace = "5" })
 o.window("org.mozilla.Thunderbird", { workspace = "4" })
 o.window("chrome-teams.cloud.microsoft__-Default", { workspace = "4" })
 o.window("chrome-outlook.office.com__mail_-Default", { workspace = "4" })
+o.window("ohmail", { workspace = "4" })
 o.window("chrome-www.office.com__launch_onedrive-Default", { workspace = "4" })
 o.window("org.remmina.Remmina", { workspace = "8" })
 o.window("pith", { workspace = "3" })
@@ -29,7 +31,7 @@ o.bind("SUPER + code:49", "Toggle current and last workspace", hl.dsp.focus({ wo
 -- Move current workspace to the other monitor
 o.bind("SUPER + CTRL + M", "Move current workspace to other monitor", hl.dsp.workspace.move({ monitor = "+1" }))
 
--- Tab group for teams + outlook on ws 4, only when the laptop monitor is the
+-- Tab group for Teams, Outlook, and Ohmail on ws 4, only when the laptop monitor is the
 -- sole display. Docked (2 externals): ws 4 lives on DP-4, keep them separate.
 local function laptop_only_monitor()
     -- hl.get_monitors() instead of io.popen("hyprctl monitors -j"): calling
@@ -53,12 +55,27 @@ local ws4_outlook = hl.window_rule({
     match = { class = "chrome-outlook.office.com__mail_-Default" },
     group = "set",
 })
+local ws4_ohmail = hl.window_rule({
+    name = "ws4-group-ohmail",
+    match = { class = "ohmail" },
+    group = "set",
+})
 
 local function set_ws4_grouping(enabled)
     ws4_teams:set_enabled(enabled)
     ws4_outlook:set_enabled(enabled)
+    ws4_ohmail:set_enabled(enabled)
 end
 
-set_ws4_grouping(laptop_only_monitor())
-hl.on("monitor.added", function() set_ws4_grouping(laptop_only_monitor()) end)
-hl.on("monitor.removed", function() set_ws4_grouping(laptop_only_monitor()) end)
+local function update_ws4_display_rules()
+    local laptop_only = laptop_only_monitor()
+    set_ws4_grouping(laptop_only)
+    hl.workspace_rule({
+        workspace = "4",
+        layout = laptop_only and "dwindle" or "scrolling",
+    })
+end
+
+update_ws4_display_rules()
+hl.on("monitor.added", function() update_ws4_display_rules() end)
+hl.on("monitor.removed", function() update_ws4_display_rules() end)

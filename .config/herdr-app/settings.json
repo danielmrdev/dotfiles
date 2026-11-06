@@ -1,11 +1,12 @@
 {
-  "zoom": 1,
+  "zoom": 1.1,
   "sounds": {
     "enabled": true
   },
-  "minimum_contrast": 1,
-  "appearance": "dark",
   "font": "GeistMono Nerd Font",
+  "font_ligatures": false,
   "ui_font": "iA Writer Duo S",
+  "minimum_contrast": 1.0,
+  "appearance": "dark",
   "theme": "omarchy"
 }

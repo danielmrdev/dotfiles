@@ -142,6 +142,22 @@ link ".config/herdr-app/settings.json" "$HOME/.config/herdr-app/settings.json"
 link ".config/herdr-app/programs.json" "$HOME/.config/herdr-app/programs.json"
 link_all ".config/herdr-app/layouts" "$HOME/.config/herdr-app/layouts" "*.json"
 link_all ".config/herdr-app/layouts" "$HOME/.config/herdr-app/layouts" "*.svg"
+# AppAssets refuses preview symlinks that escape appHome; keep this asset in-root.
+preview_src="$DOTFILES/.config/herdr-app/layouts/herdr-t3.svg"
+preview_dest="$HOME/.config/herdr-app/layouts/herdr-t3.svg"
+if [ -f "$preview_src" ]; then
+  if [ -L "$preview_dest" ] || [ -f "$preview_dest" ]; then
+    rm -f "$preview_dest"
+  elif [ -d "$preview_dest" ]; then
+    if find "$preview_dest" -mindepth 1 -maxdepth 1 -print -quit | grep -q .; then
+      echo "  ERROR (destination directory is not empty): $preview_dest" >&2
+      exit 1
+    fi
+    rmdir "$preview_dest"
+  fi
+  cp -a "$preview_src" "$preview_dest"
+  echo "  COPY .config/herdr-app/layouts/herdr-t3.svg → $preview_dest"
+fi
 link_all ".config/herdr-app/themes" "$HOME/.config/herdr-app/themes" "*.json"
 for moddir in "$DOTFILES/.config/herdr-app/mods/"*; do
   [ -d "$moddir" ] || continue

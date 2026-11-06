@@ -30,6 +30,9 @@ alias espanso-triggers='"$EDITOR" "$HOME/.config/espanso/match/base.yml"'
 
 # Directories
 alias dotfiles="cd $DOTFILES"
+vpn-imi() {
+  "$HOME/Projects/better-work/projects/catb/scripts/imi-vpn.sh" "$@"
+}
 if [[ -d "$HOME/Library" ]]; then
   alias library="cd $HOME/Library"
 fi

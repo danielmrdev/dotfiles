@@ -35,5 +35,6 @@
   "setup.input": {"action":"omarchy-launch-tui \"$HOME/.local/bin/ttt\" -- \"$HOME/.config/hypr/input.lua\""},
   "setup.config.hyprland": {"action":"omarchy-launch-tui \"$HOME/.local/bin/ttt\" -- \"$HOME/.config/hypr/hyprland.lua\""},
   "setup.config.hyprsunset": {"action":"omarchy-launch-tui \"$HOME/.local/bin/ttt\" -- \"$HOME/.config/hypr/hyprsunset.conf\" && omarchy-restart-hyprsunset"},
-  "setup.config.xcompose": {"action":"omarchy-launch-tui \"$HOME/.local/bin/ttt\" -- \"$HOME/.XCompose\" && omarchy-restart-xcompose"}
+  "setup.config.xcompose": {"action":"omarchy-launch-tui \"$HOME/.local/bin/ttt\" -- \"$HOME/.XCompose\" && omarchy-restart-xcompose"},
+  "style.lockscreen": {"icon":"󰌾","label":"Lock Screen","aliases":["lockscreen","lock-screen"],"description":"Preview and choose a lock screen design","action":"omarchy-shell lock explore"}
 }

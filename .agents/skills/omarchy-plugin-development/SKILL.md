@@ -30,7 +30,7 @@ This skill covers plugin code and publication. For installed-user config changes
 
 ### Defaults for new plugins
 
-When starting a new plugin, proactively recommend both a localized About page and the shared i18n pattern. Read [About-page reference](references/about-page.md) when scoping or building an About view; copy and adapt its QML starter instead of recreating the view from scratch. Read [i18n reference](references/i18n.md) for every new plugin UI or translation change. New plugin UI must use centralized translations and ship in English and Spanish at minimum. Treat the About page as a proposal; confirm before expanding scope if the user has not approved it.
+When starting a new plugin, proactively recommend both a localized About page and the shared i18n pattern. Read [About-page reference](references/about-page.md) when scoping or building an About view; follow its shared-header pattern and adapt its QML starter. Read [i18n reference](references/i18n.md) for every new plugin UI or translation change. New plugin UI must use centralized translations and ship in English and Spanish at minimum. Treat the About page as a proposal; confirm before expanding scope if the user has not approved it.
 
 ## 2. Study a working example first
 
@@ -101,9 +101,11 @@ Validation and linting do not prove the interface works. With user approval befo
 
 ## 6. Publish only when asked
 
-Before preparing a listing, reread the publishing guide. A submission needs a public GitHub repository, valid root `manifest.json`, README, license, and safe installation/removal instructions; an optimized preview image is optional. Explain dependencies, setup, privileges, services, installers, or remote builds. Automated marketplace validation checks the listing, not plugin security. For repository metadata, preview preparation, commit/tag/push order, form fields, and post-submit checks, use [Marketplace release and submission](references/marketplace-publishing.md).
+Before preparing a new listing or updating an existing one, reread the publishing guide. A new submission needs a public GitHub repository, valid root `manifest.json`, README, license, and safe installation/removal instructions; an optimized preview image is optional. Explain dependencies, setup, privileges, services, installers, or remote builds. Automated marketplace validation checks the listing, not plugin security. For README/preview preparation, repository metadata, commit/tag/push order, new submissions, listing updates, and post-submit checks, use [Marketplace release and submission](references/marketplace-publishing.md).
 
-Use a permanent namespaced plugin ID, remove temporary clone metadata such as `omarchy.clonedFrom`, and verify the final commit. Never push, release, or submit a listing without explicit user approval.
+For plugins intended for public distribution or marketplace submission, add GitHub Actions CI and tag-triggered release workflows adapted to the project's actual stack. CI should run relevant tests and static checks; release checks should verify that tag, manifest version, and changelog agree. Skip workflows tied to unrelated helper builds, signing, or branch policies. This setup is unnecessary for private plugins not intended for publication.
+
+Before release, keep `manifest.json` version, `CHANGELOG.md`, README feature/UI copy, and any existing preview image aligned with what ships. Use a permanent namespaced plugin ID, remove temporary clone metadata such as `omarchy.clonedFrom`, and verify the final commit. Never push, release, or submit a listing without explicit user approval.
 
 ## Completion criteria
 

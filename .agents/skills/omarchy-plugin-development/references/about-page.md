@@ -1,51 +1,46 @@
-# Plugin About page reference
+# Plugin About-page pattern
 
-Use this when adding an About view or proposing one for a new plugin. Treat the screenshot and Taskwarrior Time implementation as a visual/structural reference, not as permission to reuse its branding or copy the whole page unchanged.
+Use this when proposing or building an About view inside a plugin panel. Keep it compact and continuous with the plugin's existing Metrics view.
 
-## Visual reference
+## Canonical layout
 
-![Taskwarrior Time About page](taskwarrior-time-about.png)
+Preserve the existing panel header in both views: same title/identity, icon, alignment, and other controls. Reuse its existing About button as the view toggle:
 
-The screenshot shows a compact, scrollable About view inside the plugin panel: existing panel navigation with About selected; a hero with icon, name, developer and version; separated sections for help links, interface language, and diagnostics. Rows use the panel's existing button language and theme. Orange border and dark surfaces belong to this captured theme—use installed semantic theme tokens, never sample or hardcode screenshot colors.
+- In Metrics view, show the current plugin version (for example, `v1.1.1`); click opens About.
+- In About view, keep the same button in the same place, label it localized `Metrics`; click returns to the initial dashboard.
+- Change only that button's label/state. The shared header remains in place; About content starts below it.
 
-**Concept:** one in-panel destination for plugin identity, support links, and useful settings. **Wireframe:**
+Start the About body with one compact row: `HELP & LINKS` left-aligned, plugin version right-aligned. Put useful support/release links below as full-width actions. Do not add a second header or repeat the icon, plugin name, or developer as a hero—the shared header already identifies the plugin.
 
 ```text
-┌ plugin name                         Tasks  Projects  About
-│ [icon] Plugin name             [version]
-│        Developer · Author
-├ HELP & LINKS
-│ [What's new] [Marketplace] [Report issue] [GitHub]
-├ INTERFACE LANGUAGE
-│ [System] [English] [Español]
-├ OPTIONAL DIAGNOSTICS
-│ [logging state / relevant actions]
-└──────────────────────────────────────────────────────────
+┌ [icon] Plugin name                         [v1.1.1] ┐  Metrics view
+│                         ... existing dashboard ...   │
+
+┌ [icon] Plugin name                         [Metrics] ┐  About view
+│ HELP & LINKS                                  v1.1.1 │
+│ [Changelog]                                           │
+│ [Marketplace]                                         │
+│ [Report issue]                                        │
+│ [GitHub]                                              │
+│                                                       │
+│ [Only relevant settings or diagnostics, if any]      │
+└───────────────────────────────────────────────────────┘
 ```
 
-Keep only sections that fit the plugin's actual job. Identity and relevant help links form the core; language controls belong here only when the plugin supports an explicit language override; diagnostics belong only when the plugin has a real diagnostic feature.
+The version displayed in the header and About section must come from the same QML property. Keep that property synchronized with `manifest.json`. Add optional sections—language controls, settings, or diagnostics—only when the plugin provides those capabilities; place them after Help & Links.
 
-## Taskwarrior Time source and copied QML
+## Implementation
 
-- [Upstream repository](https://github.com/DataArchitectPro/taskwarrior-time)
-- [About view in `Panel.qml`](https://github.com/DataArchitectPro/taskwarrior-time/blob/master/Panel.qml)
-- [Plugin README](https://github.com/DataArchitectPro/taskwarrior-time/blob/master/README.md)
-- [Omarchy Marketplace listing](https://plugins.omarchy.org/plugin.html?id=taskwarrior-time)
-- [Copy-and-adapt About QML template](about-page-template.qml)
-- [MIT license notice](taskwarrior-time-MIT-LICENSE.txt)
+- Add About as a state/view inside the existing panel. Keep the established panel lifecycle, open/close behavior, and keyboard handling. Do not start another Quickshell process or declare another plugin kind.
+- Keep the shared header outside the Metrics/About body, visible in both states. Route the existing header button to `showAbout()` or `showMetrics()` based on `viewMode`; reset scrolling and restore focus when switching views.
+- Put About content in the existing scroll area. Long content must scroll inside the panel.
+- Render the `HELP & LINKS` row with the installed `PanelSectionHeader` (or nearest existing equivalent); allocate the remaining row width to the version label and right-align it.
+- Open only fixed, trusted project URLs through the shell-supported external-link API. Localize all visible labels through the plugin translator; see [i18n guidance](i18n.md).
+- Use existing panel buttons, spacing, semantic theme colors, and typography. Verify component APIs against the installed shell.
+- Keep focus order, selected state, and keyboard activation consistent across both views. Check long translated labels and theme adaptation in the runtime UI.
 
-The captured implementation was inspected in `/home/daniel/.config/omarchy/plugins/taskwarrior-time-dev-combined-235974/Panel.qml` (About view around lines 4103–4330). That local checkout had uncommitted changes; upstream `master` may differ, especially in translations. Check the target plugin and installed Omarchy version before using shell APIs.
+## Starter and example
 
-The QML file is the copyable starter: copy its About `ColumnLayout` block into the new plugin's existing panel, then adapt it. It is not a standalone QML file; it depends on surrounding `root` properties/functions and installed `qs.Ui` components. Navigation buttons, `viewMode` routing, and IPC wiring sit outside the block and must be connected separately. The source is MIT-licensed; its full notice is kept alongside it.
+Copy and adapt [about-page-template.qml](about-page-template.qml) for the shared toggle and About body; wire it into the target panel's existing header and scroll content. It is a structural starter, not a standalone QML file. Verify all bindings and `qs.Ui` components locally.
 
-## Implementation pattern
-
-- Start from `about-page-template.qml`, insert the About block as a state/view in the existing panel, then preserve that panel's open/close and keyboard behavior. Taskwarrior Time switches `viewMode` to `about`; it does not start another Quickshell process or declare a second plugin kind.
-- Make long content scroll inside the panel (`Flickable` with content height bound to the body). Use the current shell's layout, spacing, semantic colors, and `qs.Ui` components after verifying their installed API.
-- Organize information with a hero, dividers, section headings, and full-width action rows. Keep version, author, and links sourced from one maintainable place; avoid introducing duplicate hardcoded metadata.
-- Open only fixed, trusted project URLs through the shell-supported external-link API. Localize all visible labels through the plugin's translator; see [i18n guidance](i18n.md).
-- Reuse the reference's language selector only when a persisted override is useful. Prefer the plugin/host's existing settings mechanism; don't add a helper process solely to store a locale.
-- Copy diagnostics controls only when equivalent actions exist and their permissions/side effects are documented. Do not expose unrelated paths or actions merely to fill space.
-- Replace Taskwarrior's name, author, version, URLs, and icons with the new plugin's own metadata and Omarchy icon provider. Keep the visual hierarchy, not the other plugin's identity.
-
-Before finishing, replace all Taskwarrior-specific bindings and values: connect the About navigation/routing; supply the new plugin's metadata, localized keys, URLs, and working actions; remove language/debug controls the plugin does not support. Verify each `qs.Ui` component against the installed shell. Then inspect a runtime screenshot at target panel scale and compare it with the reference; check scrolling, selected navigation state, keyboard focus/close behavior, long translated labels, and theme adaptation.
+For a complete implementation of this pattern, see the [System Info `Panel.qml`](https://github.com/danielmrdev/omarchy-sysinfo/blob/main/Panel.qml). Adapt the navigation and link set to the target plugin; keep its own metadata and actions.

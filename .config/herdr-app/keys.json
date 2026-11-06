@@ -52,6 +52,7 @@
     "ctrl-,": "app.settings",
     "ctrl-shift-o": "pane.split:right",
     "ctrl-shift-e": "pane.split:down",
+    "ctrl-shift-i": "mod.open:issues",
     "ctrl-shift-w": "tab.close",
     "ctrl-shift-x": "pane.close",
     "ctrl-shift-z": "pane.zoom",
