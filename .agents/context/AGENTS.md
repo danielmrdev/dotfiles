@@ -38,31 +38,32 @@
 
 ## Desktop / User Tools
 
-- Terminal: Foot.
+- Terminal: Foot. But main drive is herdr-app (GUI multiplexer)
 - Shell: zsh.
 - Shell framework: oh-my-zsh.
 - Prompt/theme: powerlevel10k.
 - Dotfiles/config source: `~/.dotfiles`.
-- Browser: Chromium.
+- Browser: Zen.
 - Omarchy config may live under `~/.config/omarchy/`, Hyprland/Waybar/etc. Use Omarchy-specific care.
 
 ## Remote Hosts
 
-- Main VPS: connect with `ssh vps`.
-- Main VPS provider/plan: Hetzner CX33.
-- Main VPS location: Helsinki.
-- Main VPS roles: Tailscale, Cloudflare, Caddy, web projects server.
-- Mail VPS: connect with `ssh vps-mail`.
-- Mail VPS provider/arch: Netcup ARM64.
-- Mail stack: Stalwart.
-- Mail domain: `danielmr.dev`.
-- Calendars: Personal, Familia, Trabajo.
-- Webmail/calendar/contacts UI: Bulwart in Omarchy.
+- Hel1 VPS:
+  - Connect with `ssh vps`. Always load de `/home/daniel/AGENTS.md` file for specific instructions.
+  - Provider/Plan: Hetzner CX33.
+  - Location: Helsinki.
+  - Roles: Tailscale, Cloudflare, Caddy, web projects server, Navidrome.
+- Mail VPS:
+  - Connect with `ssh vps-mail`. Always load de `/home/daniel/AGENTS.md` file for specific instructions.
+  - Provider/arch: Netcup ARM64.
+  - Stack: Stalwart, Bulwart, calibre-web
+  - Mail domain: `danielmr.dev`.
+  - Calendars: Personal, Familia, Trabajo.
 
 ## Safety / Secrets
 
 - Never print private keys, tokens, passwords, cookies, or secrets.
-- Prefer SSH aliases (`ssh vps`, `ssh vps-mail`) over embedding host details.
+- Prefer SSH aliases (`ssh vps`, `ssh vps-mail`, `ssh rpi4`) over embedding host details.
 - Treat mail, calendars, contacts, and server configs as sensitive.
 - Confirm before restarting production services or changing DNS/mail/server state.
 
@@ -70,7 +71,7 @@
 
 - Use existing project conventions before adding new tools.
 - Prefer minimal diffs and reversible changes.
-- Prefer OpenSpec files for durable project decisions when task is substantial.
+- Prefer Matt Pocock skilss for SDD for durable project decisions when task is substantial. Offer the user to setup this wiht skill `setup-matt-pocock-skills` if the project doesn't have yet.
 - Prefer concise summaries: changed paths, verification, next step.
 
 ## Configuration references

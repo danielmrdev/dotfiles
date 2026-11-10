@@ -1,5 +1,6 @@
 {
   "bar": {
+    "background": "opaque",
     "layout": {
       "center": [
         {
@@ -12,6 +13,33 @@
           "showYearProgress": true,
           "verticalFormat": "HH\n—\nmm",
           "weekStartDay": "monday"
+        }
+      ],
+      "centerBegin": [
+        {
+          "id": "omarchy.indicators"
+        }
+      ],
+      "centerEnd": [
+        {
+          "id": "daniel.weather"
+        },
+        {
+          "id": "io.github.nixfred.tailscale-host-monitor"
+        },
+        {
+          "id": "omarchy.system-update"
+        },
+        {
+          "id": "oma.nearby",
+          "receiverEnabled": true
+        },
+        {
+          "autoLockMinutes": 0,
+          "clearClipboardSec": 60,
+          "colorizeIcon": false,
+          "fingerprintUnlock": true,
+          "id": "io.github.elevate08.qs-bitwarden-cli"
         }
       ],
       "left": [
@@ -72,9 +100,6 @@
           "id": "omarchy.tailscale"
         },
         {
-          "id": "omarchy.agents"
-        },
-        {
           "id": "omarchy.bluetooth"
         },
         {
@@ -95,37 +120,9 @@
           "showPercentage": true
         }
       ],
-      "centerBegin": [
-        {
-          "id": "omarchy.indicators"
-        }
-      ],
-      "centerEnd": [
-        {
-          "id": "daniel.weather"
-        },
-        {
-          "id": "io.github.nixfred.tailscale-host-monitor"
-        },
-        {
-          "id": "omarchy.system-update"
-        },
-        {
-          "id": "oma.nearby",
-          "receiverEnabled": true
-        },
-        {
-          "autoLockMinutes": 0,
-          "clearClipboardSec": 60,
-          "colorizeIcon": false,
-          "fingerprintUnlock": true,
-          "id": "io.github.elevate08.qs-bitwarden-cli"
-        }
-      ],
       "tray": []
     },
-    "position": "top",
-    "transparent": false
+    "position": "top"
   },
   "cloneSourceRestores": [
     "io.github.sirjul1337.lock-explorer"
@@ -139,11 +136,11 @@
   },
   "plugins": [
     {
+      "design": "weather",
       "id": "io.github.sirjul1337.lock-explorer",
       "openAs": "panel",
       "tourSeen": true,
-      "unlock": "zoom",
-      "design": "weather"
+      "unlock": "zoom"
     }
   ],
   "version": 1

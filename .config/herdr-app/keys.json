@@ -60,10 +60,13 @@
     "f2": "tab.rename",
     "shift-f2": "space.rename"
   },
-  "layout:herdr-t3": {
-    "cmd-shift-b": "t3-chrome.sidebar",
-    "cmd-shift-a": "t3-tabs.view",
-    "cmd-shift-s": "t3-focus.settle"
+  "layout:beautiful-herdr": {
+    "alt-down": "bh-space-folders.next",
+    "alt-up": "bh-space-folders.prev",
+    "ctrl-shift-pagedown": "bh-space-folders.next",
+    "ctrl-shift-pageup": "bh-space-folders.prev",
+    "ctrl-space shift-n": "bh-space-folders.next",
+    "ctrl-space shift-p": "bh-space-folders.prev"
   },
   "terminal": {
     "ctrl-backspace": "send:\u0017",

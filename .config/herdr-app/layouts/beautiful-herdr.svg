@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400" font-family="system-ui,sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">Beautiful Herdr layout preview</title>
+  <desc id="desc">Herdr workspace with folders grouping spaces above the agents list, terminal panes, and Codex and OpenCode usage meters in the bottom status bar.</desc>
+  <rect width="640" height="400" rx="12" fill="#141418"/>
+
+  <!-- Window chrome and split sidebar -->
+  <path d="M168 0v400M0 200h168M0 359h168" fill="none" stroke="#353539"/>
+  <g fill="#3b3b40"><circle cx="22" cy="20" r="6"/><circle cx="42" cy="20" r="6"/><circle cx="62" cy="20" r="6"/></g>
+  <g fill="none" stroke="#83838f" stroke-width="1.5"><rect x="138" y="14" width="14" height="12" rx="3"/><path d="M143 14v12"/></g>
+
+  <!-- Spaces: folders with their spaces nested underneath -->
+  <text x="16" y="61" font-size="12" font-weight="500" fill="#a9a9b4">Spaces</text>
+  <path d="M145 56h12M151 50v12" stroke="#83838f" stroke-width="1.5"/>
+
+  <path d="M16 76h7l3 3h9v12H16z" fill="#e3814f"/>
+  <text x="42" y="87" font-size="12.5" font-weight="500" fill="#e6e6ea">Project</text>
+  <text x="151" y="87" font-size="10.5" fill="#83838f" text-anchor="end">2</text>
+  <rect x="8" y="94" width="152" height="22" rx="6" fill="#2c2c2f"/>
+  <rect x="19" y="99" width="12" height="12" rx="3" fill="#5b8def"/>
+  <text x="39" y="109" font-size="12" fill="#e6e6ea">app</text>
+  <text x="151" y="109" font-size="10" fill="#83838f" text-anchor="end">main</text>
+  <rect x="19" y="123" width="12" height="12" rx="3" fill="#8b7cf6"/>
+  <text x="39" y="133" font-size="12" fill="#a9a9b4">fix-login</text>
+
+  <path d="M16 145h7l3 3h9v12H16z" fill="#22a99a"/>
+  <text x="42" y="156" font-size="12.5" font-weight="500" fill="#e6e6ea">Infrastructure</text>
+  <text x="151" y="156" font-size="10.5" fill="#83838f" text-anchor="end">1</text>
+  <rect x="19" y="168" width="12" height="12" rx="3" fill="#e3814f"/>
+  <text x="39" y="178" font-size="12" fill="#a9a9b4">infra</text>
+
+  <!-- Agents below spaces -->
+  <text x="16" y="222" font-size="12" font-weight="500" fill="#a9a9b4">Agents</text>
+  <g fill="none" stroke="#83838f" stroke-width="1.5"><circle cx="146" cy="217" r="6"/><path d="M146 214v3l2 2"/></g>
+  <text x="16" y="245" font-size="11" font-weight="500" fill="#6b93ff">Working <tspan fill="#83838f">2</tspan></text>
+  <rect x="19" y="258" width="12" height="12" rx="3" fill="#e6e6ea"/>
+  <text x="42" y="269" font-size="12.5" fill="#e6e6ea">Fix login</text>
+  <text x="151" y="269" font-size="10.5" fill="#83838f" text-anchor="end">app</text>
+  <path d="M25 273v9h11" fill="none" stroke="#3b3b40" stroke-width="1.5"/>
+  <rect x="40" y="284" width="10" height="10" rx="3" fill="#a9a9b4"/>
+  <text x="58" y="293" font-size="12" fill="#a9a9b4">review</text>
+  <g fill="none" stroke="#6b93ff" stroke-width="1.5"><path d="M151 268a5 5 0 1 1-5-5"/></g>
+
+  <text x="16" y="322" font-size="11" font-weight="500" fill="#f0a33a">Needs you <tspan fill="#83838f">1</tspan></text>
+  <rect x="19" y="335" width="12" height="12" rx="3" fill="#e6e6ea"/>
+  <text x="42" y="346" font-size="12.5" fill="#e6e6ea">Bump deps</text>
+  <rect x="139" y="334" width="14" height="14" rx="4" fill="#f0a33a" fill-opacity="0.15"/>
+  <text x="146" y="345" font-size="11" font-weight="700" fill="#f0a33a" text-anchor="middle">!</text>
+
+  <!-- Sidebar footer -->
+  <circle cx="25" cy="379" r="6" fill="none" stroke="#a9a9b4" stroke-width="1.5"/>
+  <text x="42" y="384" font-size="13" fill="#a9a9b4">Settings</text>
+
+  <!-- Tabs and pane area -->
+  <rect x="176" y="6" width="100" height="28" rx="6" fill="#2c2c2f"/>
+  <g font-size="13"><text x="200" y="24" fill="#e6e6ea">Fix login</text><text x="300" y="24" fill="#a9a9b4">infra</text></g>
+  <g fill="#a9a9b4"><rect x="184" y="14" width="10" height="10" rx="2"/><rect x="286" y="14" width="10" height="10" rx="2"/></g>
+  <path d="M613 20h12M619 14v12" stroke="#83838f" stroke-width="1.5"/>
+  <rect x="176" y="42" width="456" height="316" rx="8" fill="#232328"/>
+  <rect x="184" y="51" width="10" height="10" rx="2" fill="#a9a9b4"/>
+  <text x="202" y="60" font-size="13" font-weight="500" fill="#e6e6ea">Pi <tspan font-weight="400" fill="#83838f">~/app</tspan></text>
+  <path d="M624 56a5 5 0 1 1-5-5" fill="none" stroke="#6b93ff" stroke-width="1.5"/>
+  <g font-family="monospace" font-size="11" fill="#a9a9b4">
+    <text x="184" y="88">$ pi</text>
+    <text x="184" y="106">Reading src/login.ts</text>
+    <text x="184" y="124">Editing 2 files…</text>
+  </g>
+
+  <!-- Usage status bar below panes -->
+  <rect x="176" y="372" width="456" height="28" fill="#1d1d21"/>
+  <path d="M176 372h456" stroke="#353539"/>
+  <g fill="none" stroke="#83838f" stroke-width="1.2"><rect x="187" y="380" width="11" height="8" rx="1.5"/><path d="M190 390h5m-2.5-2v2"/></g>
+  <text x="204" y="388" font-size="9.5" fill="#a9a9b4">Local</text>
+  <text x="238" y="388" font-size="9" fill="#83838f">2 agents</text>
+  <text x="287" y="388" font-size="9" font-weight="500" fill="#a9a9b4">Codex</text>
+  <text x="321" y="388" font-size="8.5" fill="#83838f">5h</text>
+  <rect x="339" y="382" width="42" height="4" rx="2" fill="#3b3b40"/>
+  <rect x="339" y="382" width="27" height="4" rx="2" fill="#6b93ff"/>
+  <text x="392" y="388" font-size="9" font-weight="500" fill="#a9a9b4">OpenCode</text>
+  <text x="447" y="388" font-size="8.5" fill="#83838f">5h</text>
+  <rect x="465" y="382" width="42" height="4" rx="2" fill="#3b3b40"/>
+  <rect x="465" y="382" width="18" height="4" rx="2" fill="#22a99a"/>
+  <text x="604" y="388" font-size="8.5" fill="#83838f" text-anchor="end">⌘P</text>
+</svg>

@@ -42,6 +42,7 @@ hl.unbind("SUPER + COMMA")
 hl.unbind("SUPER + SHIFT + S")
 
 o.bind("SUPER + SHIFT + T", "New task", "qs ipc --path /usr/share/omarchy/shell call taskwarrior-time newTask")
+o.bind("SUPER + CTRL + ALT + Y", "Restart Espanso", "espanso restart")
 
 -- Open DA Tracking quick entry instead of Docker.
 hl.unbind("SUPER + SHIFT + D")
